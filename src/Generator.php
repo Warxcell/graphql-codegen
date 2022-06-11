@@ -393,24 +393,20 @@ final class Generator
      */
     private function getGenericsType(TypeNode $typeNode, ?TypeNode $parentType = null): array
     {
-        return match (get_class($typeNode)) {
-            ListTypeNode::class => [
-                sprintf(
-                    'iterable<%s>',
-                    $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode))
-                ),
-            ],
-            NonNullTypeNode::class => $this->getGenericsType($typeNode->type, $typeNode),
-            NamedTypeNode::class => (function () use ($typeNode, $parentType) {
-                $type = $this->fixTypeForGenerics($this->handleDefinitionByName($typeNode->name->value));
-                if ($parentType === null) {
-                    return [$type, 'null'];
-                }
-
-                return [$type];
-            })(),
-            default => throw new LogicException(),
+        $type = match ($typeNode::class) {
+            ListTypeNode::class => sprintf(
+                'iterable<%s>',
+                $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode))
+            ),
+            NonNullTypeNode::class => $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode)),
+            NamedTypeNode::class => $this->fixTypeForGenerics($this->handleDefinitionByName($typeNode->name->value)),
+            default => throw new LogicException(sprintf('%s not supported', $typeNode::class)),
         };
+        if (!$typeNode instanceof NonNullTypeNode && !$parentType instanceof NonNullTypeNode) {
+            return [$type, 'null'];
+        }
+
+        return [$type];
     }
 
     /**

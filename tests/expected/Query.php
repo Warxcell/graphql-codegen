@@ -12,12 +12,12 @@ final class Query
 {
     /**
      * @param string $ping
-     * @param iterable<ObjectTest> $objects
-     * @param iterable<ObjectTest>|null $objectItemNullable
-     * @param ObjectTest|null $object
-     * @param iterable<ObjectTest>|null $objectNullable
-     * @param iterable<ObjectTest|null>|null $objectItemAndFieldNullable
-     * @param ObjectTest|null $objectWithArgsAndInput
+     * @param iterable<\Test\ObjectTest> $objects
+     * @param iterable<\Test\ObjectTest|null> $objectItemNullable
+     * @param \Test\ObjectTest|null $object
+     * @param iterable<\Test\ObjectTest>|null $objectNullable
+     * @param iterable<\Test\ObjectTest|null>|null $objectItemAndFieldNullable
+     * @param \Test\ObjectTest|null $objectWithArgsAndInput
      */
     public function __construct(
         public readonly string $ping,

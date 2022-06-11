@@ -111,22 +111,22 @@ interface ObjectTestResolver
     ): int|\GraphQL\Executor\Promise\Promise|null;
 
     /**
-     * @return \Test\EnumTest|null|\GraphQL\Executor\Promise\Promise<\Test\EnumTest|null>
+     * @return \Test\EnumTest|\GraphQL\Executor\Promise\Promise<\Test\EnumTest>
      */
     public function enum(
         ObjectTest $parent,
         ObjectTestEnumArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
-    ): EnumTest|\GraphQL\Executor\Promise\Promise|null;
+    ): EnumTest|\GraphQL\Executor\Promise\Promise;
 
     /**
-     * @return \Test\EnumTest|\GraphQL\Executor\Promise\Promise<\Test\EnumTest>
+     * @return \Test\EnumTest|null|\GraphQL\Executor\Promise\Promise<\Test\EnumTest|null>
      */
     public function enumNullable(
         ObjectTest $parent,
         ObjectTestEnumNullableArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
-    ): EnumTest|\GraphQL\Executor\Promise\Promise;
+    ): EnumTest|\GraphQL\Executor\Promise\Promise|null;
 }

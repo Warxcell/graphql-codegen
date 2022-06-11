@@ -16,13 +16,13 @@ final class ObjectTest
      * @param bool $boolean
      * @param float $float
      * @param int $int
-     * @param EnumTest $enum
+     * @param \Test\EnumTest $enum
      * @param string|null $idNullable
      * @param string|null $stringNullable
      * @param bool|null $booleanNullable
      * @param float|null $floatNullable
      * @param int|null $intNullable
-     * @param EnumTest|null $enumNullable
+     * @param \Test\EnumTest|null $enumNullable
      */
     public function __construct(
         public readonly string $id,

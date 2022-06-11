@@ -41,7 +41,7 @@ interface QueryResolver
     ): iterable|\GraphQL\Executor\Promise\Promise;
 
     /**
-     * @return iterable<\Test\ObjectTest>|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest>>
+     * @return iterable<\Test\ObjectTest>|null|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest>|null>
      */
     public function objectNullable(
         Query $parent,
@@ -51,7 +51,7 @@ interface QueryResolver
     ): iterable|\GraphQL\Executor\Promise\Promise|null;
 
     /**
-     * @return iterable<\Test\ObjectTest>|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest>>
+     * @return iterable<\Test\ObjectTest|null>|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest|null>>
      */
     public function objectItemNullable(
         Query $parent,
@@ -61,7 +61,7 @@ interface QueryResolver
     ): iterable|\GraphQL\Executor\Promise\Promise;
 
     /**
-     * @return iterable<\Test\ObjectTest>|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest>>
+     * @return iterable<\Test\ObjectTest|null>|null|\GraphQL\Executor\Promise\Promise<iterable<\Test\ObjectTest|null>|null>
      */
     public function objectItemAndFieldNullable(
         Query $parent,

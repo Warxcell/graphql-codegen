@@ -70,8 +70,8 @@ type ObjectTest implements Node {
     floatNullable: Float
     int: Int!
     intNullable: Int
-    enum: EnumTest
-    enumNullable: EnumTest!
+    enum: EnumTest!
+    enumNullable: EnumTest
 }
 
 type ObjectTwo {
