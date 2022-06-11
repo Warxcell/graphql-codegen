@@ -9,9 +9,7 @@
         "psr/log": "^3.0"
     },
     "require-dev": {
-        "nikic/php-parser": "^4.14",
         "phpunit/phpunit": "^9",
-        "doctrine/annotations": "^1.13",
         "vimeo/psalm": "^4.23"
     },
     "autoload": {

@@ -45,6 +45,8 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use ReflectionEnum;
+use ReflectionException;
 
 use function array_map;
 use function array_merge;
@@ -501,6 +503,16 @@ final class Generator
         $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
 
         if (null !== $typeName) {
+            try {
+                $reflection = new ReflectionEnum($typeName);
+            } catch (ReflectionException $exception) {
+                throw CodegenException::notEnum($module, $definitionNode, $typeName, $exception);
+            }
+
+            if (!$reflection->isBacked()) {
+                throw CodegenException::notBackedEnum($module, $definitionNode, $typeName);
+            }
+            
             return null;
         }
         $enum = new EnumType($this->namingStrategy->nameForEnum($module, $definitionNode));

@@ -4,30 +4,22 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests;
 
+use Arxy\GraphQLCodegen\CodegenException;
 use Arxy\GraphQLCodegen\Generator;
 use Arxy\GraphQLCodegen\Module;
-use Doctrine\Common\Annotations\DocParser;
-use Doctrine\Common\Annotations\ImplicitlyIgnoredAnnotationNames;
+use Arxy\GraphQLCodegen\WriterInterface;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use stdClass;
 
 use function assert;
 use function file_get_contents;
 
 class GeneratorTest extends TestCase
 {
-    private static DocParser $annotationParser;
-
-    public static function setUpBeforeClass(): void
-    {
-        self::$annotationParser = new DocParser();
-        self::$annotationParser->setIgnoreNotImportedAnnotations(true);
-        self::$annotationParser->setIgnoredAnnotationNames(ImplicitlyIgnoredAnnotationNames::LIST);
-    }
-
-    public function generateDataset(): iterable
+    public function testGenerate(): void
     {
         $writer = new Writer();
         $generator = new Generator([
@@ -47,21 +39,67 @@ class GeneratorTest extends TestCase
             }
             $name = $file->getBasename('.' . $file->getExtension());
 
-            yield $name => [
-                file_get_contents($file->getRealPath()),
-                $generated[$name] ?? null,
-            ];
-        }
+            self::assertArrayHasKey($name, $generated);
+            $actualPhp = file_get_contents($file->getRealPath());
 
+            $expectedPhp = $generated[$name];
+
+            self::assertNotNull($actualPhp);
+            self::assertEquals($expectedPhp, $actualPhp);
+        }
     }
 
-    /**
-     * @dataProvider generateDataset
-     */
-    public function testGenerate(string $expectedPhp, ?string $actualPhp): void
+    public function testEnumToNonExistingClass()
     {
-        self::assertNotNull($actualPhp);
-        self::assertEquals($expectedPhp, $actualPhp);
+        $generator = new Generator([
+            new Module(
+                __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
+                [
+                    'MappedEnum' => 'NonExistingClass',
+                ]
+            ),
+        ], $this->createMock(WriterInterface::class));
 
+        $this->expectException(CodegenException::class);
+        $this->expectExceptionMessage(
+            'MappedEnum maps to NonExistingClass which is non-enum (defined in Arxy\GraphQLCodegen\Module)'
+        );
+        $generator->execute();
+    }
+
+    public function testEnumIsNotEnum()
+    {
+        $generator = new Generator([
+            new Module(
+                __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
+                [
+                    'MappedEnum' => stdClass::class,
+                ]
+            ),
+        ], $this->createMock(WriterInterface::class));
+
+        $this->expectException(CodegenException::class);
+        $this->expectExceptionMessage(
+            'MappedEnum maps to stdClass which is non-enum (defined in Arxy\GraphQLCodegen\Module)'
+        );
+        $generator->execute();
+    }
+
+    public function testEnumNotBacked()
+    {
+        $generator = new Generator([
+            new Module(
+                __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
+                [
+                    'MappedEnum' => NotBackedEnum::class,
+                ]
+            ),
+        ], $this->createMock(WriterInterface::class));
+
+        $this->expectException(CodegenException::class);
+        $this->expectExceptionMessage(
+            'MappedEnum maps to Arxy\GraphQLCodegen\Tests\NotBackedEnum which is non-backed enum (defined in Arxy\GraphQLCodegen\Module)'
+        );
+        $generator->execute();
     }
 }
