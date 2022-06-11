@@ -10,6 +10,9 @@ interface ModuleInterface
 
     public function getNamespace(): string;
 
+    /**
+     * @return array<string, class-string|string>
+     */
     public function getTypeMapping(): array;
 }
 

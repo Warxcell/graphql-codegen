@@ -13,6 +13,7 @@ use function glob;
 use function is_dir;
 use function is_file;
 use function mkdir;
+use function reset;
 use function sprintf;
 use function unlink;
 
@@ -41,9 +42,13 @@ final class FileWriter implements WriterInterface
     public function write(ModuleInterface $module, PhpFile $file): void
     {
         $classes = $file->getClasses();
-        assert(count($classes) === 0);
+        assert(count($classes) !== 0);
 
-        $filename = sprintf('%s/%s.php', $this->directory, reset($classes)->getName());
+        $class = reset($classes)->getName();
+
+        assert($class !== null);
+
+        $filename = sprintf('%s/%s.php', $this->directory, $class);
         file_put_contents($filename, $this->printer->printFile($file));
     }
 }

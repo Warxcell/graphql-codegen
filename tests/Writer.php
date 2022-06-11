@@ -29,8 +29,10 @@ final class Writer implements WriterInterface
 
     public function write(ModuleInterface $module, PhpFile $file): void
     {
-        foreach ($file->getClasses() as $name => $class) {
-            $this->generated[$class->getName()] = $this->psrPrinter->printFile($file);
+        foreach ($file->getClasses() as $class) {
+            $className = $class->getName();
+            assert($className !== null);
+            $this->generated[$className] = $this->psrPrinter->printFile($file);
         }
     }
 

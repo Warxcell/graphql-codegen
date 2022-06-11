@@ -48,41 +48,41 @@ use Psr\Log\NullLogger;
 
 use function array_map;
 use function array_merge;
+use function assert;
 use function count;
 use function file_get_contents;
-use function get_class;
 use function implode;
 use function in_array;
 use function iterator_to_array;
-use function property_exists;
 use function sprintf;
 
 final class Generator
 {
+    public const MIXED = 'mixed';
+
     /**
      * @var DocumentNode[]
      */
-    private array $allDocuments;
+    private array $allDocuments = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, class-string|string>
      */
-    private array $allModulesTypeMapping;
+    private array $allModulesTypeMapping = [];
 
     /**
      * @var array<class-string, array<string, ClassLike>>
      */
     private array $typeRegistry = [];
 
-    /**
-     * @param iterable<Module> $modules
-     * @param LoggerInterface $logger
-     */
     public function __construct(
+        /**
+         * @var list<Module> $modules
+         */
         private readonly iterable $modules,
         private readonly WriterInterface $writer,
         private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(
-            contextType: 'mixed',
+            contextType: self::MIXED,
             info: ResolveInfo::class
         ),
         private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
@@ -121,15 +121,21 @@ final class Generator
         $file->addComment('Auto-Generated');
 
         $this->writer->write($module, $file);
-        $this->logger->info(sprintf('Writing %s', $type->getName()));
+
+        $className = $type->getName();
+        assert($className !== null);
+        $this->logger->info(sprintf('Writing %s', $className));
     }
 
     private function addGeneratedType(ModuleInterface $module, ClassLike $type): void
     {
-        if (isset($this->typeRegistry[get_class($module)][$type->getName()])) {
+        $className = $type->getName();
+        assert($className !== null);
+
+        if (isset($this->typeRegistry[$module::class][$className])) {
             return;
         }
-        $this->typeRegistry[get_class($module)][$type->getName()] = $type;
+        $this->typeRegistry[$module::class][$className] = $type;
 
         $this->writeGeneratedType($module, $type);
     }
@@ -139,7 +145,7 @@ final class Generator
      */
     private function generate(ModuleInterface $module, DefinitionNode $definitionNode): ?ClassLike
     {
-        return match (get_class($definitionNode)) {
+        return match ($definitionNode::class) {
             ObjectTypeDefinitionNode::class, ObjectTypeExtensionNode::class => $this->generateObjectType(
                 $module,
                 $definitionNode
@@ -165,7 +171,7 @@ final class Generator
                 $definitionNode
             ),
             SchemaDefinitionNode::class => null,
-            default => throw new LogicException(sprintf('Definition %s not supported', get_class($definitionNode))),
+            default => throw new LogicException(sprintf('Definition %s not supported', $definitionNode::class)),
         };
     }
 
@@ -181,7 +187,10 @@ final class Generator
 
         $this->addGeneratedType($module, $generated);
 
-        return $module->getNamespace() . '\\' . $generated->getName();
+        $className = $generated->getName();
+        assert($className !== null);
+
+        return $module->getNamespace() . '\\' . $className;
     }
 
     /**
@@ -219,10 +228,7 @@ final class Generator
                 $handleType = function () use ($name): ?string {
                     foreach ($this->modules as $i => $module) {
                         foreach ($this->allDocuments[$i]->definitions as $definition) {
-                            if (property_exists(
-                                    $definition,
-                                    'name'
-                                )
+                            if (isset($definition->name)
                                 && $definition->name instanceof NameNode
                                 && $definition->name->value === $name) {
                                 if ($definition instanceof ScalarTypeDefinitionNode || $definition instanceof ScalarTypeExtensionNode) {
@@ -251,7 +257,7 @@ final class Generator
      */
     public function getPhpTypeFromGraphQLType(TypeNode $typeNode): string
     {
-        return match (get_class($typeNode)) {
+        return match ($typeNode::class) {
             ListTypeNode::class => 'iterable',
             NonNullTypeNode::class => $this->getPhpTypeFromGraphQLType($typeNode->type),
             NamedTypeNode::class => $this->handleDefinitionByName($typeNode->name->value),
@@ -260,8 +266,8 @@ final class Generator
     }
 
     /**
-     * @param NodeList<FieldDefinitionNode|InputValueDefinitionNode> $params
-     * @return array<FieldDefinitionNode|InputValueDefinitionNode>
+     * @param NodeList<InputValueDefinitionNode>|NodeList<FieldDefinitionNode> $params
+     * @return array<InputValueDefinitionNode>|array<FieldDefinitionNode>
      */
     private function reorderParameters(NodeList $params): array
     {
@@ -301,7 +307,9 @@ final class Generator
             }
             $this->addGeneratedType($module, $class);
 
-            $type = $module->getNamespace() . '\\' . $class->getName();
+            $className = $class->getName();
+            assert($className !== null);
+            $type = $module->getNamespace() . '\\' . $className;
         }
 
         $resolvers = $this->generateResolversForObject($module, $definitionNode, $type);
@@ -395,7 +403,7 @@ final class Generator
     {
         $type = match ($typeNode::class) {
             ListTypeNode::class => sprintf(
-                'iterable<%s>',
+                'list<%s>',
                 $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode))
             ),
             NonNullTypeNode::class => $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode)),
@@ -430,8 +438,10 @@ final class Generator
         }
 
         $this->addGeneratedType($module, $class);
+        $className = $class->getName();
+        assert($className !== null);
 
-        return $module->getNamespace() . '\\' . $class->getName();
+        return $module->getNamespace() . '\\' . $className;
     }
 
     /**
@@ -510,11 +520,13 @@ final class Generator
         $type = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($module, $definitionNode));
         $serialize = $type->addMethod('serialize')->setReturnType('string');
         $serialize->setPublic();
-        $serialize->addParameter('value')->setType($module->getTypeMapping()[$definitionNode->name->value] ?? 'mixed');
+        $serialize->addParameter('value')->setType(
+            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
+        );
         $serialize->setBody('return $value;');
 
         $parseValue = $type->addMethod('parseValue')->setReturnType(
-            $module->getTypeMapping()[$definitionNode->name->value] ?? 'mixed'
+            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
         );
 
         $throws = sprintf('@throws \%s', Error::class);
@@ -523,7 +535,7 @@ final class Generator
         $parseValue->addComment($throws);
 
         $parseLiteral = $type->addMethod('parseLiteral')->setReturnType(
-            $module->getTypeMapping()[$definitionNode->name->value] ?? 'mixed'
+            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
         );
         $parseLiteral->setPublic();
         $parseLiteral->addParameter('valueNode')->setType(Node::class);
