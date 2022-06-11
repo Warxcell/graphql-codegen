@@ -9,6 +9,9 @@ final class Module implements ModuleInterface
     public function __construct(
         private readonly string $schema,
         private readonly string $namespace,
+        /**
+         * @var array<string, class-string|string>
+         */
         private readonly array $typeMapping
     ) {
     }
@@ -23,6 +26,9 @@ final class Module implements ModuleInterface
         return $this->namespace;
     }
 
+    /**
+     * @return array<string, class-string|string>
+     */
     public function getTypeMapping(): array
     {
         return $this->typeMapping;
