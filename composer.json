@@ -1,0 +1,31 @@
+{
+    "name": "arxy/graphql-codegen",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.1",
+        "webonyx/graphql-php": "~v14.11",
+        "nette/php-generator": "^4.0",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "nikic/php-parser": "^4.14",
+        "phpunit/phpunit": "^9",
+        "doctrine/annotations": "^1.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arxy\\GraphQLCodegen\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arxy\\GraphQLCodegen\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

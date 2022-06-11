@@ -1,0 +1,92 @@
+schema {
+    query: Query
+}
+
+interface Node {
+    id: ID!
+}
+type Query {
+    ping: String!
+
+    object: ObjectTest
+    objects: [ObjectTest!]!
+    objectNullable: [ObjectTest!]
+    objectItemNullable: [ObjectTest]!
+    objectItemAndFieldNullable: [ObjectTest]
+
+    objectWithArgsAndInput(
+        id: ID!
+        idNullable: ID
+        string: String!
+        stringNullable: String
+        boolean: Boolean!
+        booleanNullable: Boolean
+        float: Float!
+        floatNullable: Float
+        int: Int!
+        intNullable: Int
+        input: ObjectInput!
+        inputNullable: ObjectInput
+        enum: EnumTest!
+        enumNullable: EnumTest
+        mappedEnum: MappedEnum!
+        mappedEnumNullable: MappedEnum
+    ): ObjectTest
+}
+
+enum EnumTest {
+    ONE
+    TWO
+    THREE
+}
+
+enum MappedEnum {
+    ONE
+    TWO
+    THREE
+}
+
+input ObjectInput {
+    id: ID!
+    idNullable: ID
+    string: String!
+    stringNullable: String
+    boolean: Boolean!
+    booleanNullable: Boolean
+    float: Float!
+    floatNullable: Float
+    int: Int!
+    intNullable: Int
+}
+
+type ObjectTest implements Node {
+    id: ID!
+    idNullable: ID
+    string: String!
+    stringNullable: String
+    boolean: Boolean!
+    booleanNullable: Boolean
+    float: Float!
+    floatNullable: Float
+    int: Int!
+    intNullable: Int
+    enum: EnumTest
+    enumNullable: EnumTest!
+}
+
+type ObjectTwo {
+    hello: String!
+}
+
+union ObjectUnion = ObjectTest | ObjectTwo
+
+
+type Node1 implements Node {
+    id: ID!
+    additionalField: String!
+}
+
+
+scalar TestScalar
+
+scalar MappedScalar
