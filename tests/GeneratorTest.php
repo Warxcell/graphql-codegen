@@ -10,6 +10,7 @@ use Arxy\GraphQLCodegen\Tests\Basic\MappedEnum;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\ImplicitlyIgnoredAnnotationNames;
+use Exception;
 use PhpParser\{Comment\Doc, Node, NodeTraverser, NodeVisitorAbstract, ParserFactory};
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
@@ -104,7 +105,11 @@ class GeneratorTest extends TestCase
 
             $actualNode = $actualNodes[$i];
 
-            self::compareNodes($expectedNode, $actualNode);
+            try {
+                self::compareNodes($expectedNode, $actualNode);
+            } catch (Exception $exception) {
+                self::assertEquals($expectedPhp, $actualPhp);
+            }
         }
     }
 

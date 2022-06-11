@@ -10,19 +10,33 @@ namespace Test;
 
 final class ObjectTest
 {
+    /**
+     * @param string $id
+     * @param string $string
+     * @param bool $boolean
+     * @param float $float
+     * @param int $int
+     * @param EnumTest $enum
+     * @param string|null $idNullable
+     * @param string|null $stringNullable
+     * @param bool|null $booleanNullable
+     * @param float|null $floatNullable
+     * @param int|null $intNullable
+     * @param EnumTest|null $enumNullable
+     */
     public function __construct(
         public readonly string $id,
-        public readonly ?string $idNullable,
         public readonly string $string,
-        public readonly ?string $stringNullable,
         public readonly bool $boolean,
-        public readonly ?bool $booleanNullable,
         public readonly float $float,
-        public readonly ?float $floatNullable,
         public readonly int $int,
-        public readonly ?int $intNullable,
-        public readonly ?EnumTest $enum,
-        public readonly EnumTest $enumNullable,
+        public readonly EnumTest $enum,
+        public readonly ?string $idNullable = null,
+        public readonly ?string $stringNullable = null,
+        public readonly ?bool $booleanNullable = null,
+        public readonly ?float $floatNullable = null,
+        public readonly ?int $intNullable = null,
+        public readonly ?EnumTest $enumNullable = null,
     ) {
     }
 }

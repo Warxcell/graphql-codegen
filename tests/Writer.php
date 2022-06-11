@@ -7,6 +7,8 @@ namespace Arxy\GraphQLCodegen\Tests;
 use Arxy\GraphQLCodegen\ModuleInterface;
 use Arxy\GraphQLCodegen\WriterInterface;
 use Nette\PhpGenerator\PhpFile;
+use Nette\PhpGenerator\Printer;
+use Nette\PhpGenerator\PsrPrinter;
 
 final class Writer implements WriterInterface
 {
@@ -14,6 +16,12 @@ final class Writer implements WriterInterface
      * @var array<string>
      */
     private array $generated = [];
+    private readonly Printer $psrPrinter;
+
+    public function __construct()
+    {
+        $this->psrPrinter = new PsrPrinter();
+    }
 
     public function init(ModuleInterface $module): void
     {
@@ -22,7 +30,7 @@ final class Writer implements WriterInterface
     public function write(ModuleInterface $module, PhpFile $file): void
     {
         foreach ($file->getClasses() as $name => $class) {
-            $this->generated[$class->getName()] = (string)$file;
+            $this->generated[$class->getName()] = $this->psrPrinter->printFile($file);
         }
     }
 

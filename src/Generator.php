@@ -23,6 +23,7 @@ use GraphQL\Language\AST\ListTypeNode;
 use GraphQL\Language\AST\NamedTypeNode;
 use GraphQL\Language\AST\NameNode;
 use GraphQL\Language\AST\Node;
+use GraphQL\Language\AST\NodeList;
 use GraphQL\Language\AST\NonNullTypeNode;
 use GraphQL\Language\AST\ObjectTypeDefinitionNode;
 use GraphQL\Language\AST\ObjectTypeExtensionNode;
@@ -259,6 +260,26 @@ final class Generator
     }
 
     /**
+     * @param NodeList<FieldDefinitionNode|InputValueDefinitionNode> $params
+     * @return array<FieldDefinitionNode|InputValueDefinitionNode>
+     */
+    private function reorderParameters(NodeList $params): array
+    {
+        $nonNullable = [];
+        $nullable = [];
+
+        foreach ($params as $param) {
+            if ($param->type instanceof NonNullTypeNode) {
+                $nonNullable[] = $param;
+            } else {
+                $nullable[] = $param;
+            }
+        }
+
+        return array_merge($nonNullable, $nullable);
+    }
+
+    /**
      * @throws Exception
      */
     public function generateObjectType(
@@ -274,11 +295,8 @@ final class Generator
 
             if (count($definitionNode->fields) > 0) {
                 $method = $class->addMethod('__construct');
-                foreach ($definitionNode->fields as $field) {
-                    $method->addPromotedParameter($field->name->value)
-                        ->setReadOnly()
-                        ->setType($this->getPhpTypeFromGraphQLType($field->type))
-                        ->setNullable(get_class($field->type) !== NonNullTypeNode::class);
+                foreach ($this->reorderParameters($definitionNode->fields) as $field) {
+                    $this->handleInputValue($method, $field);
                 }
             }
             $this->addGeneratedType($module, $class);
@@ -410,7 +428,7 @@ final class Generator
 
         if (count($definitionNode->arguments) > 0) {
             $method = $class->addMethod('__construct');
-            foreach ($definitionNode->arguments as $field) {
+            foreach ($this->reorderParameters($definitionNode->arguments) as $field) {
                 $this->handleInputValue($method, $field);
             }
         }
@@ -431,7 +449,7 @@ final class Generator
         $class->setFinal();
         if (count($definitionNode->fields) > 0) {
             $method = $class->addMethod('__construct');
-            foreach ($definitionNode->fields as $field) {
+            foreach ($this->reorderParameters($definitionNode->fields) as $field) {
                 $this->handleInputValue($method, $field);
             }
         }
@@ -444,10 +462,15 @@ final class Generator
     /**
      * @throws Exception
      */
-    private function handleInputValue(Method $method, InputValueDefinitionNode $definitionNode): void
-    {
-        $nullable = get_class($definitionNode->type) !== NonNullTypeNode::class;
-        ($nullable ? $method->addPromotedParameter($definitionNode->name->value, null) : $method->addPromotedParameter(
+    private function handleInputValue(
+        Method $method,
+        InputValueDefinitionNode|FieldDefinitionNode $definitionNode
+    ): void {
+        $nullable = !$definitionNode->type instanceof NonNullTypeNode;
+        ($nullable ? $method->addPromotedParameter(
+            $definitionNode->name->value,
+            $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
+        ) : $method->addPromotedParameter(
             $definitionNode->name->value
         ))
             ->setReadOnly()
