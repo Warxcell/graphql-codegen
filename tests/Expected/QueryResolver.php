@@ -79,4 +79,24 @@ interface QueryResolver
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
     ): ObjectTest|\GraphQL\Executor\Promise\Promise|null;
+
+    /**
+     * @return \Arxy\GraphQLCodegen\Tests\TestInterface|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\TestInterface|null>
+     */
+    public function fieldReturnsInterface(
+        Query $parent,
+        QueryFieldReturnsInterfaceArgs $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info
+    ): \Arxy\GraphQLCodegen\Tests\TestInterface|\GraphQL\Executor\Promise\Promise|null;
+
+    /**
+     * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null>
+     */
+    public function fieldReturnsUnion(
+        Query $parent,
+        QueryFieldReturnsUnionArgs $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info
+    ): ObjectTest|ObjectTwo|\GraphQL\Executor\Promise\Promise|null;
 }

@@ -15,7 +15,7 @@ final class CodegenException extends Exception
      * @param class-string $typeName
      */
     public static function notEnum(
-        Module $module,
+        ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
         string $typeName,
         Throwable $previous = null
@@ -34,7 +34,7 @@ final class CodegenException extends Exception
      * @param class-string $typeName
      */
     public static function notBackedEnum(
-        Module $module,
+        ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
         string $typeName
     ): self {

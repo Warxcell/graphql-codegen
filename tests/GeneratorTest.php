@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arxy\GraphQLCodegen\Tests;
 
 use Arxy\GraphQLCodegen\CodegenException;
+use Arxy\GraphQLCodegen\FileWriter;
 use Arxy\GraphQLCodegen\Generator;
 use Arxy\GraphQLCodegen\Module;
 use Arxy\GraphQLCodegen\WriterInterface;
@@ -22,12 +23,14 @@ class GeneratorTest extends TestCase
     public function testGenerate(): void
     {
         $writer = new Writer();
+        $writer = new FileWriter(__DIR__ . '/Expected');
         $generator = new Generator([
             new Module(
                 'testModule',
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected', [
-                'MappedEnum' => MappedEnum::class,
-            ]
+                    'MappedEnum' => MappedEnum::class,
+                    'Node' => TestInterface::class,
+                ]
             ),
         ], $writer);
 
@@ -60,6 +63,7 @@ class GeneratorTest extends TestCase
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => 'NonExistingClass',
+                    'Node' => TestInterface::class,
                 ]
             ),
         ], $this->createMock(WriterInterface::class));
@@ -79,6 +83,7 @@ class GeneratorTest extends TestCase
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => stdClass::class,
+                    'Node' => TestInterface::class,
                 ]
             ),
         ], $this->createMock(WriterInterface::class));
@@ -98,6 +103,7 @@ class GeneratorTest extends TestCase
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => NotBackedEnum::class,
+                    'Node' => TestInterface::class,
                 ]
             ),
         ], $this->createMock(WriterInterface::class));

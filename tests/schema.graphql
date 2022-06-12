@@ -5,6 +5,7 @@ schema {
 interface Node {
     id: ID!
 }
+
 type Query {
     ping: String!
 
@@ -32,6 +33,9 @@ type Query {
         mappedEnum: MappedEnum!
         mappedEnumNullable: MappedEnum
     ): ObjectTest
+
+    fieldReturnsInterface: Node
+    fieldReturnsUnion: ObjectUnion
 }
 
 enum EnumTest {
@@ -79,7 +83,6 @@ type ObjectTwo {
 }
 
 union ObjectUnion = ObjectTest | ObjectTwo
-
 
 type Node1 implements Node {
     id: ID!

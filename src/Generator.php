@@ -50,14 +50,12 @@ use Psr\Log\NullLogger;
 use ReflectionEnum;
 use ReflectionException;
 
-use function array_map;
 use function array_merge;
 use function assert;
 use function count;
 use function file_get_contents;
 use function implode;
 use function in_array;
-use function iterator_to_array;
 use function sprintf;
 
 final class Generator
@@ -227,35 +225,54 @@ final class Generator
     }
 
     /**
+     * @return list<string>
      * @throws Exception
      */
-    private function handleDefinitionByName(string $name): string
+    private function handleDefinitionByName(string $name): array
     {
         switch ($name) {
             case Type::ID:
             case Type::STRING:
-                return 'string';
+                return ['string'];
             case Type::INT:
-                return 'int';
+                return ['int'];
             case Type::FLOAT:
-                return 'float';
+                return ['float'];
             case Type::BOOLEAN:
-                return 'bool';
+                return ['bool'];
             default:
-                $handleType = function () use ($name): ?string {
+                $handleType = function () use ($name): ?array {
+                    if (isset($this->typeMappingRegistry[$name])) {
+                        return [$this->typeMappingRegistry[$name]];
+                    }
+
                     foreach ($this->modules as $i => $module) {
                         foreach ($this->allDocuments[$i]->definitions as $definition) {
                             if (isset($definition->name)
                                 && $definition->name instanceof NameNode
                                 && $definition->name->value === $name) {
-                                if ($definition instanceof ScalarTypeDefinitionNode || $definition instanceof ScalarTypeExtensionNode) {
+                                if ($definition instanceof ScalarTypeDefinitionNode
+                                    || $definition instanceof ScalarTypeExtensionNode
+                                    || $definition instanceof InterfaceTypeDefinitionNode
+                                    || $definition instanceof InterfaceTypeExtensionNode) {
                                     throw new LogicException(sprintf('Please define type for %s', $name));
                                 }
 
-                                return $this->handleDefinition(
-                                    $module,
-                                    $definition
-                                );
+                                if ($definition instanceof UnionTypeDefinitionNode || $definition instanceof UnionTypeExtensionNode) {
+                                    $types = [];
+                                    foreach ($definition->types as $type) {
+                                        $types = [...$types, ...$this->handleDefinitionByName($type->name->value)];
+                                    }
+
+                                    return $types;
+                                }
+
+                                return [
+                                    $this->handleDefinition(
+                                        $module,
+                                        $definition
+                                    ),
+                                ];
                             }
                         }
                     }
@@ -263,7 +280,7 @@ final class Generator
                     return null;
                 };
 
-                return $this->typeMappingRegistry[$name] ?? $handleType() ?? throw new LogicException(
+                return $handleType() ?? throw new LogicException(
                         sprintf('Definition %s not found', $name)
                     );
         }
@@ -272,10 +289,10 @@ final class Generator
     /**
      * @throws Exception
      */
-    private function getPhpTypeFromGraphQLType(TypeNode $typeNode): string
+    private function getPhpTypeFromGraphQLType(TypeNode $typeNode): array
     {
         return match ($typeNode::class) {
-            ListTypeNode::class => 'iterable',
+            ListTypeNode::class => ['iterable'],
             NonNullTypeNode::class => $this->getPhpTypeFromGraphQLType($typeNode->type),
             NamedTypeNode::class => $this->handleDefinitionByName($typeNode->name->value),
             default => throw new LogicException(),
@@ -370,9 +387,8 @@ final class Generator
             $method->addParameter('context')->setType($this->resolverParameterTypes->contextType);
             $method->addParameter('info')->setType($this->resolverParameterTypes->info);
 
-            $returnType = $this->getPhpTypeFromGraphQLType($field->type);
-
-            $returnTypes = [$returnType, Promise::class];
+            $returnTypes = $this->getPhpTypeFromGraphQLType($field->type);
+            $returnTypes[] = Promise::class;
             if (!$field->type instanceof NonNullTypeNode) {
                 $returnTypes[] = 'null';
             }
@@ -410,13 +426,19 @@ final class Generator
         return implode('|', $types);
     }
 
-    private function fixTypeForGenerics(string $type): string
+    /**
+     * @param array<string> $type
+     * @return array<string>
+     */
+    private function fixTypeForGenerics(array $types): array
     {
-        if (!$this->isNativeType($type)) {
-            $type = '\\' . $type;
-        }
+        return array_map(function (string $type): string {
+            if (!$this->isNativeType($type)) {
+                $type = '\\' . $type;
+            }
 
-        return $type;
+            return $type;
+        }, $types);
     }
 
     /**
@@ -425,20 +447,22 @@ final class Generator
      */
     private function getGenericsType(TypeNode $typeNode, ?TypeNode $parentType = null): array
     {
-        $type = match ($typeNode::class) {
-            ListTypeNode::class => sprintf(
-                'list<%s>',
-                $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode))
-            ),
-            NonNullTypeNode::class => $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode)),
+        $types = match ($typeNode::class) {
+            ListTypeNode::class => [
+                sprintf(
+                    'list<%s>',
+                    $this->generateUnion($this->getGenericsType($typeNode->type, $typeNode))
+                ),
+            ],
+            NonNullTypeNode::class => $this->getGenericsType($typeNode->type, $typeNode),
             NamedTypeNode::class => $this->fixTypeForGenerics($this->handleDefinitionByName($typeNode->name->value)),
             default => throw new LogicException(sprintf('%s not supported', $typeNode::class)),
         };
         if (!$typeNode instanceof NonNullTypeNode && !$parentType instanceof NonNullTypeNode) {
-            return [$type, 'null'];
+            $types[] = 'null';
         }
 
-        return [$type];
+        return $types;
     }
 
     /**
@@ -512,7 +536,7 @@ final class Generator
             $definitionNode->name->value
         ))
             ->setReadOnly()
-            ->setType($this->getPhpTypeFromGraphQLType($definitionNode->type))
+            ->setType($this->generateUnion($this->getPhpTypeFromGraphQLType($definitionNode->type)))
             ->setNullable($nullable);
 
         $method->addComment(
@@ -596,39 +620,38 @@ final class Generator
         return null;
     }
 
+    /**
+     * @throws Exception
+     */
     private function generateUnionResolver(
         ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
     ): ?ClassLike {
-        $type = new InterfaceType($this->namingStrategy->nameForUnionResolverInterface($module, $definitionNode));
-        $resolveType = $type->addMethod('resolveType');
+        $class = new InterfaceType($this->namingStrategy->nameForUnionResolverInterface($module, $definitionNode));
+        $resolveType = $class->addMethod('resolveType');
         $resolveType->setPublic();
         $resolveType->setReturnType('string');
-        $resolveType->addParameter('value')->setType(
-            implode(
-                '|',
-                array_map(
-                /**
-                 * @throws Exception
-                 */
-                    [$this, 'getPhpTypeFromGraphQLType'],
-                    iterator_to_array($definitionNode->types)
-                )
-            )
-        );
 
+        $types = [];
+        foreach ($definitionNode->types as $type) {
+            $types = [...$types, ...$this->getPhpTypeFromGraphQLType($type)];
+        }
+        $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleUnionResolver($module, $definitionNode, $type);
+            $this->typeDecorator->handleUnionResolver($module, $definitionNode, $class);
         }
 
-        $this->writeGeneratedType($module, $type);
+        $this->writeGeneratedType($module, $class);
 
         return null;
     }
 
+    /**
+     * @throws Exception
+     */
     private function generateInterfaceResolver(
         ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
@@ -652,30 +675,25 @@ final class Generator
             }
         }
 
-        $type = new InterfaceType($this->namingStrategy->nameForInterfaceResolverInterface($module, $definitionNode));
-        $resolveType = $type->addMethod('resolveType');
+        $class = new InterfaceType($this->namingStrategy->nameForInterfaceResolverInterface($module, $definitionNode));
+        $resolveType = $class->addMethod('resolveType');
         $resolveType->setPublic();
         $resolveType->setReturnType('string');
-        $resolveType->addParameter('value')->setType(
-            implode(
-                '|',
-                array_map(
-                /**
-                 * @throws Exception
-                 */
-                    [$this, 'getPhpTypeFromGraphQLType'],
-                    $allTypesThatImplements
-                )
-            )
-        );
+
+        $types = [];
+        foreach ($allTypesThatImplements as $type) {
+            $types = [...$types, ...$this->getPhpTypeFromGraphQLType($type)];
+        }
+
+        $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleInterfaceResolver($module, $definitionNode, $type);
+            $this->typeDecorator->handleInterfaceResolver($module, $definitionNode, $class);
         }
 
-        $this->writeGeneratedType($module, $type);
+        $this->writeGeneratedType($module, $class);
 
         return null;
     }

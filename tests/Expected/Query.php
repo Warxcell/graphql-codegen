@@ -18,6 +18,8 @@ final class Query
      * @param list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest>|null $objectNullable
      * @param list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>|null $objectItemAndFieldNullable
      * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null $objectWithArgsAndInput
+     * @param \Arxy\GraphQLCodegen\Tests\TestInterface|null $fieldReturnsInterface
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null $fieldReturnsUnion
      */
     public function __construct(
         public readonly string $ping,
@@ -27,6 +29,8 @@ final class Query
         public readonly ?iterable $objectNullable = null,
         public readonly ?iterable $objectItemAndFieldNullable = null,
         public readonly ?ObjectTest $objectWithArgsAndInput = null,
+        public readonly ?\Arxy\GraphQLCodegen\Tests\TestInterface $fieldReturnsInterface = null,
+        public readonly ObjectTest|ObjectTwo|null $fieldReturnsUnion = null,
     ) {
     }
 }
