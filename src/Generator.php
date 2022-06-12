@@ -136,10 +136,10 @@ final class Generator
         $className = $type->getName();
         assert($className !== null);
 
-        if (isset($this->typeRegistry[$module::class][$className])) {
+        if (isset($this->typeRegistry[$module->getName()][$className])) {
             return;
         }
-        $this->typeRegistry[$module::class][$className] = $type;
+        $this->typeRegistry[$module->getName()][$className] = $type;
 
         $this->writeGeneratedType($module, $type);
     }

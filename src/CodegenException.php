@@ -25,7 +25,7 @@ final class CodegenException extends Exception
                 '%s maps to %s which is non-enum (defined in %s)',
                 $definitionNode->name->value,
                 $typeName,
-                $module::class
+                $module->getName(),
             ), 0, $previous
         );
     }
@@ -43,7 +43,7 @@ final class CodegenException extends Exception
                 '%s maps to %s which is non-backed enum (defined in %s)',
                 $definitionNode->name->value,
                 $typeName,
-                $module::class
+                $module->getName()
             )
         );
     }

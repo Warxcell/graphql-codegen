@@ -6,6 +6,8 @@ namespace Arxy\GraphQLCodegen;
 
 interface ModuleInterface
 {
+    public function getName(): string;
+
     public function getSchema(): string;
 
     public function getNamespace(): string;

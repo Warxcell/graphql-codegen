@@ -23,9 +23,12 @@ class GeneratorTest extends TestCase
     {
         $writer = new Writer();
         $generator = new Generator([
-            new Module(__DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected', [
+            new Module(
+                'testModule',
+                __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected', [
                 'MappedEnum' => MappedEnum::class,
-            ]),
+            ]
+            ),
         ], $writer);
 
         $generator->execute();
@@ -53,6 +56,7 @@ class GeneratorTest extends TestCase
     {
         $generator = new Generator([
             new Module(
+                'testModule',
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => 'NonExistingClass',
@@ -62,7 +66,7 @@ class GeneratorTest extends TestCase
 
         $this->expectException(CodegenException::class);
         $this->expectExceptionMessage(
-            'MappedEnum maps to NonExistingClass which is non-enum (defined in Arxy\GraphQLCodegen\Module)'
+            'MappedEnum maps to NonExistingClass which is non-enum (defined in testModule)'
         );
         $generator->execute();
     }
@@ -71,6 +75,7 @@ class GeneratorTest extends TestCase
     {
         $generator = new Generator([
             new Module(
+                'testModule',
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => stdClass::class,
@@ -80,7 +85,7 @@ class GeneratorTest extends TestCase
 
         $this->expectException(CodegenException::class);
         $this->expectExceptionMessage(
-            'MappedEnum maps to stdClass which is non-enum (defined in Arxy\GraphQLCodegen\Module)'
+            'MappedEnum maps to stdClass which is non-enum (defined in testModule)'
         );
         $generator->execute();
     }
@@ -89,6 +94,7 @@ class GeneratorTest extends TestCase
     {
         $generator = new Generator([
             new Module(
+                'testModule',
                 __DIR__ . '/schema.graphql', __NAMESPACE__ . '\\Expected',
                 [
                     'MappedEnum' => NotBackedEnum::class,
@@ -98,7 +104,7 @@ class GeneratorTest extends TestCase
 
         $this->expectException(CodegenException::class);
         $this->expectExceptionMessage(
-            'MappedEnum maps to Arxy\GraphQLCodegen\Tests\NotBackedEnum which is non-backed enum (defined in Arxy\GraphQLCodegen\Module)'
+            'MappedEnum maps to Arxy\GraphQLCodegen\Tests\NotBackedEnum which is non-backed enum (defined in testModule)'
         );
         $generator->execute();
     }
