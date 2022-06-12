@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
-final class Module implements ModuleInterface
+class Module implements ModuleInterface
 {
     public function __construct(
         private readonly string $name,
