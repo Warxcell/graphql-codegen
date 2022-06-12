@@ -562,7 +562,7 @@ final class Generator
         ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): ?ClassLike {
-        $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
+        $typeName = $this->typeRegistry[$definitionNode->name->value] ?? null;
 
         if (null !== $typeName) {
             try {
@@ -597,12 +597,12 @@ final class Generator
         $serialize = $type->addMethod('serialize')->setReturnType('string');
         $serialize->setPublic();
         $serialize->addParameter('value')->setType(
-            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
+            $this->typeRegistry[$definitionNode->name->value] ?? self::MIXED
         );
         $serialize->setBody('return $value;');
 
         $parseValue = $type->addMethod('parseValue')->setReturnType(
-            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
+            $this->typeRegistry[$definitionNode->name->value] ?? self::MIXED
         );
 
         $throws = sprintf('@throws \%s', Error::class);
@@ -611,7 +611,7 @@ final class Generator
         $parseValue->addComment($throws);
 
         $parseLiteral = $type->addMethod('parseLiteral')->setReturnType(
-            $module->getTypeMapping()[$definitionNode->name->value] ?? self::MIXED
+            $this->typeRegistry[$definitionNode->name->value] ?? self::MIXED
         );
         $parseLiteral->setPublic();
         $parseLiteral->addParameter('valueNode')->setType(Node::class);
@@ -664,22 +664,33 @@ final class Generator
         ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
     ): ?ClassLike {
-        /** @var NamedTypeNode[] $allTypesThatImplements */
-        $allTypesThatImplements = [];
+        $type = $this->typeRegistry[$definitionNode->name->value] ?? null;
+        $types = [];
 
-        foreach ($this->allDocuments as $document) {
-            foreach ($document->definitions as $definition) {
-                if (!$definition instanceof ObjectTypeDefinitionNode && !$definition instanceof ObjectTypeExtensionNode) {
-                    continue;
-                }
+        if ($type) {
+            $types = [$type];
+        } else {
+            /** @var NamedTypeNode[] $allTypesThatImplements */
+            $allTypesThatImplements = [];
 
-                foreach ($definition->interfaces as $interface) {
-                    if ($interface->name->value === $definitionNode->name->value) {
-                        $allTypesThatImplements[] = new NamedTypeNode([
-                            'name' => $definition->name,
-                        ]);
+            foreach ($this->allDocuments as $document) {
+                foreach ($document->definitions as $definition) {
+                    if (!$definition instanceof ObjectTypeDefinitionNode && !$definition instanceof ObjectTypeExtensionNode) {
+                        continue;
+                    }
+
+                    foreach ($definition->interfaces as $interface) {
+                        if ($interface->name->value === $definitionNode->name->value) {
+                            $allTypesThatImplements[] = new NamedTypeNode([
+                                'name' => $definition->name,
+                            ]);
+                        }
                     }
                 }
+            }
+
+            foreach ($allTypesThatImplements as $type) {
+                $types = [...$types, ...$this->getPhpTypeFromGraphQLType($type)];
             }
         }
 
@@ -687,11 +698,6 @@ final class Generator
         $resolveType = $class->addMethod('resolveType');
         $resolveType->setPublic();
         $resolveType->setReturnType('string');
-
-        $types = [];
-        foreach ($allTypesThatImplements as $type) {
-            $types = [...$types, ...$this->getPhpTypeFromGraphQLType($type)];
-        }
 
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);

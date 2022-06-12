@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Expected;
 interface NodeResolver
 {
     public function resolveType(
-        ObjectTest|Node1 $value,
+        \Arxy\GraphQLCodegen\Tests\TestInterface $value,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
     ): string;
