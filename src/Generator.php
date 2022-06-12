@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
+use Arxy\GraphQLCodegen\Generator\TypeDecoratorInterface;
 use Arxy\GraphQLCodegen\NamingStrategy\DefaultStrategy;
 use Exception;
 use GraphQL\Error\Error;
@@ -62,7 +63,18 @@ use function sprintf;
 final class Generator
 {
     public const MIXED = 'mixed';
-    public const PHP_NATIVE_TYPES = ['string', 'int', 'float', 'bool', 'iterable', 'array', 'null'];
+    public const PHP_NATIVE_TYPES = [
+        'string',
+        'int',
+        'float',
+        'bool',
+        'iterable',
+        'array',
+        'null',
+        'mixed',
+        'object',
+        'callable',
+    ];
 
     /**
      * @var DocumentNode[]
@@ -72,7 +84,7 @@ final class Generator
     /**
      * @var array<string, class-string|string>
      */
-    private array $allModulesTypeMapping = [];
+    private array $typeMappingRegistry = [];
 
     /**
      * @var array<class-string, array<string, ClassLike>>
@@ -90,6 +102,7 @@ final class Generator
             info: ResolveInfo::class
         ),
         private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
+        private readonly ?TypeDecoratorInterface $typeDecorator = null,
         private readonly LoggerInterface $logger = new NullLogger()
     ) {
     }
@@ -105,7 +118,7 @@ final class Generator
             $mappings = array_merge($mappings, $module->getTypeMapping());
             $allDocs[] = Parser::parse(file_get_contents($module->getSchema()));
         }
-        $this->allModulesTypeMapping = $mappings;
+        $this->typeMappingRegistry = $mappings;
         $this->allDocuments = $allDocs;
 
         foreach ($this->modules as $module) {
@@ -250,7 +263,7 @@ final class Generator
                     return null;
                 };
 
-                return $this->allModulesTypeMapping[$name] ?? $handleType() ?? throw new LogicException(
+                return $this->typeMappingRegistry[$name] ?? $handleType() ?? throw new LogicException(
                         sprintf('Definition %s not found', $name)
                     );
         }
@@ -259,7 +272,7 @@ final class Generator
     /**
      * @throws Exception
      */
-    public function getPhpTypeFromGraphQLType(TypeNode $typeNode): string
+    private function getPhpTypeFromGraphQLType(TypeNode $typeNode): string
     {
         return match ($typeNode::class) {
             ListTypeNode::class => 'iterable',
@@ -292,13 +305,13 @@ final class Generator
     /**
      * @throws Exception
      */
-    public function generateObjectType(
+    private function generateObjectType(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): ?ClassLike {
         $class = null;
         //$type = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
-        $type = $this->allModulesTypeMapping[$definitionNode->name->value] ?? null;
+        $type = $this->typeMappingRegistry[$definitionNode->name->value] ?? null;
         if (!$type) {
             $class = new ClassType($this->namingStrategy->nameForObject($module, $definitionNode));
             $class->setFinal();
@@ -309,6 +322,11 @@ final class Generator
                     $this->handleInputValue($method, $field);
                 }
             }
+
+            if ($this->typeDecorator) {
+                $this->typeDecorator->handleObject($module, $definitionNode, $class);
+            }
+
             $this->addGeneratedType($module, $class);
 
             $className = $class->getName();
@@ -316,8 +334,7 @@ final class Generator
             $type = $module->getNamespace() . '\\' . $className;
         }
 
-        $resolvers = $this->generateResolversForObject($module, $definitionNode, $type);
-        $this->writeGeneratedType($module, $resolvers);
+        $this->generateResolversForObject($module, $definitionNode, $type);
 
         return $class;
     }
@@ -329,7 +346,7 @@ final class Generator
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         string $parentType
-    ): ClassLike {
+    ): void {
         $type = new InterfaceType($this->namingStrategy->nameForObjectResolverInterface($module, $definitionNode));
 
         foreach ($definitionNode->fields as $field) {
@@ -374,7 +391,10 @@ final class Generator
             );
         }
 
-        return $type;
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleObjectResolver($module, $definitionNode, $type);
+        }
+        $this->writeGeneratedType($module, $type);
     }
 
     private function wrapInPromise(string $type): string
@@ -424,7 +444,7 @@ final class Generator
     /**
      * @throws Exception
      */
-    public function generateFieldArgs(
+    private function generateFieldArgs(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
         FieldDefinitionNode $definitionNode
@@ -441,6 +461,10 @@ final class Generator
             }
         }
 
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleObjectFieldArgs($module, $objectType, $definitionNode, $class);
+        }
+
         $this->addGeneratedType($module, $class);
         $className = $class->getName();
         assert($className !== null);
@@ -451,7 +475,7 @@ final class Generator
     /**
      * @throws Exception
      */
-    public function generateInputObjectType(
+    private function generateInputObjectType(
         ModuleInterface $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): ClassLike {
@@ -462,6 +486,10 @@ final class Generator
             foreach ($this->reorderParameters($definitionNode->fields) as $field) {
                 $this->handleInputValue($method, $field);
             }
+        }
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleInputObjectType($module, $definitionNode, $class);
         }
 
         $this->addGeneratedType($module, $class);
@@ -498,7 +526,7 @@ final class Generator
 
     /**
      */
-    public function generateEnumType(
+    private function generateEnumType(
         ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): ?ClassLike {
@@ -520,6 +548,10 @@ final class Generator
         $enum = new EnumType($this->namingStrategy->nameForEnum($module, $definitionNode));
         foreach ($definitionNode->values as $value) {
             $enum->addCase($value->name->value, $value->name->value);
+        }
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleEnumType($module, $definitionNode, $enum);
         }
 
         return $enum;
@@ -554,6 +586,11 @@ final class Generator
         $parseLiteral->addParameter('variables', null)->setType('?array');
 
         $parseLiteral->addComment($throws);
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleScalarResolver($module, $definitionNode, $type);
+        }
+
         $this->writeGeneratedType($module, $type);
 
         return null;
@@ -582,6 +619,10 @@ final class Generator
 
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleUnionResolver($module, $definitionNode, $type);
+        }
 
         $this->writeGeneratedType($module, $type);
 
@@ -629,6 +670,10 @@ final class Generator
         );
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleInterfaceResolver($module, $definitionNode, $type);
+        }
 
         $this->writeGeneratedType($module, $type);
 
