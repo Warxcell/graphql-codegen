@@ -1,8 +1,7 @@
 <?php
 
-namespace Arxy\GraphQLCodegen\Generator;
+namespace Arxy\GraphQLCodegen;
 
-use Arxy\GraphQLCodegen\ModuleInterface;
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Language\AST\EnumTypeExtensionNode;
 use GraphQL\Language\AST\FieldDefinitionNode;
