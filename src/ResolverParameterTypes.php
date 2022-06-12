@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
+use GraphQL\Type\Definition\ResolveInfo;
+
 final class ResolverParameterTypes
 {
     /**
@@ -12,7 +14,7 @@ final class ResolverParameterTypes
      */
     public function __construct(
         public readonly string $contextType,
-        public readonly string $info
+        public readonly string $info = ResolveInfo::class
     ) {
     }
 }

@@ -34,7 +34,6 @@ use GraphQL\Language\AST\TypeNode;
 use GraphQL\Language\AST\UnionTypeDefinitionNode;
 use GraphQL\Language\AST\UnionTypeExtensionNode;
 use GraphQL\Language\Parser;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use LogicException;
 use Nette\PhpGenerator\ClassLike;
@@ -95,8 +94,7 @@ final class Generator
         private readonly iterable $modules,
         private readonly WriterInterface $writer,
         private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(
-            contextType: self::MIXED,
-            info: ResolveInfo::class
+            contextType: self::MIXED
         ),
         private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
         private readonly ?TypeDecoratorInterface $typeDecorator = null,
