@@ -71,6 +71,12 @@ input ObjectInput {
     floatNullable: Float
     int: Int!
     intNullable: Int
+    embeddedInput: EmbeddedInput!
+    embeddedInputNullable: EmbeddedInput
+}
+
+input EmbeddedInput {
+    testField: Int
 }
 
 type ObjectTest implements Node {

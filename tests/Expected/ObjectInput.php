@@ -16,11 +16,13 @@ final class ObjectInput
      * @param bool $boolean
      * @param float $float
      * @param int $int
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\EmbeddedInput $embeddedInput
      * @param string|null $idNullable
      * @param string|null $stringNullable
      * @param bool|null $booleanNullable
      * @param float|null $floatNullable
      * @param int|null $intNullable
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\EmbeddedInput|null $embeddedInputNullable
      */
     public function __construct(
         public readonly string $id,
@@ -28,11 +30,13 @@ final class ObjectInput
         public readonly bool $boolean,
         public readonly float $float,
         public readonly int $int,
+        public readonly EmbeddedInput $embeddedInput,
         public readonly ?string $idNullable,
         public readonly ?string $stringNullable,
         public readonly ?bool $booleanNullable,
         public readonly ?float $floatNullable,
         public readonly ?int $intNullable,
+        public readonly ?EmbeddedInput $embeddedInputNullable,
     ) {
     }
 }
