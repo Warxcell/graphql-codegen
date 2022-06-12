@@ -31,12 +31,12 @@ final class ObjectTest
         public readonly float $float,
         public readonly int $int,
         public readonly EnumTest $enum,
-        public readonly ?string $idNullable = null,
-        public readonly ?string $stringNullable = null,
-        public readonly ?bool $booleanNullable = null,
-        public readonly ?float $floatNullable = null,
-        public readonly ?int $intNullable = null,
-        public readonly ?EnumTest $enumNullable = null,
+        public readonly ?string $idNullable,
+        public readonly ?string $stringNullable,
+        public readonly ?bool $booleanNullable,
+        public readonly ?float $floatNullable,
+        public readonly ?int $intNullable,
+        public readonly ?EnumTest $enumNullable,
     ) {
     }
 }

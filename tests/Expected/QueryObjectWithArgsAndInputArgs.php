@@ -21,11 +21,16 @@ final class QueryObjectWithArgsAndInputArgs
      * @param \Arxy\GraphQLCodegen\Tests\MappedEnum $mappedEnum
      * @param string|null $idNullable
      * @param string|null $stringNullable
+     * @param string|null $stringDefault
      * @param bool|null $booleanNullable
+     * @param bool|null $booleanDefault
      * @param float|null $floatNullable
+     * @param float|null $floatDefault
      * @param int|null $intNullable
+     * @param int|null $intDefault
      * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectInput|null $inputNullable
      * @param \Arxy\GraphQLCodegen\Tests\Expected\EnumTest|null $enumNullable
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\EnumTest|null $enumDefault
      * @param \Arxy\GraphQLCodegen\Tests\MappedEnum|null $mappedEnumNullable
      */
     public function __construct(
@@ -37,14 +42,19 @@ final class QueryObjectWithArgsAndInputArgs
         public readonly ObjectInput $input,
         public readonly EnumTest $enum,
         public readonly \Arxy\GraphQLCodegen\Tests\MappedEnum $mappedEnum,
-        public readonly ?string $idNullable = null,
-        public readonly ?string $stringNullable = null,
-        public readonly ?bool $booleanNullable = null,
-        public readonly ?float $floatNullable = null,
-        public readonly ?int $intNullable = null,
-        public readonly ?ObjectInput $inputNullable = null,
-        public readonly ?EnumTest $enumNullable = null,
-        public readonly ?\Arxy\GraphQLCodegen\Tests\MappedEnum $mappedEnumNullable = null,
+        public readonly ?string $idNullable,
+        public readonly ?string $stringNullable,
+        public readonly ?string $stringDefault,
+        public readonly ?bool $booleanNullable,
+        public readonly ?bool $booleanDefault,
+        public readonly ?float $floatNullable,
+        public readonly ?float $floatDefault,
+        public readonly ?int $intNullable,
+        public readonly ?int $intDefault,
+        public readonly ?ObjectInput $inputNullable,
+        public readonly ?EnumTest $enumNullable,
+        public readonly ?EnumTest $enumDefault,
+        public readonly ?\Arxy\GraphQLCodegen\Tests\MappedEnum $mappedEnumNullable,
     ) {
     }
 }

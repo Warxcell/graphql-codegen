@@ -13,7 +13,7 @@ final class ObjectThatReturnItself
     /**
      * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null $innerObject
      */
-    public function __construct(public readonly ?ObjectThatReturnItself $innerObject = null)
+    public function __construct(public readonly ?ObjectThatReturnItself $innerObject)
     {
     }
 }

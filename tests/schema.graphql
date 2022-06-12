@@ -20,16 +20,21 @@ type Query {
         idNullable: ID
         string: String!
         stringNullable: String
+        stringDefault: String = "Test"
         boolean: Boolean!
         booleanNullable: Boolean
+        booleanDefault: Boolean = true
         float: Float!
         floatNullable: Float
+        floatDefault: Float = 0.5
         int: Int!
         intNullable: Int
+        intDefault: Int = 1
         input: ObjectInput!
         inputNullable: ObjectInput
         enum: EnumTest!
         enumNullable: EnumTest
+        enumDefault: EnumTest = ONE
         mappedEnum: MappedEnum!
         mappedEnumNullable: MappedEnum
     ): ObjectTest

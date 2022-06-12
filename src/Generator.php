@@ -538,9 +538,11 @@ final class Generator
         InputValueDefinitionNode|FieldDefinitionNode $definitionNode
     ): void {
         $nullable = !$definitionNode->type instanceof NonNullTypeNode;
+
+        // TODO maybe handle default value?
+        // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
         ($nullable ? $method->addPromotedParameter(
             $definitionNode->name->value,
-            $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
         ) : $method->addPromotedParameter(
             $definitionNode->name->value
         ))

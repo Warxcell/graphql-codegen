@@ -26,13 +26,13 @@ final class Query
         public readonly string $ping,
         public readonly iterable $objects,
         public readonly iterable $objectItemNullable,
-        public readonly ?ObjectTest $object = null,
-        public readonly ?iterable $objectNullable = null,
-        public readonly ?iterable $objectItemAndFieldNullable = null,
-        public readonly ?ObjectTest $objectWithArgsAndInput = null,
-        public readonly ?\Arxy\GraphQLCodegen\Tests\TestInterface $fieldReturnsInterface = null,
-        public readonly ObjectTest|ObjectTwo|null $fieldReturnsUnion = null,
-        public readonly ?ObjectThatReturnItself $objectThatReturnItself = null,
+        public readonly ?ObjectTest $object,
+        public readonly ?iterable $objectNullable,
+        public readonly ?iterable $objectItemAndFieldNullable,
+        public readonly ?ObjectTest $objectWithArgsAndInput,
+        public readonly ?\Arxy\GraphQLCodegen\Tests\TestInterface $fieldReturnsInterface,
+        public readonly ObjectTest|ObjectTwo|null $fieldReturnsUnion,
+        public readonly ?ObjectThatReturnItself $objectThatReturnItself,
     ) {
     }
 }
