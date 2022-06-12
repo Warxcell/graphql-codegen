@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
-use Arxy\GraphQLCodegen\Generator\TypeDecoratorInterface;
 use Arxy\GraphQLCodegen\NamingStrategy\DefaultStrategy;
 use Exception;
 use GraphQL\Error\Error;
