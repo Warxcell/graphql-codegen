@@ -35,6 +35,7 @@ use GraphQL\Language\AST\UnionTypeDefinitionNode;
 use GraphQL\Language\AST\UnionTypeExtensionNode;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
 use LogicException;
 use Nette\PhpGenerator\ClassLike;
 use Nette\PhpGenerator\ClassType;
@@ -61,6 +62,7 @@ use function sprintf;
 final class Generator
 {
     public const MIXED = 'mixed';
+    public const PHP_NATIVE_TYPES = ['string', 'int', 'float', 'bool', 'iterable', 'array', 'null'];
 
     /**
      * @var DocumentNode[]
@@ -160,15 +162,15 @@ final class Generator
                 $module,
                 $definitionNode
             ),
-            ScalarTypeDefinitionNode::class, ScalarTypeExtensionNode::class => $this->generateScalarType(
+            ScalarTypeDefinitionNode::class, ScalarTypeExtensionNode::class => $this->generateScalarResolver(
                 $module,
                 $definitionNode
             ),
-            InterfaceTypeDefinitionNode::class, InterfaceTypeExtensionNode::class => $this->generateInterfaceType(
+            InterfaceTypeDefinitionNode::class, InterfaceTypeExtensionNode::class => $this->generateInterfaceResolver(
                 $module,
                 $definitionNode
             ),
-            UnionTypeDefinitionNode::class, UnionTypeExtensionNode::class => $this->generateUnionType(
+            UnionTypeDefinitionNode::class, UnionTypeExtensionNode::class => $this->generateUnionResolver(
                 $module,
                 $definitionNode
             ),
@@ -208,7 +210,7 @@ final class Generator
 
     private function isNativeType(string $type): bool
     {
-        return in_array($type, ['string', 'int', 'float', 'bool']);
+        return in_array($type, self::PHP_NATIVE_TYPES);
     }
 
     /**
@@ -217,14 +219,14 @@ final class Generator
     private function handleDefinitionByName(string $name): string
     {
         switch ($name) {
-            case 'ID':
-            case 'String':
+            case Type::ID:
+            case Type::STRING:
                 return 'string';
-            case 'Int':
+            case Type::INT:
                 return 'int';
-            case 'Float':
+            case Type::FLOAT:
                 return 'float';
-            case 'Boolean':
+            case Type::BOOLEAN:
                 return 'bool';
             default:
                 $handleType = function () use ($name): ?string {
@@ -512,7 +514,7 @@ final class Generator
             if (!$reflection->isBacked()) {
                 throw CodegenException::notBackedEnum($module, $definitionNode, $typeName);
             }
-            
+
             return null;
         }
         $enum = new EnumType($this->namingStrategy->nameForEnum($module, $definitionNode));
@@ -523,12 +525,10 @@ final class Generator
         return $enum;
     }
 
-    /**
-     */
-    public function generateScalarType(
+    private function generateScalarResolver(
         ModuleInterface $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
-    ): ClassLike {
+    ): ?ClassLike {
         $type = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($module, $definitionNode));
         $serialize = $type->addMethod('serialize')->setReturnType('string');
         $serialize->setPublic();
@@ -554,16 +554,15 @@ final class Generator
         $parseLiteral->addParameter('variables', null)->setType('?array');
 
         $parseLiteral->addComment($throws);
+        $this->writeGeneratedType($module, $type);
 
-        return $type;
+        return null;
     }
 
-    /**
-     */
-    private function generateUnionType(
+    private function generateUnionResolver(
         ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
-    ): ClassLike {
+    ): ?ClassLike {
         $type = new InterfaceType($this->namingStrategy->nameForUnionResolverInterface($module, $definitionNode));
         $resolveType = $type->addMethod('resolveType');
         $resolveType->setPublic();
@@ -584,15 +583,15 @@ final class Generator
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
-        return $type;
+        $this->writeGeneratedType($module, $type);
+
+        return null;
     }
 
-    /**
-     */
-    private function generateInterfaceType(
+    private function generateInterfaceResolver(
         ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
-    ): ClassLike {
+    ): ?ClassLike {
         /** @var NamedTypeNode[] $allTypesThatImplements */
         $allTypesThatImplements = [];
 
@@ -631,6 +630,8 @@ final class Generator
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
-        return $type;
+        $this->writeGeneratedType($module, $type);
+
+        return null;
     }
 }
