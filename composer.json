@@ -6,7 +6,7 @@
         "php": ">=8.1",
         "webonyx/graphql-php": "~v14.11",
         "nette/php-generator": "^4.0",
-        "psr/log": "^3.0"
+        "psr/log": "^1.0 | ^2.0 | ^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
