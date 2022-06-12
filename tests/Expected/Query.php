@@ -20,6 +20,7 @@ final class Query
      * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null $objectWithArgsAndInput
      * @param \Arxy\GraphQLCodegen\Tests\TestInterface|null $fieldReturnsInterface
      * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null $fieldReturnsUnion
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null $objectThatReturnItself
      */
     public function __construct(
         public readonly string $ping,
@@ -31,6 +32,7 @@ final class Query
         public readonly ?ObjectTest $objectWithArgsAndInput = null,
         public readonly ?\Arxy\GraphQLCodegen\Tests\TestInterface $fieldReturnsInterface = null,
         public readonly ObjectTest|ObjectTwo|null $fieldReturnsUnion = null,
+        public readonly ?ObjectThatReturnItself $objectThatReturnItself = null,
     ) {
     }
 }

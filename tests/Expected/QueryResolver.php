@@ -99,4 +99,14 @@ interface QueryResolver
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
     ): ObjectTest|ObjectTwo|\GraphQL\Executor\Promise\Promise|null;
+
+    /**
+     * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null>
+     */
+    public function objectThatReturnItself(
+        Query $parent,
+        QueryObjectThatReturnItselfArgs $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info
+    ): ObjectThatReturnItself|\GraphQL\Executor\Promise\Promise|null;
 }

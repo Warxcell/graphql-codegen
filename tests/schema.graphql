@@ -36,6 +36,11 @@ type Query {
 
     fieldReturnsInterface: Node
     fieldReturnsUnion: ObjectUnion
+    objectThatReturnItself: ObjectThatReturnItself
+}
+
+type ObjectThatReturnItself {
+    innerObject: ObjectThatReturnItself
 }
 
 enum EnumTest {

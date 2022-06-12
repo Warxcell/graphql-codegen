@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Arxy\GraphQLCodegen\Tests;
 
 use Arxy\GraphQLCodegen\CodegenException;
-use Arxy\GraphQLCodegen\FileWriter;
 use Arxy\GraphQLCodegen\Generator;
 use Arxy\GraphQLCodegen\Module;
 use Arxy\GraphQLCodegen\WriterInterface;
@@ -23,7 +22,7 @@ class GeneratorTest extends TestCase
     public function testGenerate(): void
     {
         $writer = new Writer();
-        $writer = new FileWriter(__DIR__ . '/Expected');
+        //        $writer = new \Arxy\GraphQLCodegen\FileWriter(__DIR__ . '/Expected');
         $generator = new Generator([
             new Module(
                 'testModule',

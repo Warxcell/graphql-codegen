@@ -80,12 +80,12 @@ final class Generator
     private array $allDocuments = [];
 
     /**
-     * @var array<string, class-string|string>
+     * @var array<class-string, array<string, ClassLike>>
      */
-    private array $typeMappingRegistry = [];
+    private array $generatedTypes = [];
 
     /**
-     * @var array<class-string, array<string, ClassLike>>
+     * @var array<string, string>
      */
     private array $typeRegistry = [];
 
@@ -113,10 +113,12 @@ final class Generator
         $mappings = [];
         $allDocs = [];
         foreach ($this->modules as $module) {
+            foreach ($module->getTypeMapping() as $graphqlType => $phpType) {
+                $this->typeRegistry[$graphqlType] = $phpType;
+            }
             $mappings = array_merge($mappings, $module->getTypeMapping());
             $allDocs[] = Parser::parse(file_get_contents($module->getSchema()));
         }
-        $this->typeMappingRegistry = $mappings;
         $this->allDocuments = $allDocs;
 
         foreach ($this->modules as $module) {
@@ -142,15 +144,20 @@ final class Generator
         $this->logger->info(sprintf('Writing %s', $className));
     }
 
+    private function addTypeRegistry(string $graphqlType, string $phpType): void
+    {
+        $this->typeRegistry[$graphqlType] = $phpType;
+    }
+
     private function addGeneratedType(ModuleInterface $module, ClassLike $type): void
     {
         $className = $type->getName();
         assert($className !== null);
 
-        if (isset($this->typeRegistry[$module->getName()][$className])) {
+        if (isset($this->generatedTypes[$module->getName()][$className])) {
             return;
         }
-        $this->typeRegistry[$module->getName()][$className] = $type;
+        $this->generatedTypes[$module->getName()][$className] = $type;
 
         $this->writeGeneratedType($module, $type);
     }
@@ -242,8 +249,8 @@ final class Generator
                 return ['bool'];
             default:
                 $handleType = function () use ($name): ?array {
-                    if (isset($this->typeMappingRegistry[$name])) {
-                        return [$this->typeMappingRegistry[$name]];
+                    if (isset($this->typeRegistry[$name])) {
+                        return [$this->typeRegistry[$name]];
                     }
 
                     foreach ($this->modules as $i => $module) {
@@ -327,10 +334,12 @@ final class Generator
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): ?ClassLike {
         $class = null;
-        //$type = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
-        $type = $this->typeMappingRegistry[$definitionNode->name->value] ?? null;
+        $type = $this->typeRegistry[$definitionNode->name->value] ?? null;
         if (!$type) {
-            $class = new ClassType($this->namingStrategy->nameForObject($module, $definitionNode));
+            $className = $this->namingStrategy->nameForObject($module, $definitionNode);
+            $this->addTypeRegistry($definitionNode->name->value, $module->getNamespace() . '\\' . $className);
+
+            $class = new ClassType($className);
             $class->setFinal();
 
             if (count($definitionNode->fields) > 0) {
