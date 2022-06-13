@@ -83,7 +83,7 @@ final class Generator
     private array $generatedTypes = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, string|class-string>
      */
     private array $typeRegistry = [];
 
@@ -332,6 +332,7 @@ final class Generator
     ): ?ClassLike {
         $class = null;
         $type = $this->typeRegistry[$definitionNode->name->value] ?? null;
+        $generateDefaultImplementation = $type === null;
         if (!$type) {
             $className = $this->namingStrategy->nameForObject($module, $definitionNode);
             $this->addTypeRegistry($definitionNode->name->value, $module->getNamespace() . '\\' . $className);
@@ -355,9 +356,14 @@ final class Generator
             $className = $class->getName();
             assert($className !== null);
             $type = $module->getNamespace() . '\\' . $className;
-        }
 
-        $this->generateResolversForObject($module, $definitionNode, $type);
+            $interface = $this->generateResolversForObject($module, $definitionNode, $type);
+            if ($generateDefaultImplementation) {
+                $this->generateDefaultResolverImplementation($module, $definitionNode, $interface);
+            }
+        } else {
+            $this->generateResolversForObject($module, $definitionNode, $type);
+        }
 
         return $class;
     }
@@ -369,7 +375,7 @@ final class Generator
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         string $parentType
-    ): void {
+    ): InterfaceType {
         $type = new InterfaceType($this->namingStrategy->nameForObjectResolverInterface($module, $definitionNode));
 
         foreach ($definitionNode->fields as $field) {
@@ -414,9 +420,39 @@ final class Generator
         }
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleObjectResolver($module, $definitionNode, $type);
+            $this->typeDecorator->handleObjectResolverInterface($module, $definitionNode, $type);
         }
         $this->writeGeneratedType($module, $type);
+
+        return $type;
+    }
+
+    private function generateDefaultResolverImplementation(
+        ModuleInterface $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        InterfaceType $interface
+    ): void {
+        $class = new ClassType($this->namingStrategy->nameForObjectResolverImplementation($module, $definitionNode));
+
+        $name = $interface->getName();
+        assert($name !== null);
+        $class->addImplement($module->getNamespace() . '\\' . $name);
+
+        $class->setMethods(
+            array_map(static function (Method $method) {
+                $implementation = clone($method);
+                $implementation->setAbstract(false);
+                $implementation->setBody(sprintf('return $parent->%s;', $method->getName()));
+
+                return $implementation;
+            }, $interface->getMethods())
+        );
+
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleObjectResolverImplementation($module, $definitionNode, $class);
+        }
+
+        $this->writeGeneratedType($module, $class);
     }
 
     private function wrapInPromise(string $type): string
@@ -433,7 +469,7 @@ final class Generator
     }
 
     /**
-     * @param array<string> $type
+     * @param array<string> $types
      * @return array<string>
      */
     private function fixTypeForGenerics(array $types): array
@@ -556,8 +592,6 @@ final class Generator
         );
     }
 
-    /**
-     */
     private function generateEnumType(
         ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
@@ -620,7 +654,7 @@ final class Generator
         $parseLiteral->addComment($throws);
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleScalarResolver($module, $definitionNode, $type);
+            $this->typeDecorator->handleScalarResolverInterface($module, $definitionNode, $type);
         }
 
         $this->writeGeneratedType($module, $type);
@@ -649,7 +683,7 @@ final class Generator
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleUnionResolver($module, $definitionNode, $class);
+            $this->typeDecorator->handleUnionResolverInterface($module, $definitionNode, $class);
         }
 
         $this->writeGeneratedType($module, $class);
@@ -704,7 +738,7 @@ final class Generator
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
 
         if ($this->typeDecorator) {
-            $this->typeDecorator->handleInterfaceResolver($module, $definitionNode, $class);
+            $this->typeDecorator->handleInterfaceResolverInterface($module, $definitionNode, $class);
         }
 
         $this->writeGeneratedType($module, $class);

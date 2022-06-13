@@ -39,6 +39,13 @@ final class DefaultStrategy implements NamingStrategy
         return $definitionNode->name->value . 'Resolver';
     }
 
+    public function nameForObjectResolverImplementation(
+        ModuleInterface $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
+    ): string {
+        return $definitionNode->name->value . 'DefaultResolver';
+    }
+
     public function nameForScalarResolverInterface(
         ModuleInterface $module,
         ScalarTypeExtensionNode|ScalarTypeDefinitionNode $definitionNode

@@ -22,7 +22,7 @@ class GeneratorTest extends TestCase
     public function testGenerate(): void
     {
         $writer = new Writer();
-                $writer = new \Arxy\GraphQLCodegen\FileWriter(__DIR__ . '/Expected');
+//                $writer = new \Arxy\GraphQLCodegen\FileWriter(__DIR__ . '/Expected');
         $generator = new Generator([
             new Module(
                 'testModule',

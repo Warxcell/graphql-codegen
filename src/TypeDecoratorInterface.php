@@ -15,57 +15,65 @@ use GraphQL\Language\AST\ScalarTypeDefinitionNode;
 use GraphQL\Language\AST\ScalarTypeExtensionNode;
 use GraphQL\Language\AST\UnionTypeDefinitionNode;
 use GraphQL\Language\AST\UnionTypeExtensionNode;
-use Nette\PhpGenerator\ClassLike;
+use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\EnumType;
+use Nette\PhpGenerator\InterfaceType;
 
 interface TypeDecoratorInterface
 {
     public function handleObject(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectNode,
-        ClassLike $classLike
+        ClassType $classLike
     ): void;
 
     public function handleObjectFieldArgs(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectNode,
         FieldDefinitionNode $fieldNode,
-        ClassLike $classLike
+        ClassType $classLike
     ): void;
 
-    public function handleObjectResolver(
+    public function handleObjectResolverInterface(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectNode,
-        ClassLike $classLike
+        InterfaceType $classLike
+    ): void;
+
+    public function handleObjectResolverImplementation(
+        ModuleInterface $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectNode,
+        ClassType $classLike
     ): void;
 
     public function handleInputObjectType(
         ModuleInterface $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode,
-        ClassLike $classLike
+        ClassType $classLike
     ): void;
 
     public function handleEnumType(
         ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $enumNode,
-        ClassLike $classLike
+        EnumType $classLike
     ): void;
 
-    public function handleScalarResolver(
+    public function handleScalarResolverInterface(
         ModuleInterface $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $scalarNode,
-        ClassLike $classLike
+        InterfaceType $classLike
     ): void;
 
-    public function handleInterfaceResolver(
+    public function handleInterfaceResolverInterface(
         ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $interfaceNode,
-        ClassLike $classLike
+        InterfaceType $classLike
     ): void;
 
-    public function handleUnionResolver(
+    public function handleUnionResolverInterface(
         ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $unionNode,
-        ClassLike $classLike
+        InterfaceType $classLike
     ): void;
 }
 

@@ -30,6 +30,11 @@ interface NamingStrategy
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string;
 
+    public function nameForObjectResolverImplementation(
+        ModuleInterface $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
+    ): string;
+
     public function nameForScalarResolverInterface(
         ModuleInterface $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
