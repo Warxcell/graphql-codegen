@@ -14,7 +14,7 @@ interface QueryResolver
      * @return string|\GraphQL\Executor\Promise\Promise<string>
      */
     public function ping(
-        Query $parent,
+        mixed $parent,
         QueryPingArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -24,7 +24,7 @@ interface QueryResolver
      * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>
      */
     public function object(
-        Query $parent,
+        mixed $parent,
         QueryObjectArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -34,7 +34,7 @@ interface QueryResolver
      * @return list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest>|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest>>
      */
     public function objects(
-        Query $parent,
+        mixed $parent,
         QueryObjectsArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -44,7 +44,7 @@ interface QueryResolver
      * @return list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest>|null|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest>|null>
      */
     public function objectNullable(
-        Query $parent,
+        mixed $parent,
         QueryObjectNullableArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -54,7 +54,7 @@ interface QueryResolver
      * @return list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>>
      */
     public function objectItemNullable(
-        Query $parent,
+        mixed $parent,
         QueryObjectItemNullableArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -64,7 +64,7 @@ interface QueryResolver
      * @return list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>|null|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>|null>
      */
     public function objectItemAndFieldNullable(
-        Query $parent,
+        mixed $parent,
         QueryObjectItemAndFieldNullableArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -74,7 +74,7 @@ interface QueryResolver
      * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|null>
      */
     public function objectWithArgsAndInput(
-        Query $parent,
+        mixed $parent,
         QueryObjectWithArgsAndInputArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -84,7 +84,7 @@ interface QueryResolver
      * @return \Arxy\GraphQLCodegen\Tests\TestInterface|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\TestInterface|null>
      */
     public function fieldReturnsInterface(
-        Query $parent,
+        mixed $parent,
         QueryFieldReturnsInterfaceArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -94,7 +94,7 @@ interface QueryResolver
      * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectTest|\Arxy\GraphQLCodegen\Tests\Expected\ObjectTwo|null>
      */
     public function fieldReturnsUnion(
-        Query $parent,
+        mixed $parent,
         QueryFieldReturnsUnionArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
@@ -104,7 +104,7 @@ interface QueryResolver
      * @return \Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\ObjectThatReturnItself|null>
      */
     public function objectThatReturnItself(
-        Query $parent,
+        mixed $parent,
         QueryObjectThatReturnItselfArgs $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info

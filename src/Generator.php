@@ -76,7 +76,7 @@ final class Generator
      * TODO: Read these from schema
      * @var list<string>
      */
-    private array $skipTypes = ['Query', 'Mutation', 'Subscription'];
+    private array $rootTypes = ['Query', 'Mutation', 'Subscription'];
 
     /**
      * @var DocumentNode[]
@@ -99,9 +99,7 @@ final class Generator
          */
         private readonly iterable $modules,
         private readonly WriterInterface $writer,
-        private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(
-            contextType: self::MIXED
-        ),
+        private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(),
         private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
         private readonly ?TypeDecoratorInterface $typeDecorator = null,
         private readonly LoggerInterface $logger = new NullLogger()
@@ -329,6 +327,11 @@ final class Generator
         return array_merge($nonNullable, $nullable);
     }
 
+    private function isRootType(ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode): bool
+    {
+        return in_array($definitionNode->name->value, $this->rootTypes);
+    }
+
     /**
      * @throws Exception
      */
@@ -336,39 +339,48 @@ final class Generator
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): ?ClassLike {
-        $class = null;
         $type = $this->typeRegistry[$definitionNode->name->value] ?? null;
+
+        $isRootType = $this->isRootType($definitionNode);
+
+        if ($isRootType) {
+            $this->generateResolversForObject($module, $definitionNode, $this->resolverParameterTypes->rootValue);
+
+            return null;
+        }
 
         if ($type) {
             $this->generateResolversForObject($module, $definitionNode, $type);
-        } else {
-            $className = $this->namingStrategy->nameForObject($module, $definitionNode);
-            $this->addTypeRegistry($definitionNode->name->value, $module->getNamespace() . '\\' . $className);
 
-            $class = new ClassType($className);
-            $class->setFinal();
+            return null;
+        }
 
-            if (count($definitionNode->fields) > 0) {
-                $method = $class->addMethod('__construct');
-                foreach ($this->reorderParameters($definitionNode->fields) as $field) {
-                    $this->handleInputValue($method, $field);
-                }
+        $className = $this->namingStrategy->nameForObject($module, $definitionNode);
+        $this->addTypeRegistry($definitionNode->name->value, $module->getNamespace() . '\\' . $className);
+
+        $class = new ClassType($className);
+        $class->setFinal();
+
+        if (count($definitionNode->fields) > 0) {
+            $method = $class->addMethod('__construct');
+            foreach ($this->reorderParameters($definitionNode->fields) as $field) {
+                $this->handleInputValue($method, $field);
             }
+        }
 
-            if ($this->typeDecorator) {
-                $this->typeDecorator->handleObject($module, $definitionNode, $class);
-            }
+        if ($this->typeDecorator) {
+            $this->typeDecorator->handleObject($module, $definitionNode, $class);
+        }
 
-            $this->addGeneratedType($module, $class);
+        $this->addGeneratedType($module, $class);
 
-            $className = $class->getName();
-            assert($className !== null);
-            $type = $module->getNamespace() . '\\' . $className;
+        $className = $class->getName();
+        assert($className !== null);
+        $type = $module->getNamespace() . '\\' . $className;
 
-            $interface = $this->generateResolversForObject($module, $definitionNode, $type);
-            if (!in_array($definitionNode->name->value, $this->skipTypes)) {
-                $this->generateDefaultResolverImplementation($module, $definitionNode, $interface);
-            }
+        $interface = $this->generateResolversForObject($module, $definitionNode, $type);
+        if (!$this->isRootType($definitionNode)) {
+            $this->generateDefaultResolverImplementation($module, $definitionNode, $interface);
         }
 
         return $class;
