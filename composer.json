@@ -10,7 +10,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
-        "vimeo/psalm": "^4.23"
+        "vimeo/psalm": "^4.23",
+        "symfony/validator": "^5.4 | ^6.0"
     },
     "autoload": {
         "psr-4": {

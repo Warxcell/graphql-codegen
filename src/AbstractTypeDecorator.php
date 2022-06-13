@@ -19,61 +19,79 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\EnumType;
 use Nette\PhpGenerator\InterfaceType;
 
-interface TypeDecoratorInterface
+abstract class AbstractTypeDecorator implements TypeDecoratorInterface
 {
     public function handleObject(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleObjectFieldArgs(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         FieldDefinitionNode $fieldNode,
         ClassType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleObjectResolverInterface(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         InterfaceType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleObjectResolverImplementation(
         ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleInputObjectType(
         ModuleInterface $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleEnumType(
         ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
         EnumType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleScalarResolverInterface(
         ModuleInterface $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode,
         InterfaceType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleInterfaceResolverInterface(
         ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode,
         InterfaceType $classLike
-    ): void;
+    ): void {
+
+    }
 
     public function handleUnionResolverInterface(
         ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode,
         InterfaceType $classLike
-    ): void;
+    ): void {
+
+    }
 }
 

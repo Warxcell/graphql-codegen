@@ -11,6 +11,7 @@ final class ResolverParameterTypes
     /**
      * @param class-string|string $contextType
      * @param class-string|string $info
+     * @param class-string|string $rootValue
      */
     public function __construct(
         public readonly string $contextType = 'mixed',
