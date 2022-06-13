@@ -73,6 +73,12 @@ final class Generator
     ];
 
     /**
+     * TODO: Read these from schema
+     * @var list<string>
+     */
+    private array $skipTypes = ['Query', 'Mutation', 'Subscription'];
+
+    /**
      * @var DocumentNode[]
      */
     private array $allDocuments = [];
@@ -332,8 +338,10 @@ final class Generator
     ): ?ClassLike {
         $class = null;
         $type = $this->typeRegistry[$definitionNode->name->value] ?? null;
-        $generateDefaultImplementation = $type === null;
-        if (!$type) {
+
+        if ($type) {
+            $this->generateResolversForObject($module, $definitionNode, $type);
+        } else {
             $className = $this->namingStrategy->nameForObject($module, $definitionNode);
             $this->addTypeRegistry($definitionNode->name->value, $module->getNamespace() . '\\' . $className);
 
@@ -358,11 +366,9 @@ final class Generator
             $type = $module->getNamespace() . '\\' . $className;
 
             $interface = $this->generateResolversForObject($module, $definitionNode, $type);
-            if ($generateDefaultImplementation) {
+            if (!in_array($definitionNode->name->value, $this->skipTypes)) {
                 $this->generateDefaultResolverImplementation($module, $definitionNode, $interface);
             }
-        } else {
-            $this->generateResolversForObject($module, $definitionNode, $type);
         }
 
         return $class;
