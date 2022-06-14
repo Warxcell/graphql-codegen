@@ -422,6 +422,16 @@ final class Generator
             if (!$field->type instanceof NonNullTypeNode) {
                 $returnTypes[] = 'null';
             }
+
+            /**
+             * mixed can be used only alone, so if some of types is mixed - return only mixed.
+             */
+            foreach ($returnTypes as $returnType) {
+                if ($returnType === self::MIXED) {
+                    $returnTypes = [self::MIXED];
+                    break;
+                }
+            }
             $method->setReturnType($this->generateUnion($returnTypes));
 
             $genericsTypes = $this->generateUnion($this->getGenericsType($field->type));
