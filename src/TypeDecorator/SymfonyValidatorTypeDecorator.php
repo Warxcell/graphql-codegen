@@ -8,13 +8,19 @@ use Arxy\GraphQLCodegen\AbstractTypeDecorator;
 use Arxy\GraphQLCodegen\Generator;
 use Arxy\GraphQLCodegen\ModuleInterface;
 use Exception;
+use GraphQL\Language\AST\EnumTypeDefinitionNode;
+use GraphQL\Language\AST\EnumTypeExtensionNode;
 use GraphQL\Language\AST\FieldDefinitionNode;
 use GraphQL\Language\AST\InputObjectTypeDefinitionNode;
 use GraphQL\Language\AST\InputObjectTypeExtensionNode;
 use GraphQL\Language\AST\ObjectTypeDefinitionNode;
 use GraphQL\Language\AST\ObjectTypeExtensionNode;
+use GraphQL\Language\AST\ScalarTypeDefinitionNode;
+use GraphQL\Language\AST\ScalarTypeExtensionNode;
 use LogicException;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\EnumType;
+use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\PromotedParameter;
 use ReflectionClass;
 use ReflectionException;
@@ -29,9 +35,32 @@ use function sprintf;
 
 class SymfonyValidatorTypeDecorator extends AbstractTypeDecorator
 {
+    private array $scalars = [];
+    private array $enums = [];
+
     public function __construct(
         private readonly array $validationMapping
     ) {
+    }
+
+    public function handleScalarResolverInterface(
+        ModuleInterface $module,
+        ScalarTypeExtensionNode|ScalarTypeDefinitionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+        if (isset($module->getTypeMapping()[$definitionNode->name->value])) {
+            $this->scalars[$module->getTypeMapping()[$definitionNode->name->value]] = true;
+        }
+    }
+
+    public function handleEnumType(
+        ModuleInterface $module,
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
+        EnumType $classLike
+    ): void {
+        if (isset($module->getTypeMapping()[$definitionNode->name->value])) {
+            $this->enums[$module->getTypeMapping()[$definitionNode->name->value]] = true;
+        }
     }
 
     private function addConstraint(PromotedParameter $parameter, string $constraint, array $attributes = []): void
@@ -78,9 +107,33 @@ class SymfonyValidatorTypeDecorator extends AbstractTypeDecorator
             return;
         }
         foreach ($classType->getMethod('__construct')->getParameters() as $parameter) {
-            if (!in_array($parameter->getType(), Generator::PHP_NATIVE_TYPES)) {
-                $parameter->addAttribute(Valid::class);
+            $param = $parameter->getType(true);
+            if (!$param->isSingle()) {
+                continue;
             }
+
+            $type = $param->getNames()[0];
+
+            if (in_array(
+                    $type,
+                    Generator::PHP_NATIVE_TYPES
+                )
+                || isset($this->enums[$type])
+                || isset($this->scalars[$type])) {
+                continue;
+            }
+
+            try {
+                $reflection = new ReflectionClass($parameter->getType());
+
+                if ($reflection->isEnum()) {
+                    continue;
+                }
+            } catch (ReflectionException $exception) {
+                // type not found, probably generated atm, so add constraint.
+            }
+
+            $parameter->addAttribute(Valid::class);
         }
     }
 
