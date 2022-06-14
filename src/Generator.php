@@ -646,12 +646,11 @@ final class Generator
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
     ): ?ClassLike {
         $type = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($module, $definitionNode));
-        $serialize = $type->addMethod('serialize')->setReturnType('string');
+        $serialize = $type->addMethod('serialize')->setReturnType($this->generateUnion(['string', 'null']));
         $serialize->setPublic();
         $serialize->addParameter('value')->setType(
             $this->typeRegistry[$definitionNode->name->value] ?? self::MIXED
         );
-        $serialize->setBody('return $value;');
 
         $parseValue = $type->addMethod('parseValue')->setReturnType(
             $this->typeRegistry[$definitionNode->name->value] ?? self::MIXED
