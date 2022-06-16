@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\NamingStrategy;
 
-use Arxy\GraphQLCodegen\ModuleInterface;
 use Arxy\GraphQLCodegen\NamingStrategy;
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Language\AST\EnumTypeExtensionNode;
@@ -26,67 +25,77 @@ use function ucfirst;
 final class DefaultStrategy implements NamingStrategy
 {
     public function nameForObject(
-        ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string {
         return $definitionNode->name->value;
     }
 
     public function nameForObjectResolverInterface(
-        ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string {
-        return $definitionNode->name->value . 'Resolver';
+        return $definitionNode->name->value . 'ResolverInterface';
     }
 
     public function nameForObjectResolverImplementation(
-        ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string {
-        return $definitionNode->name->value . 'DefaultResolver';
+        return $definitionNode->name->value . 'Resolver';
     }
 
     public function nameForScalarResolverInterface(
-        ModuleInterface $module,
         ScalarTypeExtensionNode|ScalarTypeDefinitionNode $definitionNode
     ): string {
-        return $definitionNode->name->value . 'Resolver';
+        return $definitionNode->name->value . 'ResolverInterface';
     }
 
     public function nameForUnionResolverInterface(
-        ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
     ): string {
-        return $definitionNode->name->value . 'Resolver';
+        return $definitionNode->name->value . 'ResolverInterface';
     }
 
     public function nameForInterfaceResolverInterface(
-        ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
     ): string {
-        return $definitionNode->name->value . 'Resolver';
+        return $definitionNode->name->value . 'ResolverInterface';
     }
 
     public function nameForEnum(
-        ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): string {
         return $definitionNode->name->value;
     }
 
     public function nameForInputObject(
-        ModuleInterface $module,
         InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode
     ): string {
         return $definitionNode->name->value;
     }
 
-    public function nameForArgumentsObject(
-        ModuleInterface $module,
+    public function nameForObjectFieldArgumentsObject(
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
         FieldDefinitionNode $definitionNode
     ): string {
         return sprintf('%s%sArgs', ucfirst($objectType->name->value), ucfirst($definitionNode->name->value));
+    }
+
+    public function nameForObjectInterface(
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
+    ): string {
+        return $this->nameForObject($definitionNode) . 'Interface';
+    }
+
+    public function nameForInputObjectInterface(
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode
+    ): string {
+        return $this->nameForInputObject($definitionNode) . 'Interface';
+    }
+
+    public function nameForObjectFieldArgumentsObjectInterface(
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
+        FieldDefinitionNode $definitionNode
+    ): string {
+        return $this->nameForObjectFieldArgumentsObject($objectType, $definitionNode) . 'Interface';
     }
 }
 

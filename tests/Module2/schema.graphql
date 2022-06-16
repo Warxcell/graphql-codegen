@@ -1,0 +1,15 @@
+input CustomerInput {
+    name: String!
+}
+
+extend input CreateUserInput {
+    customer: CustomerInput!
+}
+
+extend type User {
+    name: String!
+}
+
+extend type Query {
+    pingFromModule2(da: Boolean!): String!
+}

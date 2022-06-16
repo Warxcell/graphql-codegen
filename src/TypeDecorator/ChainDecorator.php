@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\TypeDecorator;
 
-use Arxy\GraphQLCodegen\ModuleInterface;
+use Arxy\GraphQLCodegen\Module;
 use Arxy\GraphQLCodegen\TypeDecoratorInterface;
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Language\AST\EnumTypeExtensionNode;
@@ -34,93 +34,136 @@ final class ChainDecorator implements TypeDecoratorInterface
     }
 
     public function handleObject(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleObject($module, $definitionNode, $classLike);
+            $decorator->handleObject($documents, $module, $definitionNode, $classLike);
         }
     }
 
     public function handleObjectFieldArgs(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         FieldDefinitionNode $fieldNode,
         ClassType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleObjectFieldArgs($module, $definitionNode, $fieldNode, $classLike);
+            $decorator->handleObjectFieldArgs($documents, $module, $definitionNode, $fieldNode, $classLike);
         }
     }
 
     public function handleObjectResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleObjectResolverInterface($module, $definitionNode, $classLike);
+            $decorator->handleObjectResolverInterface($documents, $module, $definitionNode, $classLike);
         }
     }
 
     public function handleObjectResolverImplementation(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleObjectResolverImplementation($module, $definitionNode, $classLike);
+            $decorator->handleObjectResolverImplementation($documents, $module, $definitionNode, $classLike);
         }
     }
 
-    public function handleInputObjectType(
-        ModuleInterface $module,
+    public function handleInputObject(
+        array $documents,
+        Module $module,
         InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
         ClassType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleInputObjectType($module, $definitionNode, $classLike);
+            $decorator->handleInputObject($documents, $module, $definitionNode, $classLike);
         }
     }
 
-    public function handleEnumType(
-        ModuleInterface $module,
+    public function handleEnum(
+        array $documents,
+        Module $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
         EnumType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleEnumType($module, $definitionNode, $classLike);
+            $decorator->handleEnum($documents, $module, $definitionNode, $classLike);
         }
     }
 
     public function handleScalarResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ScalarTypeExtensionNode|ScalarTypeDefinitionNode $definitionNode,
         InterfaceType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleScalarResolverInterface($module, $definitionNode, $classLike);
+            $decorator->handleScalarResolverInterface($documents, $module, $definitionNode, $classLike);
         }
     }
 
     public function handleInterfaceResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleInterfaceResolverInterface($module, $definitionNode, $classLike);
+            $decorator->handleInterfaceResolverInterface($documents, $module, $definitionNode, $classLike);
         }
     }
 
     public function handleUnionResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
         foreach ($this->decorators as $decorator) {
-            $decorator->handleUnionResolverInterface($module, $definitionNode, $classLike);
+            $decorator->handleUnionResolverInterface($documents, $module, $definitionNode, $classLike);
+        }
+    }
+
+    public function handleObjectInterface(
+        array $documents,
+        Module $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+        foreach ($this->decorators as $decorator) {
+            $decorator->handleObjectInterface($documents, $module, $definitionNode, $classLike);
+        }
+    }
+
+    public function handleObjectFieldArgsInterface(
+        array $documents,
+        Module $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        FieldDefinitionNode $fieldNode,
+        InterfaceType $classLike
+    ): void {
+        foreach ($this->decorators as $decorator) {
+            $decorator->handleObjectFieldArgsInterface($documents, $module, $definitionNode, $fieldNode, $classLike);
+        }
+    }
+
+    public function handleInputObjectInterface(
+        array $documents,
+        Module $module,
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+        foreach ($this->decorators as $decorator) {
+            $decorator->handleInputObjectInterface($documents, $module, $definitionNode, $classLike);
         }
     }
 }

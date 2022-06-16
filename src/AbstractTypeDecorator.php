@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arxy\GraphQLCodegen;
 
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
@@ -22,76 +24,101 @@ use Nette\PhpGenerator\InterfaceType;
 abstract class AbstractTypeDecorator implements TypeDecoratorInterface
 {
     public function handleObject(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
     ): void {
-
     }
 
     public function handleObjectFieldArgs(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         FieldDefinitionNode $fieldNode,
         ClassType $classLike
     ): void {
-
     }
 
     public function handleObjectResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
-
     }
 
     public function handleObjectResolverImplementation(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
     ): void {
-
     }
 
-    public function handleInputObjectType(
-        ModuleInterface $module,
+    public function handleInputObject(
+        array $documents,
+        Module $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode,
         ClassType $classLike
     ): void {
-
     }
 
-    public function handleEnumType(
-        ModuleInterface $module,
+    public function handleEnum(
+        array $documents,
+        Module $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
         EnumType $classLike
     ): void {
-
     }
 
     public function handleScalarResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
-
     }
 
     public function handleInterfaceResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
-
     }
 
     public function handleUnionResolverInterface(
-        ModuleInterface $module,
+        array $documents,
+        Module $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void {
+    }
 
+    public function handleObjectInterface(
+        array $documents,
+        Module $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+    }
+
+    public function handleObjectFieldArgsInterface(
+        array $documents,
+        Module $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        FieldDefinitionNode $fieldNode,
+        InterfaceType $classLike
+    ): void {
+    }
+
+    public function handleInputObjectInterface(
+        array $documents,
+        Module $module,
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
     }
 }
 

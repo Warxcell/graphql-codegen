@@ -1,0 +1,40 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+scalar DateTime
+
+
+interface Node {
+    id: ID!
+}
+
+type Query {
+    ping(da: Boolean!): String!
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!, int: Int, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): User!
+}
+
+input CreateUserInput {
+    email: String!
+}
+
+type User implements Node {
+    id: ID!
+    username: String!
+}
+
+union Widget = Widget1 | Widget2
+
+type Widget1 {
+    name: String!
+}
+
+type Widget2 {
+    name: String!
+}
+
+

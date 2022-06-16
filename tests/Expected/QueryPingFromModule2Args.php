@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Expected;
 
-final class QueryPingArgs implements \Arxy\GraphQLCodegen\Tests\Module1\Expected\QueryPingArgsInterface
+final class QueryPingFromModule2Args implements \Arxy\GraphQLCodegen\Tests\Module2\Expected\QueryPingFromModule2ArgsInterface
 {
     public function __construct(/** @var bool $da */
     private readonly bool $da) {

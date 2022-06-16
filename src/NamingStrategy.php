@@ -20,50 +20,54 @@ use GraphQL\Language\AST\UnionTypeExtensionNode;
 
 interface NamingStrategy
 {
+    public function nameForObjectFieldArgumentsObject(
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
+        FieldDefinitionNode $definitionNode
+    ): string;
+
+    public function nameForObjectFieldArgumentsObjectInterface(
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
+        FieldDefinitionNode $definitionNode
+    ): string;
+
     public function nameForObject(
-        ModuleInterface $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
+    ): string;
+
+    public function nameForObjectInterface(
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForObjectResolverInterface(
-        ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForObjectResolverImplementation(
-        ModuleInterface $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForScalarResolverInterface(
-        ModuleInterface $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForUnionResolverInterface(
-        ModuleInterface $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForInterfaceResolverInterface(
-        ModuleInterface $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForEnum(
-        ModuleInterface $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): string;
 
     public function nameForInputObject(
-        ModuleInterface $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): string;
 
-    public function nameForArgumentsObject(
-        ModuleInterface $module,
-        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
-        FieldDefinitionNode $definitionNode
+    public function nameForInputObjectInterface(
+        InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): string;
 }
 
