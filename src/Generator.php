@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Arxy\GraphQLCodegen;
 
 use Arxy\GraphQLCodegen\NamingStrategy\DefaultStrategy;
+use Closure;
 use Exception;
 use GraphQL\Error\SyntaxError;
 use GraphQL\Executor\Promise\Promise;
+use GraphQL\Language\AST\DefinitionNode;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Language\AST\EnumTypeExtensionNode;
@@ -450,19 +452,47 @@ final class Generator
         return $this->modules[$name];
     }
 
+    /**
+     * @template T of DefinitionNode
+     * @param Closure(DefinitionNode): bool $predicate
+     * @return DefinitionNode
+     */
+    private function findDefinitionBy(Closure $predicate): DefinitionNode
+    {
+        foreach ($this->documents as $document) {
+            foreach ($document->definitions as $definition) {
+                if ($predicate($definition)) {
+                    return $definition;
+                }
+            }
+        }
+        throw new LogicException('Definition not found');
+    }
+
+    private function getBaseInputObjectType(InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode): ClassType
+    {
+        $name = $definitionNode->name->value;
+        if (!isset($this->baseTypes['InputObject'][$name])) {
+            if (!$definitionNode instanceof InputObjectTypeDefinitionNode) {
+                $definitionNode = $this->findDefinitionBy(
+                    static fn (DefinitionNode $definitionNode
+                    ): bool => $definitionNode instanceof InputObjectTypeDefinitionNode && $definitionNode->name->value === $name
+                );
+            }
+            $inputObject = new ClassType($this->namingStrategy->nameForInputObject($definitionNode));
+            $inputObject->setFinal();
+
+            $this->baseTypes['InputObject'][$name] = $inputObject;
+        }
+
+        return $this->baseTypes['InputObject'][$name];
+    }
+
     private function handleInputObjectType(
         Module $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): void {
-        if ($definitionNode instanceof InputObjectTypeDefinitionNode) {
-            $inputObject = new ClassType($this->namingStrategy->nameForInputObject($definitionNode));
-            $inputObject->setFinal();
-
-            $this->baseTypes['InputObject'][$definitionNode->name->value] = $inputObject;
-        } else {
-            $inputObject = $this->baseTypes['InputObject'][$definitionNode->name->value];
-            assert($inputObject instanceof ClassType);
-        }
+        $inputObject = $this->getBaseInputObjectType($definitionNode);
 
         $interface = new InterfaceType($this->namingStrategy->nameForInputObjectInterface($definitionNode));
 
