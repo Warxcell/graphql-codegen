@@ -853,7 +853,7 @@ final class Generator
 
                 foreach ($this->moduleTypeMappingRegistry as $moduleName => $typeMapping) {
                     if (isset($typeMapping[$type->name->value])) {
-                        return $typeMapping[$type->name->value][0];
+                        return $typeMapping[$type->name->value];
                     }
                 }
                 throw new LogicException(sprintf('Type %s not found', $type->name->value));
