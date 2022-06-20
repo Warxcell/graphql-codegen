@@ -851,9 +851,15 @@ final class Generator
                         );
                 }
 
-                return $this->moduleTypeMappingRegistry[$module->getName()][$type->name->value] ?? throw new LogicException(
-                        sprintf('Type %s not found', $type->name->value)
-                    );
+                foreach ($this->moduleTypeMappingRegistry as $moduleName => $typeMapping) {
+                    if (isset($typeMapping[$type->name->value])) {
+                        return $typeMapping[$type->name->value][0];
+                    }
+                }
+                throw new LogicException(sprintf('Type %s not found', $type->name->value));
+            //                return $this->moduleTypeMappingRegistry[$module->getName()][$type->name->value] ?? throw new LogicException(
+            //                        sprintf('Type %s not found', $type->name->value)
+            //                    );
         }
     }
 
