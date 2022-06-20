@@ -648,8 +648,8 @@ final class Generator
         ))
             ->setPrivate()
             ->setReadOnly()
-            ->setType($types)
-            ->setNullable($nullable);
+            ->setType($types);
+//            ->setNullable($nullable);
 
         $method->addComment(sprintf('@return %s', $this->generateUnion($this->getPhpTypesFromGraphQLType($definitionNode->type, $module))));
 
