@@ -30,6 +30,7 @@ use GraphQL\Language\AST\ObjectTypeExtensionNode;
 use GraphQL\Language\AST\ScalarTypeDefinitionNode;
 use GraphQL\Language\AST\ScalarTypeExtensionNode;
 use GraphQL\Language\AST\SchemaDefinitionNode;
+use GraphQL\Language\AST\SchemaTypeExtensionNode;
 use GraphQL\Language\AST\TypeNode;
 use GraphQL\Language\AST\UnionTypeDefinitionNode;
 use GraphQL\Language\AST\UnionTypeExtensionNode;
@@ -210,7 +211,7 @@ final class Generator
                         }
                         $className = $this->namingStrategy->nameForObjectInterface($definitionNode);
 
-                        $this->baseTypeMappingRegistry[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
+                        $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$this->baseModule->getNamespace() . '\\' . $className];
                         $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::OBJECT_TYPE_EXTENSION => function (ObjectTypeExtensionNode $definitionNode) use (
@@ -258,8 +259,7 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
-                    (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -303,6 +303,26 @@ final class Generator
                 ],
                 'leave' => function ($node) use (&$currentNode) {
                     unset($currentNode);
+                },
+            ]);
+
+            Visitor::visit($document, [
+                NodeKind::UNION_TYPE_DEFINITION => function (UnionTypeDefinitionNode $definitionNode) {
+                    foreach ($definitionNode->types as $type) {
+                        $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
+                            ...($this->baseTypeMappingRegistry[$definitionNode->name->value] ?? []),
+                            ...$this->baseTypeMappingRegistry[$type->name->value],
+                        ];
+
+                        foreach ($this->modules as $module) {
+                            if (isset($this->moduleTypeMappingRegistry[$module->getName()][$type->name->value])) {
+                                $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [
+                                    ...($this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? []),
+                                    ...$this->moduleTypeMappingRegistry[$module->getName()][$type->name->value],
+                                ];
+                            }
+                        }
+                    }
                 },
             ]);
         }
@@ -378,12 +398,6 @@ final class Generator
                     $this->handleInterfaceType($module, $definitionNode);
                 }
             );
-            //            $this->processDef(
-            //                $document,
-            //                function (InterfaceTypeExtensionNode $definitionNode) use ($module) {
-            //                    throw new LogicException('Not supported');
-            //                }
-            //            );
         }
 
         $initDir = function (string $directory) {
@@ -831,21 +845,16 @@ final class Generator
             case Type::BOOLEAN:
                 return ['bool'];
             default:
-                return [$this->getPhpTypeFromNamedNode($type, $module)];
-        }
-    }
+                if (!$module) {
+                    return $this->baseTypeMappingRegistry[$type->name->value] ?? throw new LogicException(
+                            sprintf('Global type %s not found', $type->name->value)
+                        );
+                }
 
-    private function getPhpTypeFromNamedNode(NamedTypeNode $type, ?Module $module = null)
-    {
-        if (!$module) {
-            return $this->baseTypeMappingRegistry[$type->name->value][0] ?? throw new LogicException(sprintf('Global type %s not found', $type->name->value));
+                return $this->moduleTypeMappingRegistry[$module->getName()][$type->name->value] ?? throw new LogicException(
+                        sprintf('Type %s not found', $type->name->value)
+                    );
         }
-        foreach ($this->moduleTypeMappingRegistry as $moduleName => $typeMapping) {
-            if (isset($typeMapping[$type->name->value])) {
-                return $typeMapping[$type->name->value][0];
-            }
-        }
-        throw new LogicException(sprintf('Type %s not found', $type->name));
     }
 
     private function wrapInPromise(string $type): string
@@ -936,7 +945,7 @@ final class Generator
 
         $types = [];
         foreach ($definitionNode->types as $type) {
-            $types[] = $this->getPhpTypeFromNamedNode($type, $module);
+            $types = [...$types, ...$this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $type]), $module)];
         }
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
@@ -1038,12 +1047,18 @@ final class Generator
 
                     foreach ($definition->interfaces as $definitionInterface) {
                         if ($definitionInterface->name->value === $definitionNode->name->value) {
-                            $types[] = $this->getPhpTypeFromNamedNode(
-                                new NamedTypeNode([
-                                    'name' => $definition->name,
-                                ]),
-                                $module
-                            );
+                            $types = [
+                                ...$types,
+                                ...$this->getPhpTypesFromGraphQLType(
+                                    new NonNullTypeNode([
+                                        'type' => new NamedTypeNode([
+                                            'name' => $definition->name,
+                                        ]),
+                                    ]),
+                                    $module,
+
+                                ),
+                            ];
                         }
                     }
                 }

@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 211,
+    'end' => 384,
   ),
   'definitions' => 
   array (
@@ -248,7 +248,7 @@ return array (
       'loc' => 
       array (
         'start' => 146,
-        'end' => 210,
+        'end' => 216,
       ),
       'name' => 
       array (
@@ -274,7 +274,7 @@ return array (
           'loc' => 
           array (
             'start' => 170,
-            'end' => 208,
+            'end' => 214,
           ),
           'name' => 
           array (
@@ -345,7 +345,7 @@ return array (
             'loc' => 
             array (
               'start' => 201,
-              'end' => 208,
+              'end' => 214,
             ),
             'type' => 
             array (
@@ -353,7 +353,7 @@ return array (
               'loc' => 
               array (
                 'start' => 201,
-                'end' => 207,
+                'end' => 213,
               ),
               'name' => 
               array (
@@ -361,7 +361,169 @@ return array (
                 'loc' => 
                 array (
                   'start' => 201,
-                  'end' => 207,
+                  'end' => 213,
+                ),
+                'value' => 'PingResponse',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    4 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 218,
+        'end' => 268,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 223,
+          'end' => 242,
+        ),
+        'value' => 'PingResponseSuccess',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 249,
+            'end' => 266,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 249,
+              'end' => 256,
+            ),
+            'value' => 'success',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 258,
+              'end' => 266,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 258,
+                'end' => 265,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 258,
+                  'end' => 265,
+                ),
+                'value' => 'Boolean',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    5 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 270,
+        'end' => 319,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 275,
+          'end' => 294,
+        ),
+        'value' => 'PingResponseFailure',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 301,
+            'end' => 317,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 301,
+              'end' => 308,
+            ),
+            'value' => 'message',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 310,
+              'end' => 317,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 310,
+                'end' => 316,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 310,
+                  'end' => 316,
                 ),
                 'value' => 'String',
               ),
@@ -369,6 +531,69 @@ return array (
           ),
           'directives' => 
           array (
+          ),
+        ),
+      ),
+    ),
+    6 => 
+    array (
+      'kind' => 'UnionTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 321,
+        'end' => 383,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 327,
+          'end' => 339,
+        ),
+        'value' => 'PingResponse',
+      ),
+      'directives' => 
+      array (
+      ),
+      'types' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 342,
+            'end' => 361,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 342,
+              'end' => 361,
+            ),
+            'value' => 'PingResponseSuccess',
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 364,
+            'end' => 383,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 364,
+              'end' => 383,
+            ),
+            'value' => 'PingResponseFailure',
           ),
         ),
       ),

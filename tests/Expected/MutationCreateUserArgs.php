@@ -18,11 +18,11 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
         /** @var list<string> $nonNullArray */
         private readonly iterable $nonNullArray,
         /** @var int|null $int */
-        private readonly int|null $int,
+        private readonly int|null $int = null,
         /** @var list<string>|null $arrayNonNullItem */
-        private readonly iterable|null $arrayNonNullItem,
+        private readonly iterable|null $arrayNonNullItem = null,
         /** @var list<string>|null $array */
-        private readonly iterable|null $array,
+        private readonly iterable|null $array = null,
     ) {
     }
 

@@ -11,5 +11,15 @@ extend type User {
 }
 
 extend type Query {
-    pingFromModule2(da: Boolean!): String!
+    pingFromModule2(da: Boolean!): PingResponse!
 }
+
+type PingResponseSuccess {
+    success: Boolean!
+}
+
+type PingResponseFailure {
+    message: String!
+}
+
+union PingResponse = PingResponseSuccess | PingResponseFailure
