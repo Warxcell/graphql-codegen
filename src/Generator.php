@@ -258,7 +258,8 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
+                    (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -469,8 +470,8 @@ final class Generator
         throw new LogicException('Definition not found');
     }
 
-    private function getBaseInputObjectType(InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode): ClassType
-    {
+    private function getBaseInputObjectType(InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
+    ): ClassType {
         $name = $definitionNode->name->value;
         if (!isset($this->baseTypes['InputObject'][$name])) {
             if (!$definitionNode instanceof InputObjectTypeDefinitionNode) {
@@ -649,7 +650,7 @@ final class Generator
             ->setPrivate()
             ->setReadOnly()
             ->setType($types);
-//            ->setNullable($nullable);
+        //            ->setNullable($nullable);
 
         $method->addComment(sprintf('@return %s', $this->generateUnion($this->getPhpTypesFromGraphQLType($definitionNode->type, $module))));
 
@@ -891,12 +892,15 @@ final class Generator
                 $genericsTypes = $this->generateUnion($this->getGenericsTypes($argument->type));
                 $method->addComment(sprintf('@return %s', $genericsTypes));
 
-                ### 
-                $construct->addPromotedParameter($argument->name->value)
+                ###
+                $parameter = $construct->addPromotedParameter($argument->name->value)
                     ->setPrivate()
                     ->setReadOnly()
                     ->setType($phpTypes)
                     ->addComment(sprintf('@var %s $%s', $genericsTypes, $argument->name->value));
+                if (!$argument->type instanceof NonNullTypeNode) {
+                    $parameter->setDefaultValue(null);
+                }
 
                 $baseObjectFieldArgs->addMethod(sprintf('get%s', ucfirst($argument->name->value)))
                     ->setPublic()
