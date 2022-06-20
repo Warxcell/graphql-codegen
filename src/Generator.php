@@ -375,12 +375,12 @@ final class Generator
                     $this->handleInterfaceType($module, $definitionNode);
                 }
             );
-            $this->processDef(
-                $document,
-                function (InterfaceTypeExtensionNode $definitionNode) use ($module) {
-                    throw new LogicException('Not supported');
-                }
-            );
+            //            $this->processDef(
+            //                $document,
+            //                function (InterfaceTypeExtensionNode $definitionNode) use ($module) {
+            //                    throw new LogicException('Not supported');
+            //                }
+            //            );
         }
 
         $initDir = function (string $directory) {
