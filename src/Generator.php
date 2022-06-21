@@ -259,7 +259,8 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
+                    (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -712,6 +713,30 @@ final class Generator
         foreach ($definitionNode->fields as $field) {
             try {
                 $this->generateFieldArgsInterface($module, $definitionNode, $field);
+
+                $method = $interface->addMethod($field->name->value);
+                $method->setPublic();
+                $method->addParameter('parent')->setType($this->generateUnion($parentTypes));
+                $method->addParameter('args')->setType($this->getArgsType($definitionNode, $field, $module));
+                $method->addParameter('context')->setType($this->resolverParameterTypes->contextType);
+                $method->addParameter('info')->setType($this->resolverParameterTypes->info);
+                $types = $this->getPhpTypesFromGraphQLType($field->type, $module);
+                if ($types[0] !== self::MIXED) {
+                    $types[] = Promise::class;
+                }
+                $method->setReturnType($this->generateUnion($types));
+
+                $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
+                $promise = $this->wrapInPromise($genericsTypes);
+                $method->addComment(
+                    sprintf(
+                        '@return %s',
+                        $this->generateUnion([
+                            $genericsTypes,
+                            $promise,
+                        ])
+                    )
+                );
             } catch (Exception $exception) {
                 throw new Exception(
                     sprintf(
@@ -722,30 +747,6 @@ final class Generator
                     ), 0, $exception
                 );
             }
-
-            $method = $interface->addMethod($field->name->value);
-            $method->setPublic();
-            $method->addParameter('parent')->setType($this->generateUnion($parentTypes));
-            $method->addParameter('args')->setType($this->getArgsType($definitionNode, $field, $module));
-            $method->addParameter('context')->setType($this->resolverParameterTypes->contextType);
-            $method->addParameter('info')->setType($this->resolverParameterTypes->info);
-            $types = $this->getPhpTypesFromGraphQLType($field->type, $module);
-            if ($types[0] !== self::MIXED) {
-                $types[] = Promise::class;
-            }
-            $method->setReturnType($this->generateUnion($types));
-
-            $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
-            $promise = $this->wrapInPromise($genericsTypes);
-            $method->addComment(
-                sprintf(
-                    '@return %s',
-                    $this->generateUnion([
-                        $genericsTypes,
-                        $promise,
-                    ])
-                )
-            );
         }
 
         if ($this->typeDecorator) {
