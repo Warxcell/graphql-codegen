@@ -259,8 +259,7 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
-                    (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -542,11 +541,14 @@ final class Generator
                 $method->setReturnType($types);
                 $method->addComment(sprintf('@return %s', $genericsTypes));
 
-                $construct->addPromotedParameter($field->name->value)
+                $parameter = $construct->addPromotedParameter($field->name->value)
                     ->setPrivate()
                     ->setReadOnly()
                     ->setType($types)
                     ->addComment(sprintf('@var %s %s', $genericsTypes, $field->name->value));
+                if (!$field->type instanceof NonNullTypeNode) {
+                    $parameter->setDefaultValue(null);
+                }
 
                 $inputObject->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
