@@ -16,6 +16,11 @@ interface MutationCreateUserArgsInterface
     public function getInput(): \Arxy\GraphQLCodegen\Tests\Expected\CreateUserInput;
 
     /**
+     * @return int|null
+     */
+    public function getInt(): int|null;
+
+    /**
      * @return list<string>
      */
     public function getNonNullArrayNonNullItem(): iterable;
@@ -24,11 +29,6 @@ interface MutationCreateUserArgsInterface
      * @return list<string>
      */
     public function getNonNullArray(): iterable;
-
-    /**
-     * @return int|null
-     */
-    public function getInt(): int|null;
 
     /**
      * @return list<string>|null

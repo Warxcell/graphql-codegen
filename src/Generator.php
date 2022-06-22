@@ -23,7 +23,6 @@ use GraphQL\Language\AST\ListTypeNode;
 use GraphQL\Language\AST\NamedTypeNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\AST\NodeList;
 use GraphQL\Language\AST\NonNullTypeNode;
 use GraphQL\Language\AST\ObjectTypeDefinitionNode;
 use GraphQL\Language\AST\ObjectTypeExtensionNode;
@@ -259,7 +258,8 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
+                    (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -426,6 +426,28 @@ final class Generator
         $initDir($this->baseModule->getDirectory());
         foreach ($this->baseTypes as $type => $classes) {
             foreach ($classes as $class) {
+                if (in_array($type, [
+                        'ObjectFieldArgs',
+                        'InputObject',
+                    ])
+                    && $class instanceof ClassType
+                    && $class->hasMethod('__construct')) {
+                    $construct = $class->getMethod('__construct');
+                    $params = $construct->getParameters();
+
+                    $nullables = [];
+                    $nonNullables = [];
+
+                    foreach ($params as $param) {
+                        if ($param->isNullable() || in_array('null', $param->getType(true)->getTypes())) {
+                            $nullables[] = $param;
+                        } else {
+                            $nonNullables[] = $param;
+                        }
+                    }
+
+                    $construct->setParameters(array_merge($nonNullables, $nullables));
+                }
                 //$this->typeDecorator->handleObjectFieldArgs($module, $objectType, $field, $baseObjectFieldArgs);
                 $this->write($this->baseModule->getNamespace(), $class, $this->baseModule->getDirectory());
             }
@@ -524,7 +546,7 @@ final class Generator
         $inputObject->addImplement($module->getNamespace() . '\\' . $interface->getName());
 
         if (count($definitionNode->fields) > 0) {
-            foreach ($this->reorderParameters($definitionNode->fields) as $field) {
+            foreach ($definitionNode->fields as $field) {
                 try {
                     $construct = $inputObject->getMethod('__construct');
                 } catch (InvalidArgumentException $exception) {
@@ -566,26 +588,6 @@ final class Generator
         $this->typeRegistry->addInputObjectInterface($definitionNode, $interface, $module);
     }
 
-    /**
-     * @param NodeList<InputValueDefinitionNode>|NodeList<FieldDefinitionNode> $params
-     * @return array<InputValueDefinitionNode>|array<FieldDefinitionNode>
-     */
-    private function reorderParameters(NodeList $params): array
-    {
-        $nonNullable = [];
-        $nullable = [];
-
-        foreach ($params as $param) {
-            if ($param->type instanceof NonNullTypeNode) {
-                $nonNullable[] = $param;
-            } else {
-                $nullable[] = $param;
-            }
-        }
-
-        return array_merge($nonNullable, $nullable);
-    }
-
     private function handleObjectType(
         Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
@@ -612,7 +614,7 @@ final class Generator
         $interfaceName = $this->namingStrategy->nameForObjectInterface($definitionNode);
         $interface = new InterfaceType($interfaceName);
         if (count($definitionNode->fields) > 0) {
-            foreach ($this->reorderParameters($definitionNode->fields) as $field) {
+            foreach ($definitionNode->fields as $field) {
                 $interface->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
                     ->setReturnType($this->generateUnion($this->getPhpTypesFromGraphQLType($field->type, $module)));
@@ -630,7 +632,7 @@ final class Generator
         $class->addImplement($module->getNamespace() . '\\' . $interface->getName());
         if (count($definitionNode->fields) > 0) {
             $method = $class->addMethod('__construct');
-            foreach ($this->reorderParameters($definitionNode->fields) as $field) {
+            foreach ($definitionNode->fields as $field) {
                 $this->handleInputValue($module, $class, $method, $field);
             }
         }
@@ -894,7 +896,7 @@ final class Generator
         $baseObjectFieldArgs->addImplement($module->getNamespace() . '\\' . $className);
 
         if (count($field->arguments) > 0) {
-            foreach ($this->reorderParameters($field->arguments) as $argument) {
+            foreach ($field->arguments as $argument) {
                 try {
                     $construct = $baseObjectFieldArgs->getMethod('__construct');
                 } catch (InvalidArgumentException $exception) {

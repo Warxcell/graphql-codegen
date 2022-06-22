@@ -31,6 +31,11 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
         return $this->input;
     }
 
+    public function getInt(): int|null
+    {
+        return $this->int;
+    }
+
     public function getNonNullArrayNonNullItem(): iterable
     {
         return $this->nonNullArrayNonNullItem;
@@ -39,11 +44,6 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
     public function getNonNullArray(): iterable
     {
         return $this->nonNullArray;
-    }
-
-    public function getInt(): int|null
-    {
-        return $this->int;
     }
 
     public function getArrayNonNullItem(): iterable|null
