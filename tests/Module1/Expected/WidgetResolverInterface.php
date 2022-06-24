@@ -10,6 +10,9 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 interface WidgetResolverInterface
 {
+    /**
+     * @return 'Widget1' | 'Widget2'
+     */
     public function resolveType(
         Widget1Interface|Widget2Interface $value,
         mixed $context,

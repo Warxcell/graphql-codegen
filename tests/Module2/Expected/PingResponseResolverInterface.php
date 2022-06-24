@@ -10,6 +10,9 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 interface PingResponseResolverInterface
 {
+    /**
+     * @return 'PingResponseSuccess' | 'PingResponseFailure'
+     */
     public function resolveType(
         PingResponseSuccessInterface|PingResponseFailureInterface $value,
         mixed $context,

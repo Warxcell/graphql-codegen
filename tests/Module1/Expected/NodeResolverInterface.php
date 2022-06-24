@@ -10,6 +10,9 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 interface NodeResolverInterface
 {
+    /**
+     * @return 'User'
+     */
     public function resolveType(
         UserInterface $value,
         mixed $context,

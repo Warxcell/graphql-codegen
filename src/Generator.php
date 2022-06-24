@@ -258,8 +258,7 @@ final class Generator
 
                         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
-                    (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
@@ -954,13 +953,17 @@ final class Generator
         $resolveType->setPublic();
         $resolveType->setReturnType('string');
 
+        $returnTypes = [];
         $types = [];
         foreach ($definitionNode->types as $type) {
             $types = [...$types, ...$this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $type]), $module)];
+
+            $returnTypes[] = $type->name->value;
         }
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
         if ($this->typeDecorator) {
             $this->typeDecorator->handleUnionResolverInterface($this->documents, $module, $definitionNode, $interface);
@@ -1076,9 +1079,25 @@ final class Generator
             }
         }
 
+        $returnTypes = [];
+        foreach ($this->documents as $document) {
+            foreach ($document->definitions as $definition) {
+                if (!$definition instanceof ObjectTypeDefinitionNode && !$definition instanceof ObjectTypeExtensionNode) {
+                    continue;
+                }
+
+                foreach ($definition->interfaces as $definitionInterface) {
+                    if ($definitionInterface->name->value === $definitionNode->name->value) {
+                        $returnTypes[] = $definition->name->value;
+                    }
+                }
+            }
+        }
+
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
         if ($this->typeDecorator) {
             $this->typeDecorator->handleInterfaceResolverInterface($this->documents, $module, $definitionNode, $interface);
