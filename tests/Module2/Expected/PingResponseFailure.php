@@ -10,11 +10,8 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 final class PingResponseFailure implements PingResponseFailureInterface
 {
-    /**
-     * @return string
-     */
-    public function __construct(private readonly string $message)
-    {
+    public function __construct(/** @var string */
+    private readonly string $message) {
     }
 
     public function getMessage(): string

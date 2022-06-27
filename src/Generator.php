@@ -660,7 +660,7 @@ final class Generator
         // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
 
         $types = $this->generateUnion($this->getPhpTypesFromGraphQLType($definitionNode->type, $module));
-        ($nullable ? $method->addPromotedParameter(
+        $param = ($nullable ? $method->addPromotedParameter(
             $definitionNode->name->value,
         ) : $method->addPromotedParameter(
             $definitionNode->name->value
@@ -670,7 +670,7 @@ final class Generator
             ->setType($types);
         //            ->setNullable($nullable);
 
-        $method->addComment(sprintf('@return %s', $this->generateUnion($this->getPhpTypesFromGraphQLType($definitionNode->type, $module))));
+        $param->addComment(sprintf('@var %s', $this->generateUnion($this->getGenericsTypes($definitionNode->type, $module))));
 
         $class->addMethod(sprintf('get%s', ucfirst($definitionNode->name->value)))
             ->setPublic()

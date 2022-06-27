@@ -10,11 +10,8 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 final class PingResponseSuccess implements PingResponseSuccessInterface
 {
-    /**
-     * @return bool
-     */
-    public function __construct(private readonly bool $success)
-    {
+    public function __construct(/** @var bool */
+    private readonly bool $success) {
     }
 
     public function getSuccess(): bool

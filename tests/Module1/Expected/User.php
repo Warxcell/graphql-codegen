@@ -10,12 +10,10 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 final class User implements UserInterface
 {
-    /**
-     * @return string
-     * @return string
-     */
     public function __construct(
+        /** @var string */
         private readonly string $id,
+        /** @var string */
         private readonly string $username,
     ) {
     }
