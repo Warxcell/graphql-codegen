@@ -10,5 +10,8 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 interface PingResponseFailureInterface
 {
-    public function getMessage(): string;
+    /**
+     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     */
+    public function getMessage(): string|\GraphQL\Executor\Promise\Promise;
 }

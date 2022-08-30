@@ -10,11 +10,11 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 final class PingResponseFailure implements PingResponseFailureInterface
 {
-    public function __construct(/** @var string */
-    private readonly string $message) {
+    public function __construct(/** @var string|\GraphQL\Executor\Promise\Promise<string> */
+    private readonly string|\GraphQL\Executor\Promise\Promise $message) {
     }
 
-    public function getMessage(): string
+    public function getMessage(): string|\GraphQL\Executor\Promise\Promise
     {
         return $this->message;
     }

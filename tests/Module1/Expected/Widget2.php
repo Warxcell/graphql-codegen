@@ -10,11 +10,11 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 final class Widget2 implements Widget2Interface
 {
-    public function __construct(/** @var string */
-    private readonly string $name) {
+    public function __construct(/** @var string|\GraphQL\Executor\Promise\Promise<string> */
+    private readonly string|\GraphQL\Executor\Promise\Promise $name) {
     }
 
-    public function getName(): string
+    public function getName(): string|\GraphQL\Executor\Promise\Promise
     {
         return $this->name;
     }

@@ -10,5 +10,8 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 interface PingResponseSuccessInterface
 {
-    public function getSuccess(): bool;
+    /**
+     * @return bool|\GraphQL\Executor\Promise\Promise<bool>
+     */
+    public function getSuccess(): bool|\GraphQL\Executor\Promise\Promise;
 }

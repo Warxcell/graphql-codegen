@@ -10,7 +10,13 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 interface UserInterface
 {
-    public function getId(): string;
+    /**
+     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     */
+    public function getId(): string|\GraphQL\Executor\Promise\Promise;
 
-    public function getUsername(): string;
+    /**
+     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     */
+    public function getUsername(): string|\GraphQL\Executor\Promise\Promise;
 }

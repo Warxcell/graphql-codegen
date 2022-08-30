@@ -614,9 +614,14 @@ final class Generator
         $interface = new InterfaceType($interfaceName);
         if (count($definitionNode->fields) > 0) {
             foreach ($definitionNode->fields as $field) {
+                $types = $this->getPhpTypesFromGraphQLType($field->type, $module);
+                $types[] = Promise::class;
+
+                $generics = $this->generateUnion($this->getGenericsTypes($field->type, $module));
                 $interface->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
-                    ->setReturnType($this->generateUnion($this->getPhpTypesFromGraphQLType($field->type, $module)));
+                    ->addComment(sprintf('@return %s',$this->generateUnion([$generics,$this->wrapInPromise($generics)])))
+                    ->setReturnType($this->generateUnion($types));
             }
         }
 
@@ -659,7 +664,9 @@ final class Generator
         // TODO maybe handle default value?
         // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
 
-        $types = $this->generateUnion($this->getPhpTypesFromGraphQLType($definitionNode->type, $module));
+        $types = $this->getPhpTypesFromGraphQLType($definitionNode->type, $module);
+        $types[] = Promise::class;
+        $types = $this->generateUnion($types);
         $param = ($nullable ? $method->addPromotedParameter(
             $definitionNode->name->value,
         ) : $method->addPromotedParameter(
@@ -670,7 +677,8 @@ final class Generator
             ->setType($types);
         //            ->setNullable($nullable);
 
-        $param->addComment(sprintf('@var %s', $this->generateUnion($this->getGenericsTypes($definitionNode->type, $module))));
+        $generics = $this->generateUnion($this->getGenericsTypes($definitionNode->type, $module));
+        $param->addComment(sprintf('@var %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])));
 
         $class->addMethod(sprintf('get%s', ucfirst($definitionNode->name->value)))
             ->setPublic()
@@ -851,8 +859,8 @@ final class Generator
             default:
                 if (!$module) {
                     return $this->baseTypeMappingRegistry[$type->name->value] ?? throw new LogicException(
-                            sprintf('Global type %s not found', $type->name->value)
-                        );
+                        sprintf('Global type %s not found', $type->name->value)
+                    );
                 }
 
                 foreach ($this->moduleTypeMappingRegistry as $moduleName => $typeMapping) {

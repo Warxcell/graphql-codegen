@@ -11,19 +11,19 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 final class User implements UserInterface
 {
     public function __construct(
-        /** @var string */
-        private readonly string $id,
-        /** @var string */
-        private readonly string $username,
+        /** @var string|\GraphQL\Executor\Promise\Promise<string> */
+        private readonly string|\GraphQL\Executor\Promise\Promise $id,
+        /** @var string|\GraphQL\Executor\Promise\Promise<string> */
+        private readonly string|\GraphQL\Executor\Promise\Promise $username,
     ) {
     }
 
-    public function getId(): string
+    public function getId(): string|\GraphQL\Executor\Promise\Promise
     {
         return $this->id;
     }
 
-    public function getUsername(): string
+    public function getUsername(): string|\GraphQL\Executor\Promise\Promise
     {
         return $this->username;
     }
