@@ -44,5 +44,6 @@ return array (
   ),
   'enumsMapping' => 
   array (
+    'Enum1' => 'Arxy\\GraphQLCodegen\\Tests\\Module1\\Expected\\Enum1',
   ),
 );

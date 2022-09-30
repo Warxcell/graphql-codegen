@@ -23,3 +23,8 @@ type PingResponseFailure {
 }
 
 union PingResponse = PingResponseSuccess | PingResponseFailure
+
+extend enum Enum1 {
+    VAL3
+    VAL4
+}

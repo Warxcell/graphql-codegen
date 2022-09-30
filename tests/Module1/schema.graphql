@@ -37,4 +37,9 @@ type Widget2 {
     name: String!
 }
 
+enum Enum1 {
+    VAL1
+    VAL2
+}
+
 

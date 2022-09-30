@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 384,
+    'end' => 425,
   ),
   'definitions' => 
   array (
@@ -594,6 +594,75 @@ return array (
               'end' => 383,
             ),
             'value' => 'PingResponseFailure',
+          ),
+        ),
+      ),
+    ),
+    7 => 
+    array (
+      'kind' => 'EnumTypeExtension',
+      'loc' => 
+      array (
+        'start' => 385,
+        'end' => 424,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 397,
+          'end' => 402,
+        ),
+        'value' => 'Enum1',
+      ),
+      'directives' => 
+      array (
+      ),
+      'values' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 409,
+            'end' => 413,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 409,
+              'end' => 413,
+            ),
+            'value' => 'VAL3',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 418,
+            'end' => 422,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 418,
+              'end' => 422,
+            ),
+            'value' => 'VAL4',
+          ),
+          'directives' => 
+          array (
           ),
         ),
       ),

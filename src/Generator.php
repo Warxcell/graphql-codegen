@@ -294,11 +294,6 @@ final class Generator
 
                         $this->enumsMapping[$definitionNode->name->value] = $name;
                     },
-                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeDefinitionNode $definitionNode) use (
-                        $module
-                    ) {
-                        throw new LogicException('Not supported');
-                    },
                 ],
                 'leave' => function ($node) use (&$currentNode) {
                     unset($currentNode);
@@ -345,13 +340,6 @@ final class Generator
                     $this->handleEnum($module, $definitionNode);
                 }
             );
-            $this->processDef(
-                $document,
-                function (EnumTypeExtensionNode $definitionNode) use ($module) {
-                    throw new LogicException('Not supported');
-                }
-            );
-
             $this->processDef(
                 $document,
                 function (InputObjectTypeDefinitionNode $definitionNode) use ($module) {
@@ -620,7 +608,7 @@ final class Generator
                 $generics = $this->generateUnion($this->getGenericsTypes($field->type, $module));
                 $interface->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
-                    ->addComment(sprintf('@return %s',$this->generateUnion([$generics,$this->wrapInPromise($generics)])))
+                    ->addComment(sprintf('@return %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])))
                     ->setReturnType($this->generateUnion($types));
             }
         }
@@ -1032,6 +1020,20 @@ final class Generator
         $enum = new EnumType($this->namingStrategy->nameForEnum($definitionNode));
         foreach ($definitionNode->values as $value) {
             $enum->addCase($value->name->value, $value->name->value);
+        }
+        foreach ($this->documents as $document) {
+            Visitor::visit($document, [
+                'enter' => [
+                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeExtensionNode $extension) use ($enum, $definitionNode) {
+                        if ($extension->name->value !== $definitionNode->name->value) {
+                            return;
+                        }
+                        foreach ($extension->values as $value) {
+                            $enum->addCase($value->name->value, $value->name->value);
+                        }
+                    },
+                ],
+            ]);
         }
 
         if ($this->typeDecorator) {

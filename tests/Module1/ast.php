@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 536,
+    'end' => 570,
   ),
   'definitions' => 
   array (
@@ -1172,6 +1172,75 @@ return array (
                 'value' => 'String',
               ),
             ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    10 => 
+    array (
+      'kind' => 'EnumTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 535,
+        'end' => 567,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 540,
+          'end' => 545,
+        ),
+        'value' => 'Enum1',
+      ),
+      'directives' => 
+      array (
+      ),
+      'values' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 552,
+            'end' => 556,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 552,
+              'end' => 556,
+            ),
+            'value' => 'VAL1',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 561,
+            'end' => 565,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 561,
+              'end' => 565,
+            ),
+            'value' => 'VAL2',
           ),
           'directives' => 
           array (
