@@ -28,3 +28,10 @@ extend enum Enum1 {
     VAL3
     VAL4
 }
+
+type TestError1 {
+    message: String!
+}
+
+
+

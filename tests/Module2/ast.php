@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 425,
+    'end' => 470,
   ),
   'definitions' => 
   array (
@@ -660,6 +660,87 @@ return array (
               'end' => 422,
             ),
             'value' => 'VAL4',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    8 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 426,
+        'end' => 466,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 431,
+          'end' => 441,
+        ),
+        'value' => 'TestError1',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 448,
+            'end' => 464,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 448,
+              'end' => 455,
+            ),
+            'value' => 'message',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 457,
+              'end' => 464,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 457,
+                'end' => 463,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 457,
+                  'end' => 463,
+                ),
+                'value' => 'String',
+              ),
+            ),
           ),
           'directives' => 
           array (

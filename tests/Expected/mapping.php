@@ -28,6 +28,14 @@ return array (
     array (
       'name' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\Widget2NameArgs',
     ),
+    'TestFailureResponse' => 
+    array (
+      'errors' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestFailureResponseErrorsArgs',
+    ),
+    'TestSuccessResponse' => 
+    array (
+      'bool' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestSuccessResponseBoolArgs',
+    ),
     'PingResponseSuccess' => 
     array (
       'success' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\PingResponseSuccessSuccessArgs',
@@ -35,6 +43,10 @@ return array (
     'PingResponseFailure' => 
     array (
       'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\PingResponseFailureMessageArgs',
+    ),
+    'TestError1' => 
+    array (
+      'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestError1MessageArgs',
     ),
   ),
   'inputObjectsMapping' => 

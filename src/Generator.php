@@ -299,7 +299,9 @@ final class Generator
                     unset($currentNode);
                 },
             ]);
-
+        }
+        foreach ($this->modules as $module) {
+            $document = $this->documents[$module->getName()];
             Visitor::visit($document, [
                 NodeKind::UNION_TYPE_DEFINITION => function (UnionTypeDefinitionNode $definitionNode) {
                     foreach ($definitionNode->types as $type) {

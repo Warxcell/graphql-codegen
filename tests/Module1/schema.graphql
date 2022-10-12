@@ -42,4 +42,14 @@ enum Enum1 {
     VAL2
 }
 
+union TestResponse = TestSuccessResponse | TestFailureResponse
 
+type TestFailureResponse {
+    errors: [TestError!]!
+}
+
+union TestError = TestError1
+
+type TestSuccessResponse {
+    bool: Boolean!
+}

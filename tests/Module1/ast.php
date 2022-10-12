@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 570,
+    'end' => 767,
   ),
   'definitions' => 
   array (
@@ -1241,6 +1241,293 @@ return array (
               'end' => 565,
             ),
             'value' => 'VAL2',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    11 => 
+    array (
+      'kind' => 'UnionTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 569,
+        'end' => 631,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 575,
+          'end' => 587,
+        ),
+        'value' => 'TestResponse',
+      ),
+      'directives' => 
+      array (
+      ),
+      'types' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 590,
+            'end' => 609,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 590,
+              'end' => 609,
+            ),
+            'value' => 'TestSuccessResponse',
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 612,
+            'end' => 631,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 612,
+              'end' => 631,
+            ),
+            'value' => 'TestFailureResponse',
+          ),
+        ),
+      ),
+    ),
+    12 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 633,
+        'end' => 687,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 638,
+          'end' => 657,
+        ),
+        'value' => 'TestFailureResponse',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 664,
+            'end' => 685,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 664,
+              'end' => 670,
+            ),
+            'value' => 'errors',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 672,
+              'end' => 685,
+            ),
+            'type' => 
+            array (
+              'kind' => 'ListType',
+              'loc' => 
+              array (
+                'start' => 672,
+                'end' => 684,
+              ),
+              'type' => 
+              array (
+                'kind' => 'NonNullType',
+                'loc' => 
+                array (
+                  'start' => 673,
+                  'end' => 683,
+                ),
+                'type' => 
+                array (
+                  'kind' => 'NamedType',
+                  'loc' => 
+                  array (
+                    'start' => 673,
+                    'end' => 682,
+                  ),
+                  'name' => 
+                  array (
+                    'kind' => 'Name',
+                    'loc' => 
+                    array (
+                      'start' => 673,
+                      'end' => 682,
+                    ),
+                    'value' => 'TestError',
+                  ),
+                ),
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    13 => 
+    array (
+      'kind' => 'UnionTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 689,
+        'end' => 717,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 695,
+          'end' => 704,
+        ),
+        'value' => 'TestError',
+      ),
+      'directives' => 
+      array (
+      ),
+      'types' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 707,
+            'end' => 717,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 707,
+              'end' => 717,
+            ),
+            'value' => 'TestError1',
+          ),
+        ),
+      ),
+    ),
+    14 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 719,
+        'end' => 766,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 724,
+          'end' => 743,
+        ),
+        'value' => 'TestSuccessResponse',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 750,
+            'end' => 764,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 750,
+              'end' => 754,
+            ),
+            'value' => 'bool',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 756,
+              'end' => 764,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 756,
+                'end' => 763,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 756,
+                  'end' => 763,
+                ),
+                'value' => 'Boolean',
+              ),
+            ),
           ),
           'directives' => 
           array (
