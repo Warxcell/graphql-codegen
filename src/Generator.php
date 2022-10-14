@@ -792,7 +792,7 @@ final class Generator
             }
         }
 
-        return $types;
+        return array_unique($types);
     }
 
     private function isNativeType(string $type): bool

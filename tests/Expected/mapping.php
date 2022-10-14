@@ -8,6 +8,7 @@ return array (
     'Query' => 
     array (
       'ping' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryPingArgs',
+      'testSameType' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryTestSameTypeArgs',
       'pingFromModule2' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryPingFromModule2Args',
     ),
     'Mutation' => 
@@ -35,6 +36,14 @@ return array (
     'TestSuccessResponse' => 
     array (
       'bool' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestSuccessResponseBoolArgs',
+    ),
+    'TestSameType1' => 
+    array (
+      'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestSameType1MessageArgs',
+    ),
+    'TestSameType2' => 
+    array (
+      'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestSameType2MessageArgs',
     ),
     'PingResponseSuccess' => 
     array (

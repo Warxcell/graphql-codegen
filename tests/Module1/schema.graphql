@@ -12,6 +12,7 @@ interface Node {
 
 type Query {
     ping(da: Boolean!): String!
+    testSameType: TestSameType!
 }
 
 type Mutation {
@@ -52,4 +53,14 @@ union TestError = TestError1
 
 type TestSuccessResponse {
     bool: Boolean!
+}
+
+union TestSameType = TestSameType1 | TestSameType2
+
+type TestSameType1 {
+    message: String!
+}
+
+type TestSameType2 {
+    message: String!
 }
