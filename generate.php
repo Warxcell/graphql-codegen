@@ -20,8 +20,8 @@ $modules = [
         namespace: 'Arxy\GraphQLCodegen\Tests\Module1\Expected',
         typeMapping: [
             'DateTime' => DateTimeInterface::class,
-            'TestSameType1' => 'string',
-            'TestSameType2' => 'string',
+            'TestSameType1' => DateTimeInterface::class,
+            'TestSameType2' => DateTimeInterface::class,
         ],
         directory: __DIR__ . '/tests/Module1/Expected'
     ),

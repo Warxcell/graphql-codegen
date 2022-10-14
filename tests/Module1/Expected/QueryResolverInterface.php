@@ -21,12 +21,12 @@ interface QueryResolverInterface
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
-     * @return string|string|\GraphQL\Executor\Promise\Promise<string|string>
+     * @return \DateTimeInterface|\GraphQL\Executor\Promise\Promise<\DateTimeInterface>
      */
     public function testSameType(
         mixed $parent,
         QueryTestSameTypeArgsInterface $args,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
-    ): string|\GraphQL\Executor\Promise\Promise;
+    ): \DateTimeInterface|\GraphQL\Executor\Promise\Promise;
 }

@@ -56,6 +56,7 @@ use ReflectionUnionType;
 
 use function array_map;
 use function array_merge;
+use function array_unique;
 use function assert;
 use function count;
 use function file_get_contents;
@@ -831,7 +832,7 @@ final class Generator
             $types[] = 'null';
         }
 
-        return $types;
+        return array_unique($types);
     }
 
     private function getPhpTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
@@ -958,6 +959,8 @@ final class Generator
 
             $returnTypes[] = $type->name->value;
         }
+        $returnTypes = array_unique($returnTypes);
+        $types = array_unique($types);
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);

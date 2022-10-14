@@ -14,7 +14,7 @@ interface TestSameTypeResolverInterface
      * @return 'TestSameType1' | 'TestSameType2'
      */
     public function resolveType(
-        string|string $value,
+        \DateTimeInterface $value,
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
     ): string;
