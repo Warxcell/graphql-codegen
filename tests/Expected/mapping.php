@@ -15,6 +15,15 @@ return array (
     array (
       'createUser' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MutationCreateUserArgs',
     ),
+    'CreateUserSuccess' => 
+    array (
+      'user' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CreateUserSuccessUserArgs',
+      'fieldFromModule2' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CreateUserSuccessFieldFromModule2Args',
+    ),
+    'CreateUserFailure' => 
+    array (
+      'error' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CreateUserFailureErrorArgs',
+    ),
     'User' => 
     array (
       'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\UserIdArgs',

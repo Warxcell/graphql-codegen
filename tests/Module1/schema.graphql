@@ -16,12 +16,22 @@ type Query {
 }
 
 type Mutation {
-    createUser(input: CreateUserInput!, int: Int, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): User!
+    createUser(input: CreateUserInput!, int: Int, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): CreateUserResponse!
 }
 
 input CreateUserInput {
     email: String!
 }
+
+type CreateUserSuccess {
+    user: User!
+}
+
+type CreateUserFailure {
+    error: String!
+}
+
+union CreateUserResponse = CreateUserSuccess | CreateUserFailure
 
 type User implements Node {
     id: ID!

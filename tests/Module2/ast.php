@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 470,
+    'end' => 535,
   ),
   'definitions' => 
   array (
@@ -740,6 +740,78 @@ return array (
                 ),
                 'value' => 'String',
               ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    9 => 
+    array (
+      'kind' => 'ObjectTypeExtension',
+      'loc' => 
+      array (
+        'start' => 469,
+        'end' => 531,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 481,
+          'end' => 498,
+        ),
+        'value' => 'CreateUserSuccess',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 505,
+            'end' => 529,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 505,
+              'end' => 521,
+            ),
+            'value' => 'fieldFromModule2',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NamedType',
+            'loc' => 
+            array (
+              'start' => 523,
+              'end' => 529,
+            ),
+            'name' => 
+            array (
+              'kind' => 'Name',
+              'loc' => 
+              array (
+                'start' => 523,
+                'end' => 529,
+              ),
+              'value' => 'String',
             ),
           ),
           'directives' => 
