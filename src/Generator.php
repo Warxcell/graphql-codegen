@@ -73,6 +73,8 @@ use function ucfirst;
 use function unlink;
 use function var_export;
 
+use const PHP_EOL;
+
 final class Generator
 {
     public const MIXED = 'mixed';
@@ -954,10 +956,16 @@ final class Generator
 
         $returnTypes = [];
         $types = [];
+        $mapped = 0;
+        $typesInArray = [];
         foreach ($definitionNode->types as $type) {
+            $mapped += isset($this->moduleTypeMapping[$type->name->value]) ? 1 : 0;
+
             $types = [...$types, ...$this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $type]), $module)];
 
             $returnTypes[] = $type->name->value;
+
+            $typesInArray[] = $type;
         }
         $returnTypes = array_unique($returnTypes);
         $types = array_unique($types);
@@ -971,6 +979,43 @@ final class Generator
         }
 
         $this->typeRegistry->addUnionResolverInterface($definitionNode, $interface, $module);
+
+        if ($mapped === 0) {
+            $resolver = new ClassType($this->namingStrategy->nameForUnionResolver($definitionNode));
+            $resolver->addImplement($module->getNamespace() . '\\' . $interface->getName());
+            $resolveType = $resolver
+                ->addMethod('resolveType')
+                ->setPublic()
+                ->setReturnType('string');
+
+            $resolveType->addParameter('value')->setType($this->generateUnion($types));
+            $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
+            $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+
+            $generateBodyForType = function (NamedTypeNode $typeNode) use ($module): string {
+                $unionType = $typeNode->name->value;
+
+                $phpTypes = $this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $typeNode]), $module);
+                if (count($phpTypes) > 1) {
+                    throw new LogicException('Cannot generate resolver for ' . $unionType);
+                }
+                $phpType = $phpTypes[0];
+
+                return <<<EOT
+if (\$value instanceof \\${phpType}) {
+    return '${unionType}';
+}
+EOT;
+            };
+
+            if (count($typesInArray) === 1) {
+                $resolveType->setBody(sprintf('return \'%s\';', $typesInArray[0]->name->value));
+            } else {
+                $resolveType->setBody(implode(PHP_EOL, array_map($generateBodyForType, $typesInArray)));
+            }
+
+            $this->typeRegistry->addUnionResolver($definitionNode, $resolver, $module);
+        }
     }
 
     private function handleScalarType(

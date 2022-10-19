@@ -54,6 +54,12 @@ final class DefaultStrategy implements NamingStrategy
         return $definitionNode->name->value . 'ResolverInterface';
     }
 
+    public function nameForUnionResolver(
+        UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
+    ): string {
+        return $definitionNode->name->value . 'Resolver';
+    }
+
     public function nameForInterfaceResolverInterface(
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
     ): string {

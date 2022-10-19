@@ -43,6 +43,7 @@ final class TypeRegistry
     private array $scalarResolverInterfaces = [];
     private array $interfaceResolverInterfaces = [];
     private array $unionResolverInterfaces = [];
+    private array $unionResolvers = [];
 
     public function all(): array
     {
@@ -166,6 +167,15 @@ final class TypeRegistry
         ?Module $module = null,
     ): void {
         $this->unionResolverInterfaces[$module->getName()][$definitionNode->name->value] = $interface;
+        $this->add($definitionNode, $interface, $module);
+    }
+
+    public function addUnionResolver(
+        UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode,
+        ClassType $interface,
+        ?Module $module = null,
+    ): void {
+        $this->unionResolvers[$module->getName()][$definitionNode->name->value] = $interface;
         $this->add($definitionNode, $interface, $module);
     }
 }

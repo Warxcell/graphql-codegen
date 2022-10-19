@@ -54,6 +54,10 @@ interface NamingStrategy
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
     ): string;
 
+    public function nameForUnionResolver(
+        UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
+    ): string;
+
     public function nameForInterfaceResolverInterface(
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
     ): string;
