@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
-class TestFailureResponseResolver implements TestFailureResponseResolverInterface
+final class TestFailureResponseResolver implements TestFailureResponseResolverInterface
 {
     /**
      * @return list<\Arxy\GraphQLCodegen\Tests\Expected\TestError1Interface>|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Expected\TestError1Interface>>

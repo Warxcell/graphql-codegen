@@ -685,6 +685,7 @@ final class Generator
         InterfaceType $interface
     ): void {
         $class = new ClassType($this->namingStrategy->nameForObjectResolverImplementation($definitionNode));
+        $class->setFinal();
 
         $name = $interface->getName();
         assert($name !== null);
@@ -983,6 +984,7 @@ final class Generator
         if ($mapped === 0) {
             $resolver = new ClassType($this->namingStrategy->nameForUnionResolver($definitionNode));
             $resolver->addImplement($module->getNamespace() . '\\' . $interface->getName());
+            $resolver->setFinal();
             $resolveType = $resolver
                 ->addMethod('resolveType')
                 ->setPublic()

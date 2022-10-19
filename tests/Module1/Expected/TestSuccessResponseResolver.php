@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
-class TestSuccessResponseResolver implements TestSuccessResponseResolverInterface
+final class TestSuccessResponseResolver implements TestSuccessResponseResolverInterface
 {
     /**
      * @return bool|\GraphQL\Executor\Promise\Promise<bool>

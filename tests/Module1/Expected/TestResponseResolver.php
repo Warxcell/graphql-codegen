@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
-class TestResponseResolver implements TestResponseResolverInterface
+final class TestResponseResolver implements TestResponseResolverInterface
 {
     public function resolveType(
         TestSuccessResponseInterface|TestFailureResponseInterface $value,

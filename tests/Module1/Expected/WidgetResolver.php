@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
-class WidgetResolver implements WidgetResolverInterface
+final class WidgetResolver implements WidgetResolverInterface
 {
     public function resolveType(
         Widget1Interface|Widget2Interface $value,

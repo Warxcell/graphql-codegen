@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
-class Widget2Resolver implements Widget2ResolverInterface
+final class Widget2Resolver implements Widget2ResolverInterface
 {
     /**
      * @return string|\GraphQL\Executor\Promise\Promise<string>

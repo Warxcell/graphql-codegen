@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
-class UserResolver implements UserResolverInterface
+final class UserResolver implements UserResolverInterface
 {
     /**
      * @return string|\GraphQL\Executor\Promise\Promise<string>
