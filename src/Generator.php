@@ -21,6 +21,7 @@ use GraphQL\Language\AST\InterfaceTypeDefinitionNode;
 use GraphQL\Language\AST\InterfaceTypeExtensionNode;
 use GraphQL\Language\AST\ListTypeNode;
 use GraphQL\Language\AST\NamedTypeNode;
+use GraphQL\Language\AST\NameNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\AST\NonNullTypeNode;
@@ -30,6 +31,7 @@ use GraphQL\Language\AST\ScalarTypeDefinitionNode;
 use GraphQL\Language\AST\ScalarTypeExtensionNode;
 use GraphQL\Language\AST\SchemaDefinitionNode;
 use GraphQL\Language\AST\SchemaTypeExtensionNode;
+use GraphQL\Language\AST\TypeExtensionNode;
 use GraphQL\Language\AST\TypeNode;
 use GraphQL\Language\AST\UnionTypeDefinitionNode;
 use GraphQL\Language\AST\UnionTypeExtensionNode;
@@ -306,21 +308,39 @@ final class Generator
         foreach ($this->modules as $module) {
             $document = $this->documents[$module->getName()];
             Visitor::visit($document, [
-                NodeKind::UNION_TYPE_DEFINITION => function (UnionTypeDefinitionNode $definitionNode) {
-                    foreach ($definitionNode->types as $type) {
-                        $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
-                            ...($this->baseTypeMappingRegistry[$definitionNode->name->value] ?? []),
+                NodeKind::UNION_TYPE_DEFINITION => function (UnionTypeDefinitionNode $union) use ($module) {
+                    foreach ($union->types as $type) {
+                        $this->baseTypeMappingRegistry[$union->name->value] = [
+                            ...($this->baseTypeMappingRegistry[$union->name->value] ?? []),
                             ...$this->baseTypeMappingRegistry[$type->name->value],
                         ];
 
-                        foreach ($this->modules as $module) {
-                            if (isset($this->moduleTypeMappingRegistry[$module->getName()][$type->name->value])) {
-                                $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [
-                                    ...($this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? []),
-                                    ...$this->moduleTypeMappingRegistry[$module->getName()][$type->name->value],
+                        foreach ($this->documents as $moduleInner => $document) {
+                            foreach ($document->definitions as $definition) {
+                                if ($definition instanceof TypeExtensionNode) {
+                                    continue;
+                                }
+                                if (!isset($definition->name) || !$definition->name instanceof NameNode || $definition->name->value !== $type->name->value) {
+                                    continue;
+                                }
+                                $this->moduleTypeMappingRegistry[$module->getName()][$union->name->value] = [
+                                    ...($this->moduleTypeMappingRegistry[$module->getName()][$union->name->value] ?? []),
+                                    ...($this->moduleTypeMappingRegistry[$moduleInner][$type->name->value] ?? []),
                                 ];
                             }
                         }
+
+                        $this->moduleTypeMappingRegistry[$module->getName()][$union->name->value] = array_unique(
+                            $this->moduleTypeMappingRegistry[$module->getName()][$union->name->value]
+                        );
+                        //                        foreach ($this->modules as $moduleInner) {
+                        //                            if (isset($this->moduleTypeMappingRegistry[$moduleInner->getName()][$type->name->value])) {
+                        //                                $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [
+                        //                                    ...($this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? []),
+                        //                                    ...$this->moduleTypeMappingRegistry[$moduleInner->getName()][$type->name->value],
+                        //                                ];
+                        //                            }
+                        //                        }
                     }
                 },
             ]);
