@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 1112,
+    'end' => 1144,
   ),
   'definitions' => 
   array (
@@ -2029,6 +2029,87 @@ return array (
                   'end' => 1108,
                 ),
                 'value' => 'String',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    21 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1113,
+        'end' => 1143,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1118,
+          'end' => 1127,
+        ),
+        'value' => 'OneMapped',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 1134,
+            'end' => 1141,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1134,
+              'end' => 1136,
+            ),
+            'value' => 'id',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1138,
+              'end' => 1141,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1138,
+                'end' => 1140,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1138,
+                  'end' => 1140,
+                ),
+                'value' => 'ID',
               ),
             ),
           ),

@@ -33,10 +33,18 @@ type TestError1 {
     message: String!
 }
 
-
 extend type CreateUserSuccess {
     fieldFromModule2: String
 }
 
+type OneNotMapped {
+    id: ID!
+}
+
+union OneMappedOneNotMapped = OneMapped | OneNotMapped
+
+type ObjectThatHaveOneMappedOneNotMapped {
+    item: OneMappedOneNotMapped!
+}
 
 

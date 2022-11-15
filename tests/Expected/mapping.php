@@ -54,6 +54,10 @@ return array (
     array (
       'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestSameType2MessageArgs',
     ),
+    'OneMapped' => 
+    array (
+      'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\OneMappedIdArgs',
+    ),
     'PingResponseSuccess' => 
     array (
       'success' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\PingResponseSuccessSuccessArgs',
@@ -65,6 +69,14 @@ return array (
     'TestError1' => 
     array (
       'message' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestError1MessageArgs',
+    ),
+    'OneNotMapped' => 
+    array (
+      'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\OneNotMappedIdArgs',
+    ),
+    'ObjectThatHaveOneMappedOneNotMapped' => 
+    array (
+      'item' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\ObjectThatHaveOneMappedOneNotMappedItemArgs',
     ),
   ),
   'inputObjectsMapping' => 

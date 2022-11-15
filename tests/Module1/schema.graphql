@@ -74,3 +74,7 @@ type TestSameType1 {
 type TestSameType2 {
     message: String!
 }
+
+type OneMapped {
+    id: ID!
+}

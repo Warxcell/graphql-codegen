@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 535,
+    'end' => 703,
   ),
   'definitions' => 
   array (
@@ -753,16 +753,16 @@ return array (
       'kind' => 'ObjectTypeExtension',
       'loc' => 
       array (
-        'start' => 469,
-        'end' => 531,
+        'start' => 468,
+        'end' => 530,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 481,
-          'end' => 498,
+          'start' => 480,
+          'end' => 497,
         ),
         'value' => 'CreateUserSuccess',
       ),
@@ -779,16 +779,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 505,
-            'end' => 529,
+            'start' => 504,
+            'end' => 528,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 505,
-              'end' => 521,
+              'start' => 504,
+              'end' => 520,
             ),
             'value' => 'fieldFromModule2',
           ),
@@ -800,18 +800,243 @@ return array (
             'kind' => 'NamedType',
             'loc' => 
             array (
-              'start' => 523,
-              'end' => 529,
+              'start' => 522,
+              'end' => 528,
             ),
             'name' => 
             array (
               'kind' => 'Name',
               'loc' => 
               array (
-                'start' => 523,
-                'end' => 529,
+                'start' => 522,
+                'end' => 528,
               ),
               'value' => 'String',
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    10 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 532,
+        'end' => 565,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 537,
+          'end' => 549,
+        ),
+        'value' => 'OneNotMapped',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 556,
+            'end' => 563,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 556,
+              'end' => 558,
+            ),
+            'value' => 'id',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 560,
+              'end' => 563,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 560,
+                'end' => 562,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 560,
+                  'end' => 562,
+                ),
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    11 => 
+    array (
+      'kind' => 'UnionTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 567,
+        'end' => 621,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 573,
+          'end' => 594,
+        ),
+        'value' => 'OneMappedOneNotMapped',
+      ),
+      'directives' => 
+      array (
+      ),
+      'types' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 597,
+            'end' => 606,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 597,
+              'end' => 606,
+            ),
+            'value' => 'OneMapped',
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'NamedType',
+          'loc' => 
+          array (
+            'start' => 609,
+            'end' => 621,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 609,
+              'end' => 621,
+            ),
+            'value' => 'OneNotMapped',
+          ),
+        ),
+      ),
+    ),
+    12 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 623,
+        'end' => 700,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 628,
+          'end' => 663,
+        ),
+        'value' => 'ObjectThatHaveOneMappedOneNotMapped',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 670,
+            'end' => 698,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 670,
+              'end' => 674,
+            ),
+            'value' => 'item',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 676,
+              'end' => 698,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 676,
+                'end' => 697,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 676,
+                  'end' => 697,
+                ),
+                'value' => 'OneMappedOneNotMapped',
+              ),
             ),
           ),
           'directives' => 

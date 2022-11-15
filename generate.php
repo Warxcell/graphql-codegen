@@ -18,19 +18,20 @@ $modules = [
         name: 'module1',
         schema: __DIR__ . '/tests/Module1/schema.graphql',
         namespace: 'Arxy\GraphQLCodegen\Tests\Module1\Expected',
+        directory: __DIR__ . '/tests/Module1/Expected',
         typeMapping: [
             'DateTime' => DateTimeInterface::class,
             'TestSameType1' => DateTimeInterface::class,
             'TestSameType2' => DateTimeInterface::class,
-        ],
-        directory: __DIR__ . '/tests/Module1/Expected'
+            'OneMapped' => stdClass::class,
+        ]
     ),
     new Module(
         name: 'module2',
         schema: __DIR__ . '/tests/Module2/schema.graphql',
         namespace: 'Arxy\GraphQLCodegen\Tests\Module2\Expected',
-        typeMapping: [],
-        directory: __DIR__ . '/tests/Module2/Expected'
+        directory: __DIR__ . '/tests/Module2/Expected',
+        typeMapping: []
     ),
 ];
 
