@@ -51,8 +51,6 @@ use Nette\PhpGenerator\Printer;
 use Nette\PhpGenerator\PsrPrinter;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use ReflectionEnum;
-use ReflectionException;
 use ReflectionFunction;
 use ReflectionUnionType;
 
@@ -597,7 +595,7 @@ final class Generator
             $this->typeDecorator->handleInputObject($this->documents, $module, $definitionNode, $inputObject);
         }
 
-        $this->typeRegistry->addInputObjectInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 
     private function handleObjectType(
@@ -642,7 +640,7 @@ final class Generator
             $this->typeDecorator->handleObjectInterface($this->documents, $module, $definitionNode, $interface);
         }
 
-        $this->typeRegistry->addObjectInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
 
         $class = new ClassType($this->namingStrategy->nameForObject($definitionNode));
         $class->setFinal();
@@ -658,7 +656,7 @@ final class Generator
             $this->typeDecorator->handleObject($this->documents, $module, $definitionNode, $class);
         }
 
-        $this->typeRegistry->addObject($definitionNode, $class, $module);
+        $this->typeRegistry->add($definitionNode, $class, $module);
 
         $interface = $this->generateResolverInterfaceForObject($module, $definitionNode, [
             $module->getNamespace() . '\\' . $interfaceName,
@@ -725,7 +723,7 @@ final class Generator
             $this->typeDecorator->handleObjectResolverImplementation($this->documents, $module, $definitionNode, $class);
         }
 
-        $this->typeRegistry->addObjectResolverImplementation($definitionNode, $class, $module);
+        $this->typeRegistry->add($definitionNode, $class, $module);
     }
 
     private function generateResolverInterfaceForObject(
@@ -777,7 +775,7 @@ final class Generator
         if ($this->typeDecorator) {
             $this->typeDecorator->handleObjectResolverInterface($this->documents, $module, $definitionNode, $interface);
         }
-        $this->typeRegistry->addObjectResolverInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
 
         return $interface;
     }
@@ -963,7 +961,7 @@ final class Generator
             $this->typeDecorator->handleObjectFieldArgs($this->documents, $module, $objectType, $field, $baseObjectFieldArgs);
         }
 
-        $this->typeRegistry->addObjectFieldArgsInterface($field, $interface, $module);
+        $this->typeRegistry->add($field, $interface, $module);
     }
 
     /**
@@ -1007,7 +1005,7 @@ final class Generator
             $this->typeDecorator->handleUnionResolverInterface($this->documents, $module, $definitionNode, $interface);
         }
 
-        $this->typeRegistry->addUnionResolverInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
 
         if ($mapped === 0) {
             $resolver = new ClassType($this->namingStrategy->nameForUnionResolver($definitionNode));
@@ -1044,7 +1042,7 @@ EOT;
                 $resolveType->setBody(implode(PHP_EOL, array_map($generateBodyForType, $typesInArray)));
             }
 
-            $this->typeRegistry->addUnionResolver($definitionNode, $resolver, $module);
+            $this->typeRegistry->add($definitionNode, $resolver, $module);
         }
     }
 
@@ -1075,52 +1073,66 @@ EOT;
         if ($this->typeDecorator) {
             $this->typeDecorator->handleScalarResolverInterface($this->documents, $module, $definitionNode, $interface);
         }
-        $this->typeRegistry->addScalarResolverInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 
     private function handleEnum(
         Module $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): void {
-        $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
-        if (null !== $typeName) {
-            try {
-                $reflection = new ReflectionEnum($typeName);
-            } catch (ReflectionException $exception) {
-                throw CodegenException::notEnum($module, $definitionNode, $typeName, $exception);
-            }
-
-            if (!$reflection->isBacked()) {
-                throw CodegenException::notBackedEnum($module, $definitionNode, $typeName);
-            }
-
-            return;
-        }
-
-        $enum = new EnumType($this->namingStrategy->nameForEnum($definitionNode));
+        $cases = [];
         foreach ($definitionNode->values as $value) {
-            $enum->addCase($value->name->value, $value->name->value);
+            $cases[] = $value->name->value;
         }
         foreach ($this->documents as $document) {
             Visitor::visit($document, [
                 'enter' => [
-                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeExtensionNode $extension) use ($enum, $definitionNode) {
+                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeExtensionNode $extension) use (&$cases, $definitionNode) {
                         if ($extension->name->value !== $definitionNode->name->value) {
                             return;
                         }
                         foreach ($extension->values as $value) {
-                            $enum->addCase($value->name->value, $value->name->value);
+                            $cases[] = $value->name->value;
                         }
                     },
                 ],
             ]);
         }
 
+        $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
+        if (null !== $typeName) {
+            $interface = new InterfaceType($this->namingStrategy->nameForEnumResolver($definitionNode));
+            $resolve = $interface->addMethod('resolve');
+            $resolve->setStatic()
+                ->setPublic();
+
+            $resolve->addParameter('value')->setType('string');
+
+            $resolve->setReturnType($typeName);
+
+            $resolve->addComment(
+                sprintf('@param %s $value', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $cases)))
+            );
+
+            if ($this->typeDecorator) {
+                $this->typeDecorator->handleEnumResolverInterface($this->documents, $module, $definitionNode, $interface);
+            }
+
+            $this->typeRegistry->add($definitionNode, $interface, $module);
+
+            return;
+        }
+
+        $enum = new EnumType($this->namingStrategy->nameForEnum($definitionNode));
+        foreach ($cases as $value) {
+            $enum->addCase($value, $value);
+        }
+
         if ($this->typeDecorator) {
             $this->typeDecorator->handleEnum($this->documents, $module, $definitionNode, $enum);
         }
 
-        $this->typeRegistry->addEnum($definitionNode, $enum, $module);
+        $this->typeRegistry->add($definitionNode, $enum, $module);
     }
 
     /**
@@ -1193,6 +1205,6 @@ EOT;
             $this->typeDecorator->handleInterfaceResolverInterface($this->documents, $module, $definitionNode, $interface);
         }
 
-        $this->typeRegistry->addInterfaceResolverInterface($definitionNode, $interface, $module);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 }

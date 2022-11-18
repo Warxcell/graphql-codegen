@@ -108,5 +108,12 @@ interface TypeDecoratorInterface
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode,
         InterfaceType $classLike
     ): void;
+
+    public function handleEnumResolverInterface(
+        array $documents,
+        Module $module,
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
+        InterfaceType $classLike
+    ): void;
 }
 

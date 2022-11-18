@@ -66,6 +66,10 @@ interface NamingStrategy
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
     ): string;
 
+    public function nameForEnumResolver(
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
+    ): string;
+
     public function nameForInputObject(
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): string;

@@ -103,5 +103,10 @@ final class DefaultStrategy implements NamingStrategy
     ): string {
         return $this->nameForObjectFieldArgumentsObject($objectType, $definitionNode) . 'Interface';
     }
+
+    public function nameForEnumResolver(EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode): string
+    {
+        return $definitionNode->name->value . 'ResolverInterface';
+    }
 }
 

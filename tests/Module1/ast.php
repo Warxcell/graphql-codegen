@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 1144,
+    'end' => 1200,
   ),
   'definitions' => 
   array (
@@ -2112,6 +2112,75 @@ return array (
                 'value' => 'ID',
               ),
             ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    22 => 
+    array (
+      'kind' => 'EnumTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1164,
+        'end' => 1199,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1169,
+          'end' => 1179,
+        ),
+        'value' => 'MappedEnum',
+      ),
+      'directives' => 
+      array (
+      ),
+      'values' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1186,
+            'end' => 1189,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1186,
+              'end' => 1189,
+            ),
+            'value' => 'ONE',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'EnumValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1194,
+            'end' => 1197,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1194,
+              'end' => 1197,
+            ),
+            'value' => 'TWO',
           ),
           'directives' => 
           array (

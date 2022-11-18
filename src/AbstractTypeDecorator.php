@@ -120,5 +120,13 @@ abstract class AbstractTypeDecorator implements TypeDecoratorInterface
         InterfaceType $classLike
     ): void {
     }
+
+    public function handleEnumResolverInterface(
+        array $documents,
+        Module $module,
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
+        EnumType $classLike
+    ): void {
+    }
 }
 
