@@ -166,5 +166,16 @@ final class ChainDecorator implements TypeDecoratorInterface
             $decorator->handleInputObjectInterface($documents, $module, $definitionNode, $classLike);
         }
     }
+
+    public function handleEnumResolverInterface(
+        array $documents,
+        Module $module,
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+        foreach ($this->decorators as $decorator) {
+            $decorator->handleEnumResolverInterface($documents, $module, $definitionNode, $classLike);
+        }
+    }
 }
 
