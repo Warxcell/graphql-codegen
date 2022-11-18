@@ -125,7 +125,7 @@ abstract class AbstractTypeDecorator implements TypeDecoratorInterface
         array $documents,
         Module $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode,
-        EnumType $classLike
+        InterfaceType $classLike
     ): void {
     }
 }
