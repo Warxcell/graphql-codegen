@@ -97,6 +97,12 @@ final class DefaultStrategy implements NamingStrategy
         return $this->nameForInputObject($definitionNode) . 'Interface';
     }
 
+    public function nameForInputObjectResolverInterface(
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode
+    ): string {
+        return $this->nameForInputObject($definitionNode) . 'ResolverInterface';
+    }
+
     public function nameForObjectFieldArgumentsObjectInterface(
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
         FieldDefinitionNode $definitionNode

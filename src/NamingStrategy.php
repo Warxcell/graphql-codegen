@@ -77,5 +77,9 @@ interface NamingStrategy
     public function nameForInputObjectInterface(
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): string;
+
+    public function nameForInputObjectResolverInterface(
+        InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
+    ): string;
 }
 

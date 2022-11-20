@@ -82,6 +82,7 @@ return array (
   'inputObjectsMapping' => 
   array (
     'CreateUserInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CreateUserInput',
+    'UnmappedInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\UnmappedInput',
     'CustomerInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CustomerInput',
   ),
   'enumsMapping' => 

@@ -81,6 +81,13 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    public function handleInputObjectResolverInterface(
+        array $documents,
+        Module $module,
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
+        InterfaceType $classLike
+    ): void;
+
     public function handleEnum(
         array $documents,
         Module $module,

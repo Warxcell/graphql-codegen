@@ -251,15 +251,17 @@ final class Generator
                     ) use (
                         $module
                     ) {
-                        $interfaceName = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
-                        $this->inputObjectsInterfaceMapping[$module->getName()][$definitionNode->name->value] = $module->getNamespace() . '\\' . $interfaceName;
+                        $mapped = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
+                        if ($mapped) {
+                            $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$mapped];
 
-                        $className = $this->namingStrategy->nameForInputObject($definitionNode);
-                        $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$this->baseModule->getNamespace() . '\\' . $className];
+                            $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$mapped];
+                        } else {
+                            $className = $this->namingStrategy->nameForInputObject($definitionNode);
+                            $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$this->baseModule->getNamespace() . '\\' . $className];
 
-                        $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
-
-                        $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $className;
+                            $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
+                        }
                     },
                     NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
                         $module
@@ -516,7 +518,8 @@ final class Generator
         throw new LogicException('Definition not found');
     }
 
-    private function getBaseInputObjectType(InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
+    private function getBaseInputObjectType(
+        InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): ClassType {
         $name = $definitionNode->name->value;
         if (!isset($this->baseTypes['InputObject'][$name])) {
@@ -539,6 +542,32 @@ final class Generator
         Module $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
     ): void {
+        $mappedType = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
+
+        if ($mappedType) {
+            $resolverInterface = new InterfaceType($this->namingStrategy->nameForInputObjectResolverInterface($definitionNode));
+            $resolveMethod = $resolverInterface->addMethod('resolve');
+            $resolveMethod->setPublic();
+            $resolveMethod->setReturnType($mappedType);
+
+            if (count($definitionNode->fields) > 0) {
+                foreach ($definitionNode->fields as $field) {
+                    $parameter = $resolveMethod->addParameter($field->name->value);
+
+                    $types = $this->getPhpTypesFromGraphQLType($field->type);
+                    $types = $this->generateUnion($types);
+
+                    $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
+
+                    $parameter->setType($types);
+                    $resolveMethod->addComment(sprintf('@var %s %s', $genericsTypes, '$' . $field->name->value));
+                }
+            }
+
+            $this->typeRegistry->add($definitionNode, $resolverInterface, $module);
+
+            return;
+        }
         $inputObject = $this->getBaseInputObjectType($definitionNode);
 
         $interface = new InterfaceType($this->namingStrategy->nameForInputObjectInterface($definitionNode));
@@ -547,7 +576,9 @@ final class Generator
             foreach ($this->documents as $moduleName => $document) {
                 foreach ($document->definitions as $definition) {
                     if ($definition instanceof InputObjectTypeDefinitionNode && $definition->name->value === $definitionNode->name->value) {
-                        $originInterface = $this->inputObjectsInterfaceMapping[$moduleName][$definition->name->value];
+                        $originInterfaceName = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
+                        $originInterface = $this->modules[$moduleName]->getNamespace() . '\\' . $originInterfaceName;
+
                         $interface->addExtend($originInterface);
                     }
                 }
@@ -596,6 +627,8 @@ final class Generator
         }
 
         $this->typeRegistry->add($definitionNode, $interface, $module);
+
+        $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $inputObject->getName();
     }
 
     private function handleObjectType(

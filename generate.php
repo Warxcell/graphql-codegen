@@ -10,7 +10,9 @@ error_reporting(E_ALL);
 use Arxy\GraphQLCodegen\BaseModule;
 use Arxy\GraphQLCodegen\Generator;
 use Arxy\GraphQLCodegen\Module;
+use Arxy\GraphQLCodegen\Tests\Module1\AnotherMappedInput;
 use Arxy\GraphQLCodegen\Tests\Module1\MappedEnum;
+use Arxy\GraphQLCodegen\Tests\Module1\MappedInput;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 
@@ -26,6 +28,8 @@ $modules = [
             'TestSameType2' => DateTimeInterface::class,
             'OneMapped' => stdClass::class,
             'MappedEnum' => MappedEnum::class,
+            'TestMappedInput' => MappedInput::class,
+            'AnotherMappedInput' => AnotherMappedInput::class,
         ]
     ),
     new Module(

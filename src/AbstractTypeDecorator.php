@@ -121,6 +121,14 @@ abstract class AbstractTypeDecorator implements TypeDecoratorInterface
     ): void {
     }
 
+    public function handleInputObjectResolverInterface(
+        array $documents,
+        Module $module,
+        InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
+        InterfaceType $classLike
+    ): void {
+    }
+
     public function handleEnumResolverInterface(
         array $documents,
         Module $module,

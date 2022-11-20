@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 1200,
+    'end' => 1446,
   ),
   'definitions' => 
   array (
@@ -2181,6 +2181,381 @@ return array (
               'end' => 1197,
             ),
             'value' => 'TWO',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    23 => 
+    array (
+      'kind' => 'InputObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1221,
+        'end' => 1366,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1227,
+          'end' => 1242,
+        ),
+        'value' => 'TestMappedInput',
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1249,
+            'end' => 1264,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1249,
+              'end' => 1255,
+            ),
+            'value' => 'string',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1257,
+              'end' => 1264,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1257,
+                'end' => 1263,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1257,
+                  'end' => 1263,
+                ),
+                'value' => 'String',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        1 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1269,
+            'end' => 1286,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1269,
+              'end' => 1276,
+            ),
+            'value' => 'boolean',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1278,
+              'end' => 1286,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1278,
+                'end' => 1285,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1278,
+                  'end' => 1285,
+                ),
+                'value' => 'Boolean',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        2 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1291,
+            'end' => 1330,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1291,
+              'end' => 1309,
+            ),
+            'value' => 'anotherMappedInput',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1311,
+              'end' => 1330,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1311,
+                'end' => 1329,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1311,
+                  'end' => 1329,
+                ),
+                'value' => 'AnotherMappedInput',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+        3 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1335,
+            'end' => 1364,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1335,
+              'end' => 1348,
+            ),
+            'value' => 'unmappedInput',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1350,
+              'end' => 1364,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1350,
+                'end' => 1363,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1350,
+                  'end' => 1363,
+                ),
+                'value' => 'UnmappedInput',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    24 => 
+    array (
+      'kind' => 'InputObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1368,
+        'end' => 1408,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1374,
+          'end' => 1392,
+        ),
+        'value' => 'AnotherMappedInput',
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1399,
+            'end' => 1406,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1399,
+              'end' => 1401,
+            ),
+            'value' => 'id',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1403,
+              'end' => 1406,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1403,
+                'end' => 1405,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1403,
+                  'end' => 1405,
+                ),
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    25 => 
+    array (
+      'kind' => 'InputObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1410,
+        'end' => 1445,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1416,
+          'end' => 1429,
+        ),
+        'value' => 'UnmappedInput',
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1436,
+            'end' => 1443,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1436,
+              'end' => 1438,
+            ),
+            'value' => 'id',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1440,
+              'end' => 1443,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1440,
+                'end' => 1442,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1440,
+                  'end' => 1442,
+                ),
+                'value' => 'ID',
+              ),
+            ),
           ),
           'directives' => 
           array (

@@ -85,3 +85,20 @@ enum MappedEnum {
     ONE
     TWO
 }
+
+## TestMappedInput
+
+input TestMappedInput {
+    string: String!
+    boolean: Boolean!
+    anotherMappedInput: AnotherMappedInput!
+    unmappedInput: UnmappedInput!
+}
+
+input AnotherMappedInput {
+    id: ID!
+}
+
+input UnmappedInput {
+    id: ID!
+}
