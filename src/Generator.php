@@ -564,6 +564,9 @@ final class Generator
                 }
             }
 
+            if ($this->typeDecorator) {
+                $this->typeDecorator->handleInputObjectResolverInterface($this->documents, $module, $definitionNode, $resolverInterface);
+            }
             $this->typeRegistry->add($definitionNode, $resolverInterface, $module);
 
             return;
