@@ -785,7 +785,7 @@ final class Generator
                 }
                 $method->setReturnType($this->generateUnion($types));
 
-                $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
+                $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type, $module));
                 $promise = $this->wrapInPromise($genericsTypes);
                 $method->addComment(
                     sprintf(

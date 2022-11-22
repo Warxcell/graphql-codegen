@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface QueryResolverInterface
 {
     /**
-     * @return \Arxy\GraphQLCodegen\Tests\Expected\PingResponseSuccessInterface|\Arxy\GraphQLCodegen\Tests\Expected\PingResponseFailureInterface|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Expected\PingResponseSuccessInterface|\Arxy\GraphQLCodegen\Tests\Expected\PingResponseFailureInterface>
+     * @return \Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseFailureInterface|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseFailureInterface>
      */
     public function pingFromModule2(
         mixed $parent,
