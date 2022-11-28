@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface TestFailureResponseResolverInterface
 {
     /**
-     * @return list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>>
+     * @return list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>|\GraphQL\Executor\Promise\Promise
      */
     public function errors(
         TestFailureResponseInterface $parent,

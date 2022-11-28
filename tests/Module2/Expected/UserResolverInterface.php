@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface UserResolverInterface
 {
     /**
-     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function name(
         UserInterface $parent,

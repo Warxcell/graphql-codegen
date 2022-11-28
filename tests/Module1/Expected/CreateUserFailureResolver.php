@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 final class CreateUserFailureResolver implements CreateUserFailureResolverInterface
 {
     /**
-     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function error(
         CreateUserFailureInterface $parent,

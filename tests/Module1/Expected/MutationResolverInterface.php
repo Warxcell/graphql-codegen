@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface MutationResolverInterface
 {
     /**
-     * @return \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise<\Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserFailureInterface>
+     * @return \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise
      */
     public function createUser(
         mixed $parent,

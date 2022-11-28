@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface Widget2ResolverInterface
 {
     /**
-     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function name(
         Widget2Interface $parent,

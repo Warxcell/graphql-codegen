@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 final class PingResponseSuccessResolver implements PingResponseSuccessResolverInterface
 {
     /**
-     * @return bool|\GraphQL\Executor\Promise\Promise<bool>
+     * @return bool|\GraphQL\Executor\Promise\Promise
      */
     public function success(
         PingResponseSuccessInterface $parent,

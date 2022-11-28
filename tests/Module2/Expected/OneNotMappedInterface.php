@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface OneNotMappedInterface
 {
     /**
-     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function getId(): string|\GraphQL\Executor\Promise\Promise;
 }

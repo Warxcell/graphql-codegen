@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
 final class TestFailureResponse implements TestFailureResponseInterface
 {
-    public function __construct(/** @var list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>|\GraphQL\Executor\Promise\Promise<list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>> */
+    public function __construct(/** @var list<\Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface>|\GraphQL\Executor\Promise\Promise */
     private readonly iterable|\GraphQL\Executor\Promise\Promise $errors) {
     }
 

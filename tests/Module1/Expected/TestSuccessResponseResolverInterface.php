@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface TestSuccessResponseResolverInterface
 {
     /**
-     * @return bool|\GraphQL\Executor\Promise\Promise<bool>
+     * @return bool|\GraphQL\Executor\Promise\Promise
      */
     public function bool(
         TestSuccessResponseInterface $parent,

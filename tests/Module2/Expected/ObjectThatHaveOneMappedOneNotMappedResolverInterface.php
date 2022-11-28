@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface ObjectThatHaveOneMappedOneNotMappedResolverInterface
 {
     /**
-     * @return \stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface|\GraphQL\Executor\Promise\Promise<\stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface>
+     * @return \stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface|\GraphQL\Executor\Promise\Promise
      */
     public function item(
         ObjectThatHaveOneMappedOneNotMappedInterface $parent,

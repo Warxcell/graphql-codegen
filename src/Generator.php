@@ -933,7 +933,9 @@ final class Generator
 
     private function wrapInPromise(string $type): string
     {
-        return sprintf('\%s<%s>', Promise::class, $type);
+        return sprintf('\%s', Promise::class);
+        //https://github.com/webonyx/graphql-php/pull/1170
+        //return sprintf('\%s<%s>', Promise::class, $type);
     }
 
     private function generateFieldArgsInterface(

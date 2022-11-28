@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 final class CreateUserSuccess implements CreateUserSuccessInterface
 {
-    public function __construct(/** @var string|null|\GraphQL\Executor\Promise\Promise<string|null> */
+    public function __construct(/** @var string|null|\GraphQL\Executor\Promise\Promise */
     private readonly string|null|\GraphQL\Executor\Promise\Promise $fieldFromModule2) {
     }
 

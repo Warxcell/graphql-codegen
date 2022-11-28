@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface QueryResolverInterface
 {
     /**
-     * @return string|\GraphQL\Executor\Promise\Promise<string>
+     * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function ping(
         mixed $parent,
@@ -21,7 +21,7 @@ interface QueryResolverInterface
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
-     * @return \DateTimeInterface|\GraphQL\Executor\Promise\Promise<\DateTimeInterface>
+     * @return \DateTimeInterface|\GraphQL\Executor\Promise\Promise
      */
     public function testSameType(
         mixed $parent,

@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface CreateUserSuccessResolverInterface
 {
     /**
-     * @return string|null|\GraphQL\Executor\Promise\Promise<string|null>
+     * @return string|null|\GraphQL\Executor\Promise\Promise
      */
     public function fieldFromModule2(
         CreateUserSuccessInterface $parent,

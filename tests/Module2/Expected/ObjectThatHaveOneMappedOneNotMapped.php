@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 
 final class ObjectThatHaveOneMappedOneNotMapped implements ObjectThatHaveOneMappedOneNotMappedInterface
 {
-    public function __construct(/** @var \stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface|\GraphQL\Executor\Promise\Promise<\stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface> */
+    public function __construct(/** @var \stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface|\GraphQL\Executor\Promise\Promise */
     private readonly \stdClass|OneNotMappedInterface|\GraphQL\Executor\Promise\Promise $item) {
     }
 
