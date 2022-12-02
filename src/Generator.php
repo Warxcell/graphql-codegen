@@ -855,22 +855,27 @@ final class Generator
 
     private function isNativeType(string $type): bool
     {
-        return in_array($type, self::PHP_NATIVE_TYPES);
+        $pattern = sprintf('/^(%s).?/', implode('|', self::PHP_NATIVE_TYPES));
+
+        return preg_match($pattern, $type) === 1;
     }
 
     /**
      * @param array<string> $types
      * @return array<string>
      */
-    private function fixTypeForGenerics(array $types): array
+    private function fixTypesForGenerics(array $types): array
     {
-        return array_map(function (string $type): string {
-            if (!$this->isNativeType($type)) {
-                $type = '\\' . $type;
-            }
+        return array_map([$this, 'fixTypeForGenerics'], $types);
+    }
 
-            return $type;
-        }, $types);
+    private function fixTypeForGenerics(string $type): string
+    {
+        if (!$this->isNativeType($type)) {
+            $type = '\\' . $type;
+        }
+
+        return $type;
     }
 
     private function getGenericsTypes(TypeNode $typeNode, ?Module $module = null, ?TypeNode $parentType = null): array
@@ -883,7 +888,7 @@ final class Generator
                 ),
             ],
             NonNullTypeNode::class => $this->getGenericsTypes($typeNode->type, $module, $typeNode),
-            NamedTypeNode::class => $this->fixTypeForGenerics($this->getPhpTypesFromNamedNode($typeNode, $module))
+            NamedTypeNode::class => $this->fixTypesForGenerics($this->getPhpTypesFromNamedNode($typeNode, $module))
         };
         if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
             $types[] = 'null';
@@ -1088,14 +1093,29 @@ EOT;
         Module $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
     ): void {
-        $types = $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? [self::MIXED];
+        $mappedTypes = $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? [self::MIXED];
+        $types = [];
+        $generics = [];
+        foreach ($mappedTypes as $type) {
+            $matches = [];
+            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
+                $types[] = $matches['phpType'];
+                $generics[] = $this->fixTypeForGenerics($type);
+            } else {
+                $generics[] = $this->fixTypeForGenerics($type);
+                $types[] = $type;
+            }
+        }
         $unions = $this->generateUnion($types);
+        $generics = implode(' | ', $generics);
         $interface = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($definitionNode));
         $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string', 'null']));
         $serialize->setPublic();
         $serialize->addParameter('value')->setType($unions);
+        $serialize->addComment(sprintf('@param %s $value', $generics));
 
         $parseValue = $interface->addMethod('parseValue')->setReturnType($unions);
+        $parseValue->addComment(sprintf('@return %s', $generics));
 
         $throws = sprintf('@throws \%s', Exception::class);
         $parseValue->setPublic();
@@ -1107,6 +1127,7 @@ EOT;
         $parseLiteral->addParameter('valueNode')->setType(Node::class);
         $parseLiteral->addParameter('variables', null)->setType('?array');
         $parseLiteral->addComment('@param array<string, mixed>|null $variables');
+        $parseLiteral->addComment(sprintf('@return %s', $generics));
         $parseLiteral->addComment($throws);
 
         if ($this->typeDecorator) {

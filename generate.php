@@ -30,6 +30,7 @@ $modules = [
             'MappedEnum' => MappedEnum::class,
             'TestMappedInput' => MappedInput::class,
             'AnotherMappedInput' => AnotherMappedInput::class,
+            'JSON' => 'array<string, mixed>',
         ]
     ),
     new Module(

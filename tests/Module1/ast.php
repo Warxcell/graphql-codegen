@@ -7,7 +7,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 1446,
+    'end' => 1458,
   ),
   'definitions' => 
   array (
@@ -108,19 +108,41 @@ return array (
     ),
     2 => 
     array (
-      'kind' => 'InterfaceTypeDefinition',
+      'kind' => 'ScalarTypeDefinition',
       'loc' => 
       array (
-        'start' => 70,
-        'end' => 100,
+        'start' => 69,
+        'end' => 80,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 80,
-          'end' => 84,
+          'start' => 76,
+          'end' => 80,
+        ),
+        'value' => 'JSON',
+      ),
+      'directives' => 
+      array (
+      ),
+    ),
+    3 => 
+    array (
+      'kind' => 'InterfaceTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 82,
+        'end' => 112,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 92,
+          'end' => 96,
         ),
         'value' => 'Node',
       ),
@@ -137,16 +159,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 91,
-            'end' => 98,
+            'start' => 103,
+            'end' => 110,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 91,
-              'end' => 93,
+              'start' => 103,
+              'end' => 105,
             ),
             'value' => 'id',
           ),
@@ -158,24 +180,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 95,
-              'end' => 98,
+              'start' => 107,
+              'end' => 110,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 95,
-                'end' => 97,
+                'start' => 107,
+                'end' => 109,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 95,
-                  'end' => 97,
+                  'start' => 107,
+                  'end' => 109,
                 ),
                 'value' => 'ID',
               ),
@@ -187,21 +209,21 @@ return array (
         ),
       ),
     ),
-    3 => 
+    4 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 102,
-        'end' => 180,
+        'start' => 114,
+        'end' => 192,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 107,
-          'end' => 112,
+          'start' => 119,
+          'end' => 124,
         ),
         'value' => 'Query',
       ),
@@ -218,16 +240,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 119,
-            'end' => 146,
+            'start' => 131,
+            'end' => 158,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 119,
-              'end' => 123,
+              'start' => 131,
+              'end' => 135,
             ),
             'value' => 'ping',
           ),
@@ -238,16 +260,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 124,
-                'end' => 136,
+                'start' => 136,
+                'end' => 148,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 124,
-                  'end' => 126,
+                  'start' => 136,
+                  'end' => 138,
                 ),
                 'value' => 'da',
               ),
@@ -256,24 +278,24 @@ return array (
                 'kind' => 'NonNullType',
                 'loc' => 
                 array (
-                  'start' => 128,
-                  'end' => 136,
+                  'start' => 140,
+                  'end' => 148,
                 ),
                 'type' => 
                 array (
                   'kind' => 'NamedType',
                   'loc' => 
                   array (
-                    'start' => 128,
-                    'end' => 135,
+                    'start' => 140,
+                    'end' => 147,
                   ),
                   'name' => 
                   array (
                     'kind' => 'Name',
                     'loc' => 
                     array (
-                      'start' => 128,
-                      'end' => 135,
+                      'start' => 140,
+                      'end' => 147,
                     ),
                     'value' => 'Boolean',
                   ),
@@ -289,24 +311,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 139,
-              'end' => 146,
+              'start' => 151,
+              'end' => 158,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 139,
-                'end' => 145,
+                'start' => 151,
+                'end' => 157,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 139,
-                  'end' => 145,
+                  'start' => 151,
+                  'end' => 157,
                 ),
                 'value' => 'String',
               ),
@@ -321,16 +343,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 151,
-            'end' => 178,
+            'start' => 163,
+            'end' => 190,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 151,
-              'end' => 163,
+              'start' => 163,
+              'end' => 175,
             ),
             'value' => 'testSameType',
           ),
@@ -342,24 +364,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 165,
-              'end' => 178,
+              'start' => 177,
+              'end' => 190,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 165,
-                'end' => 177,
+                'start' => 177,
+                'end' => 189,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 165,
-                  'end' => 177,
+                  'start' => 177,
+                  'end' => 189,
                 ),
                 'value' => 'TestSameType',
               ),
@@ -371,21 +393,21 @@ return array (
         ),
       ),
     ),
-    4 => 
+    5 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 182,
-        'end' => 362,
+        'start' => 194,
+        'end' => 374,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 187,
-          'end' => 195,
+          'start' => 199,
+          'end' => 207,
         ),
         'value' => 'Mutation',
       ),
@@ -402,16 +424,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 202,
-            'end' => 360,
+            'start' => 214,
+            'end' => 372,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 202,
-              'end' => 212,
+              'start' => 214,
+              'end' => 224,
             ),
             'value' => 'createUser',
           ),
@@ -422,16 +444,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 213,
-                'end' => 236,
+                'start' => 225,
+                'end' => 248,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 213,
-                  'end' => 218,
+                  'start' => 225,
+                  'end' => 230,
                 ),
                 'value' => 'input',
               ),
@@ -440,24 +462,24 @@ return array (
                 'kind' => 'NonNullType',
                 'loc' => 
                 array (
-                  'start' => 220,
-                  'end' => 236,
+                  'start' => 232,
+                  'end' => 248,
                 ),
                 'type' => 
                 array (
                   'kind' => 'NamedType',
                   'loc' => 
                   array (
-                    'start' => 220,
-                    'end' => 235,
+                    'start' => 232,
+                    'end' => 247,
                   ),
                   'name' => 
                   array (
                     'kind' => 'Name',
                     'loc' => 
                     array (
-                      'start' => 220,
-                      'end' => 235,
+                      'start' => 232,
+                      'end' => 247,
                     ),
                     'value' => 'CreateUserInput',
                   ),
@@ -472,16 +494,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 238,
-                'end' => 246,
+                'start' => 250,
+                'end' => 258,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 238,
-                  'end' => 241,
+                  'start' => 250,
+                  'end' => 253,
                 ),
                 'value' => 'int',
               ),
@@ -490,16 +512,16 @@ return array (
                 'kind' => 'NamedType',
                 'loc' => 
                 array (
-                  'start' => 243,
-                  'end' => 246,
+                  'start' => 255,
+                  'end' => 258,
                 ),
                 'name' => 
                 array (
                   'kind' => 'Name',
                   'loc' => 
                   array (
-                    'start' => 243,
-                    'end' => 246,
+                    'start' => 255,
+                    'end' => 258,
                   ),
                   'value' => 'Int',
                 ),
@@ -513,16 +535,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 248,
-                'end' => 279,
+                'start' => 260,
+                'end' => 291,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 248,
-                  'end' => 271,
+                  'start' => 260,
+                  'end' => 283,
                 ),
                 'value' => 'nonNullArrayNonNullItem',
               ),
@@ -531,40 +553,40 @@ return array (
                 'kind' => 'NonNullType',
                 'loc' => 
                 array (
-                  'start' => 273,
-                  'end' => 279,
+                  'start' => 285,
+                  'end' => 291,
                 ),
                 'type' => 
                 array (
                   'kind' => 'ListType',
                   'loc' => 
                   array (
-                    'start' => 273,
-                    'end' => 278,
+                    'start' => 285,
+                    'end' => 290,
                   ),
                   'type' => 
                   array (
                     'kind' => 'NonNullType',
                     'loc' => 
                     array (
-                      'start' => 274,
-                      'end' => 277,
+                      'start' => 286,
+                      'end' => 289,
                     ),
                     'type' => 
                     array (
                       'kind' => 'NamedType',
                       'loc' => 
                       array (
-                        'start' => 274,
-                        'end' => 276,
+                        'start' => 286,
+                        'end' => 288,
                       ),
                       'name' => 
                       array (
                         'kind' => 'Name',
                         'loc' => 
                         array (
-                          'start' => 274,
-                          'end' => 276,
+                          'start' => 286,
+                          'end' => 288,
                         ),
                         'value' => 'ID',
                       ),
@@ -581,16 +603,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 281,
-                'end' => 300,
+                'start' => 293,
+                'end' => 312,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 281,
-                  'end' => 293,
+                  'start' => 293,
+                  'end' => 305,
                 ),
                 'value' => 'nonNullArray',
               ),
@@ -599,32 +621,32 @@ return array (
                 'kind' => 'NonNullType',
                 'loc' => 
                 array (
-                  'start' => 295,
-                  'end' => 300,
+                  'start' => 307,
+                  'end' => 312,
                 ),
                 'type' => 
                 array (
                   'kind' => 'ListType',
                   'loc' => 
                   array (
-                    'start' => 295,
-                    'end' => 299,
+                    'start' => 307,
+                    'end' => 311,
                   ),
                   'type' => 
                   array (
                     'kind' => 'NamedType',
                     'loc' => 
                     array (
-                      'start' => 296,
-                      'end' => 298,
+                      'start' => 308,
+                      'end' => 310,
                     ),
                     'name' => 
                     array (
                       'kind' => 'Name',
                       'loc' => 
                       array (
-                        'start' => 296,
-                        'end' => 298,
+                        'start' => 308,
+                        'end' => 310,
                       ),
                       'value' => 'ID',
                     ),
@@ -640,16 +662,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 302,
-                'end' => 325,
+                'start' => 314,
+                'end' => 337,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 302,
-                  'end' => 318,
+                  'start' => 314,
+                  'end' => 330,
                 ),
                 'value' => 'arrayNonNullItem',
               ),
@@ -658,32 +680,32 @@ return array (
                 'kind' => 'ListType',
                 'loc' => 
                 array (
-                  'start' => 320,
-                  'end' => 325,
+                  'start' => 332,
+                  'end' => 337,
                 ),
                 'type' => 
                 array (
                   'kind' => 'NonNullType',
                   'loc' => 
                   array (
-                    'start' => 321,
-                    'end' => 324,
+                    'start' => 333,
+                    'end' => 336,
                   ),
                   'type' => 
                   array (
                     'kind' => 'NamedType',
                     'loc' => 
                     array (
-                      'start' => 321,
-                      'end' => 323,
+                      'start' => 333,
+                      'end' => 335,
                     ),
                     'name' => 
                     array (
                       'kind' => 'Name',
                       'loc' => 
                       array (
-                        'start' => 321,
-                        'end' => 323,
+                        'start' => 333,
+                        'end' => 335,
                       ),
                       'value' => 'ID',
                     ),
@@ -699,16 +721,16 @@ return array (
               'kind' => 'InputValueDefinition',
               'loc' => 
               array (
-                'start' => 327,
-                'end' => 338,
+                'start' => 339,
+                'end' => 350,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 327,
-                  'end' => 332,
+                  'start' => 339,
+                  'end' => 344,
                 ),
                 'value' => 'array',
               ),
@@ -717,24 +739,24 @@ return array (
                 'kind' => 'ListType',
                 'loc' => 
                 array (
-                  'start' => 334,
-                  'end' => 338,
+                  'start' => 346,
+                  'end' => 350,
                 ),
                 'type' => 
                 array (
                   'kind' => 'NamedType',
                   'loc' => 
                   array (
-                    'start' => 335,
-                    'end' => 337,
+                    'start' => 347,
+                    'end' => 349,
                   ),
                   'name' => 
                   array (
                     'kind' => 'Name',
                     'loc' => 
                     array (
-                      'start' => 335,
-                      'end' => 337,
+                      'start' => 347,
+                      'end' => 349,
                     ),
                     'value' => 'ID',
                   ),
@@ -750,24 +772,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 341,
-              'end' => 360,
+              'start' => 353,
+              'end' => 372,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 341,
-                'end' => 359,
+                'start' => 353,
+                'end' => 371,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 341,
-                  'end' => 359,
+                  'start' => 353,
+                  'end' => 371,
                 ),
                 'value' => 'CreateUserResponse',
               ),
@@ -779,21 +801,21 @@ return array (
         ),
       ),
     ),
-    5 => 
+    6 => 
     array (
       'kind' => 'InputObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 364,
-        'end' => 408,
+        'start' => 376,
+        'end' => 420,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 370,
-          'end' => 385,
+          'start' => 382,
+          'end' => 397,
         ),
         'value' => 'CreateUserInput',
       ),
@@ -807,16 +829,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 392,
-            'end' => 406,
+            'start' => 404,
+            'end' => 418,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 392,
-              'end' => 397,
+              'start' => 404,
+              'end' => 409,
             ),
             'value' => 'email',
           ),
@@ -825,24 +847,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 399,
-              'end' => 406,
+              'start' => 411,
+              'end' => 418,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 399,
-                'end' => 405,
+                'start' => 411,
+                'end' => 417,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 399,
-                  'end' => 405,
+                  'start' => 411,
+                  'end' => 417,
                 ),
                 'value' => 'String',
               ),
@@ -854,21 +876,21 @@ return array (
         ),
       ),
     ),
-    6 => 
+    7 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 410,
-        'end' => 452,
+        'start' => 422,
+        'end' => 464,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 415,
-          'end' => 432,
+          'start' => 427,
+          'end' => 444,
         ),
         'value' => 'CreateUserSuccess',
       ),
@@ -885,16 +907,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 439,
-            'end' => 450,
+            'start' => 451,
+            'end' => 462,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 439,
-              'end' => 443,
+              'start' => 451,
+              'end' => 455,
             ),
             'value' => 'user',
           ),
@@ -906,24 +928,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 445,
-              'end' => 450,
+              'start' => 457,
+              'end' => 462,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 445,
-                'end' => 449,
+                'start' => 457,
+                'end' => 461,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 445,
-                  'end' => 449,
+                  'start' => 457,
+                  'end' => 461,
                 ),
                 'value' => 'User',
               ),
@@ -935,21 +957,21 @@ return array (
         ),
       ),
     ),
-    7 => 
+    8 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 454,
-        'end' => 499,
+        'start' => 466,
+        'end' => 511,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 459,
-          'end' => 476,
+          'start' => 471,
+          'end' => 488,
         ),
         'value' => 'CreateUserFailure',
       ),
@@ -966,16 +988,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 483,
-            'end' => 497,
+            'start' => 495,
+            'end' => 509,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 483,
-              'end' => 488,
+              'start' => 495,
+              'end' => 500,
             ),
             'value' => 'error',
           ),
@@ -987,24 +1009,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 490,
-              'end' => 497,
+              'start' => 502,
+              'end' => 509,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 490,
-                'end' => 496,
+                'start' => 502,
+                'end' => 508,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 490,
-                  'end' => 496,
+                  'start' => 502,
+                  'end' => 508,
                 ),
                 'value' => 'String',
               ),
@@ -1016,21 +1038,21 @@ return array (
         ),
       ),
     ),
-    8 => 
+    9 => 
     array (
       'kind' => 'UnionTypeDefinition',
       'loc' => 
       array (
-        'start' => 501,
-        'end' => 565,
+        'start' => 513,
+        'end' => 577,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 507,
-          'end' => 525,
+          'start' => 519,
+          'end' => 537,
         ),
         'value' => 'CreateUserResponse',
       ),
@@ -1044,16 +1066,16 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 528,
-            'end' => 545,
+            'start' => 540,
+            'end' => 557,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 528,
-              'end' => 545,
+              'start' => 540,
+              'end' => 557,
             ),
             'value' => 'CreateUserSuccess',
           ),
@@ -1063,37 +1085,37 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 548,
-            'end' => 565,
+            'start' => 560,
+            'end' => 577,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 548,
-              'end' => 565,
+              'start' => 560,
+              'end' => 577,
             ),
             'value' => 'CreateUserFailure',
           ),
         ),
       ),
     ),
-    9 => 
+    10 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 567,
-        'end' => 630,
+        'start' => 579,
+        'end' => 642,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 572,
-          'end' => 576,
+          'start' => 584,
+          'end' => 588,
         ),
         'value' => 'User',
       ),
@@ -1104,16 +1126,16 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 588,
-            'end' => 592,
+            'start' => 600,
+            'end' => 604,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 588,
-              'end' => 592,
+              'start' => 600,
+              'end' => 604,
             ),
             'value' => 'Node',
           ),
@@ -1129,16 +1151,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 599,
-            'end' => 606,
+            'start' => 611,
+            'end' => 618,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 599,
-              'end' => 601,
+              'start' => 611,
+              'end' => 613,
             ),
             'value' => 'id',
           ),
@@ -1150,24 +1172,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 603,
-              'end' => 606,
+              'start' => 615,
+              'end' => 618,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 603,
-                'end' => 605,
+                'start' => 615,
+                'end' => 617,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 603,
-                  'end' => 605,
+                  'start' => 615,
+                  'end' => 617,
                 ),
                 'value' => 'ID',
               ),
@@ -1182,16 +1204,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 611,
-            'end' => 628,
+            'start' => 623,
+            'end' => 640,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 611,
-              'end' => 619,
+              'start' => 623,
+              'end' => 631,
             ),
             'value' => 'username',
           ),
@@ -1203,24 +1225,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 621,
-              'end' => 628,
+              'start' => 633,
+              'end' => 640,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 621,
-                'end' => 627,
+                'start' => 633,
+                'end' => 639,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 621,
-                  'end' => 627,
+                  'start' => 633,
+                  'end' => 639,
                 ),
                 'value' => 'String',
               ),
@@ -1232,21 +1254,21 @@ return array (
         ),
       ),
     ),
-    10 => 
+    11 => 
     array (
       'kind' => 'UnionTypeDefinition',
       'loc' => 
       array (
-        'start' => 632,
-        'end' => 664,
+        'start' => 644,
+        'end' => 676,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 638,
-          'end' => 644,
+          'start' => 650,
+          'end' => 656,
         ),
         'value' => 'Widget',
       ),
@@ -1260,16 +1282,16 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 647,
-            'end' => 654,
+            'start' => 659,
+            'end' => 666,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 647,
-              'end' => 654,
+              'start' => 659,
+              'end' => 666,
             ),
             'value' => 'Widget1',
           ),
@@ -1279,37 +1301,37 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 657,
-            'end' => 664,
+            'start' => 669,
+            'end' => 676,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 657,
-              'end' => 664,
+              'start' => 669,
+              'end' => 676,
             ),
             'value' => 'Widget2',
           ),
         ),
       ),
     ),
-    11 => 
+    12 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 666,
-        'end' => 700,
+        'start' => 678,
+        'end' => 712,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 671,
-          'end' => 678,
+          'start' => 683,
+          'end' => 690,
         ),
         'value' => 'Widget1',
       ),
@@ -1326,16 +1348,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 685,
-            'end' => 698,
+            'start' => 697,
+            'end' => 710,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 685,
-              'end' => 689,
+              'start' => 697,
+              'end' => 701,
             ),
             'value' => 'name',
           ),
@@ -1347,24 +1369,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 691,
-              'end' => 698,
+              'start' => 703,
+              'end' => 710,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 691,
-                'end' => 697,
+                'start' => 703,
+                'end' => 709,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 691,
-                  'end' => 697,
+                  'start' => 703,
+                  'end' => 709,
                 ),
                 'value' => 'String',
               ),
@@ -1376,21 +1398,21 @@ return array (
         ),
       ),
     ),
-    12 => 
+    13 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 702,
-        'end' => 736,
+        'start' => 714,
+        'end' => 748,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 707,
-          'end' => 714,
+          'start' => 719,
+          'end' => 726,
         ),
         'value' => 'Widget2',
       ),
@@ -1407,16 +1429,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 721,
-            'end' => 734,
+            'start' => 733,
+            'end' => 746,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 721,
-              'end' => 725,
+              'start' => 733,
+              'end' => 737,
             ),
             'value' => 'name',
           ),
@@ -1428,24 +1450,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 727,
-              'end' => 734,
+              'start' => 739,
+              'end' => 746,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 727,
-                'end' => 733,
+                'start' => 739,
+                'end' => 745,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 727,
-                  'end' => 733,
+                  'start' => 739,
+                  'end' => 745,
                 ),
                 'value' => 'String',
               ),
@@ -1457,21 +1479,21 @@ return array (
         ),
       ),
     ),
-    13 => 
+    14 => 
     array (
       'kind' => 'EnumTypeDefinition',
       'loc' => 
       array (
-        'start' => 738,
-        'end' => 770,
+        'start' => 750,
+        'end' => 782,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 743,
-          'end' => 748,
+          'start' => 755,
+          'end' => 760,
         ),
         'value' => 'Enum1',
       ),
@@ -1485,16 +1507,16 @@ return array (
           'kind' => 'EnumValueDefinition',
           'loc' => 
           array (
-            'start' => 755,
-            'end' => 759,
+            'start' => 767,
+            'end' => 771,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 755,
-              'end' => 759,
+              'start' => 767,
+              'end' => 771,
             ),
             'value' => 'VAL1',
           ),
@@ -1507,16 +1529,16 @@ return array (
           'kind' => 'EnumValueDefinition',
           'loc' => 
           array (
-            'start' => 764,
-            'end' => 768,
+            'start' => 776,
+            'end' => 780,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 764,
-              'end' => 768,
+              'start' => 776,
+              'end' => 780,
             ),
             'value' => 'VAL2',
           ),
@@ -1526,21 +1548,21 @@ return array (
         ),
       ),
     ),
-    14 => 
+    15 => 
     array (
       'kind' => 'UnionTypeDefinition',
       'loc' => 
       array (
-        'start' => 772,
-        'end' => 834,
+        'start' => 784,
+        'end' => 846,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 778,
-          'end' => 790,
+          'start' => 790,
+          'end' => 802,
         ),
         'value' => 'TestResponse',
       ),
@@ -1554,16 +1576,16 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 793,
-            'end' => 812,
+            'start' => 805,
+            'end' => 824,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 793,
-              'end' => 812,
+              'start' => 805,
+              'end' => 824,
             ),
             'value' => 'TestSuccessResponse',
           ),
@@ -1573,37 +1595,37 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 815,
-            'end' => 834,
+            'start' => 827,
+            'end' => 846,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 815,
-              'end' => 834,
+              'start' => 827,
+              'end' => 846,
             ),
             'value' => 'TestFailureResponse',
           ),
         ),
       ),
     ),
-    15 => 
+    16 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 836,
-        'end' => 890,
+        'start' => 848,
+        'end' => 902,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 841,
-          'end' => 860,
+          'start' => 853,
+          'end' => 872,
         ),
         'value' => 'TestFailureResponse',
       ),
@@ -1620,16 +1642,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 867,
-            'end' => 888,
+            'start' => 879,
+            'end' => 900,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 867,
-              'end' => 873,
+              'start' => 879,
+              'end' => 885,
             ),
             'value' => 'errors',
           ),
@@ -1641,40 +1663,40 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 875,
-              'end' => 888,
+              'start' => 887,
+              'end' => 900,
             ),
             'type' => 
             array (
               'kind' => 'ListType',
               'loc' => 
               array (
-                'start' => 875,
-                'end' => 887,
+                'start' => 887,
+                'end' => 899,
               ),
               'type' => 
               array (
                 'kind' => 'NonNullType',
                 'loc' => 
                 array (
-                  'start' => 876,
-                  'end' => 886,
+                  'start' => 888,
+                  'end' => 898,
                 ),
                 'type' => 
                 array (
                   'kind' => 'NamedType',
                   'loc' => 
                   array (
-                    'start' => 876,
-                    'end' => 885,
+                    'start' => 888,
+                    'end' => 897,
                   ),
                   'name' => 
                   array (
                     'kind' => 'Name',
                     'loc' => 
                     array (
-                      'start' => 876,
-                      'end' => 885,
+                      'start' => 888,
+                      'end' => 897,
                     ),
                     'value' => 'TestError',
                   ),
@@ -1688,21 +1710,21 @@ return array (
         ),
       ),
     ),
-    16 => 
+    17 => 
     array (
       'kind' => 'UnionTypeDefinition',
       'loc' => 
       array (
-        'start' => 892,
-        'end' => 920,
+        'start' => 904,
+        'end' => 932,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 898,
-          'end' => 907,
+          'start' => 910,
+          'end' => 919,
         ),
         'value' => 'TestError',
       ),
@@ -1716,37 +1738,37 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 910,
-            'end' => 920,
+            'start' => 922,
+            'end' => 932,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 910,
-              'end' => 920,
+              'start' => 922,
+              'end' => 932,
             ),
             'value' => 'TestError1',
           ),
         ),
       ),
     ),
-    17 => 
+    18 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 922,
-        'end' => 969,
+        'start' => 934,
+        'end' => 981,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 927,
-          'end' => 946,
+          'start' => 939,
+          'end' => 958,
         ),
         'value' => 'TestSuccessResponse',
       ),
@@ -1763,16 +1785,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 953,
-            'end' => 967,
+            'start' => 965,
+            'end' => 979,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 953,
-              'end' => 957,
+              'start' => 965,
+              'end' => 969,
             ),
             'value' => 'bool',
           ),
@@ -1784,24 +1806,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 959,
-              'end' => 967,
+              'start' => 971,
+              'end' => 979,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 959,
-                'end' => 966,
+                'start' => 971,
+                'end' => 978,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 959,
-                  'end' => 966,
+                  'start' => 971,
+                  'end' => 978,
                 ),
                 'value' => 'Boolean',
               ),
@@ -1813,21 +1835,21 @@ return array (
         ),
       ),
     ),
-    18 => 
+    19 => 
     array (
       'kind' => 'UnionTypeDefinition',
       'loc' => 
       array (
-        'start' => 971,
-        'end' => 1021,
+        'start' => 983,
+        'end' => 1033,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 977,
-          'end' => 989,
+          'start' => 989,
+          'end' => 1001,
         ),
         'value' => 'TestSameType',
       ),
@@ -1841,16 +1863,16 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 992,
-            'end' => 1005,
+            'start' => 1004,
+            'end' => 1017,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 992,
-              'end' => 1005,
+              'start' => 1004,
+              'end' => 1017,
             ),
             'value' => 'TestSameType1',
           ),
@@ -1860,37 +1882,37 @@ return array (
           'kind' => 'NamedType',
           'loc' => 
           array (
-            'start' => 1008,
-            'end' => 1021,
+            'start' => 1020,
+            'end' => 1033,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1008,
-              'end' => 1021,
+              'start' => 1020,
+              'end' => 1033,
             ),
             'value' => 'TestSameType2',
           ),
         ),
       ),
     ),
-    19 => 
+    20 => 
     array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 1023,
-        'end' => 1066,
+        'start' => 1035,
+        'end' => 1078,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 1028,
-          'end' => 1041,
+          'start' => 1040,
+          'end' => 1053,
         ),
         'value' => 'TestSameType1',
       ),
@@ -1907,16 +1929,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 1048,
-            'end' => 1064,
+            'start' => 1060,
+            'end' => 1076,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1048,
-              'end' => 1055,
+              'start' => 1060,
+              'end' => 1067,
             ),
             'value' => 'message',
           ),
@@ -1928,105 +1950,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1057,
-              'end' => 1064,
+              'start' => 1069,
+              'end' => 1076,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1057,
-                'end' => 1063,
+                'start' => 1069,
+                'end' => 1075,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1057,
-                  'end' => 1063,
-                ),
-                'value' => 'String',
-              ),
-            ),
-          ),
-          'directives' => 
-          array (
-          ),
-        ),
-      ),
-    ),
-    20 => 
-    array (
-      'kind' => 'ObjectTypeDefinition',
-      'loc' => 
-      array (
-        'start' => 1068,
-        'end' => 1111,
-      ),
-      'name' => 
-      array (
-        'kind' => 'Name',
-        'loc' => 
-        array (
-          'start' => 1073,
-          'end' => 1086,
-        ),
-        'value' => 'TestSameType2',
-      ),
-      'interfaces' => 
-      array (
-      ),
-      'directives' => 
-      array (
-      ),
-      'fields' => 
-      array (
-        0 => 
-        array (
-          'kind' => 'FieldDefinition',
-          'loc' => 
-          array (
-            'start' => 1093,
-            'end' => 1109,
-          ),
-          'name' => 
-          array (
-            'kind' => 'Name',
-            'loc' => 
-            array (
-              'start' => 1093,
-              'end' => 1100,
-            ),
-            'value' => 'message',
-          ),
-          'arguments' => 
-          array (
-          ),
-          'type' => 
-          array (
-            'kind' => 'NonNullType',
-            'loc' => 
-            array (
-              'start' => 1102,
-              'end' => 1109,
-            ),
-            'type' => 
-            array (
-              'kind' => 'NamedType',
-              'loc' => 
-              array (
-                'start' => 1102,
-                'end' => 1108,
-              ),
-              'name' => 
-              array (
-                'kind' => 'Name',
-                'loc' => 
-                array (
-                  'start' => 1102,
-                  'end' => 1108,
+                  'start' => 1069,
+                  'end' => 1075,
                 ),
                 'value' => 'String',
               ),
@@ -2043,16 +1984,97 @@ return array (
       'kind' => 'ObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 1113,
-        'end' => 1143,
+        'start' => 1080,
+        'end' => 1123,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 1118,
-          'end' => 1127,
+          'start' => 1085,
+          'end' => 1098,
+        ),
+        'value' => 'TestSameType2',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'FieldDefinition',
+          'loc' => 
+          array (
+            'start' => 1105,
+            'end' => 1121,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1105,
+              'end' => 1112,
+            ),
+            'value' => 'message',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1114,
+              'end' => 1121,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1114,
+                'end' => 1120,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1114,
+                  'end' => 1120,
+                ),
+                'value' => 'String',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    22 => 
+    array (
+      'kind' => 'ObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1125,
+        'end' => 1155,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1130,
+          'end' => 1139,
         ),
         'value' => 'OneMapped',
       ),
@@ -2069,16 +2091,16 @@ return array (
           'kind' => 'FieldDefinition',
           'loc' => 
           array (
-            'start' => 1134,
-            'end' => 1141,
+            'start' => 1146,
+            'end' => 1153,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1134,
-              'end' => 1136,
+              'start' => 1146,
+              'end' => 1148,
             ),
             'value' => 'id',
           ),
@@ -2090,24 +2112,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1138,
-              'end' => 1141,
+              'start' => 1150,
+              'end' => 1153,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1138,
-                'end' => 1140,
+                'start' => 1150,
+                'end' => 1152,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1138,
-                  'end' => 1140,
+                  'start' => 1150,
+                  'end' => 1152,
                 ),
                 'value' => 'ID',
               ),
@@ -2119,21 +2141,21 @@ return array (
         ),
       ),
     ),
-    22 => 
+    23 => 
     array (
       'kind' => 'EnumTypeDefinition',
       'loc' => 
       array (
-        'start' => 1164,
-        'end' => 1199,
+        'start' => 1176,
+        'end' => 1211,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 1169,
-          'end' => 1179,
+          'start' => 1181,
+          'end' => 1191,
         ),
         'value' => 'MappedEnum',
       ),
@@ -2147,16 +2169,16 @@ return array (
           'kind' => 'EnumValueDefinition',
           'loc' => 
           array (
-            'start' => 1186,
-            'end' => 1189,
+            'start' => 1198,
+            'end' => 1201,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1186,
-              'end' => 1189,
+              'start' => 1198,
+              'end' => 1201,
             ),
             'value' => 'ONE',
           ),
@@ -2169,16 +2191,16 @@ return array (
           'kind' => 'EnumValueDefinition',
           'loc' => 
           array (
-            'start' => 1194,
-            'end' => 1197,
+            'start' => 1206,
+            'end' => 1209,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1194,
-              'end' => 1197,
+              'start' => 1206,
+              'end' => 1209,
             ),
             'value' => 'TWO',
           ),
@@ -2188,21 +2210,21 @@ return array (
         ),
       ),
     ),
-    23 => 
+    24 => 
     array (
       'kind' => 'InputObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 1221,
-        'end' => 1366,
+        'start' => 1233,
+        'end' => 1378,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 1227,
-          'end' => 1242,
+          'start' => 1239,
+          'end' => 1254,
         ),
         'value' => 'TestMappedInput',
       ),
@@ -2216,16 +2238,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 1249,
-            'end' => 1264,
+            'start' => 1261,
+            'end' => 1276,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1249,
-              'end' => 1255,
+              'start' => 1261,
+              'end' => 1267,
             ),
             'value' => 'string',
           ),
@@ -2234,24 +2256,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1257,
-              'end' => 1264,
+              'start' => 1269,
+              'end' => 1276,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1257,
-                'end' => 1263,
+                'start' => 1269,
+                'end' => 1275,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1257,
-                  'end' => 1263,
+                  'start' => 1269,
+                  'end' => 1275,
                 ),
                 'value' => 'String',
               ),
@@ -2266,16 +2288,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 1269,
-            'end' => 1286,
+            'start' => 1281,
+            'end' => 1298,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1269,
-              'end' => 1276,
+              'start' => 1281,
+              'end' => 1288,
             ),
             'value' => 'boolean',
           ),
@@ -2284,24 +2306,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1278,
-              'end' => 1286,
+              'start' => 1290,
+              'end' => 1298,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1278,
-                'end' => 1285,
+                'start' => 1290,
+                'end' => 1297,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1278,
-                  'end' => 1285,
+                  'start' => 1290,
+                  'end' => 1297,
                 ),
                 'value' => 'Boolean',
               ),
@@ -2316,16 +2338,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 1291,
-            'end' => 1330,
+            'start' => 1303,
+            'end' => 1342,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1291,
-              'end' => 1309,
+              'start' => 1303,
+              'end' => 1321,
             ),
             'value' => 'anotherMappedInput',
           ),
@@ -2334,24 +2356,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1311,
-              'end' => 1330,
+              'start' => 1323,
+              'end' => 1342,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1311,
-                'end' => 1329,
+                'start' => 1323,
+                'end' => 1341,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1311,
-                  'end' => 1329,
+                  'start' => 1323,
+                  'end' => 1341,
                 ),
                 'value' => 'AnotherMappedInput',
               ),
@@ -2366,16 +2388,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 1335,
-            'end' => 1364,
+            'start' => 1347,
+            'end' => 1376,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1335,
-              'end' => 1348,
+              'start' => 1347,
+              'end' => 1360,
             ),
             'value' => 'unmappedInput',
           ),
@@ -2384,101 +2406,26 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1350,
-              'end' => 1364,
+              'start' => 1362,
+              'end' => 1376,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1350,
-                'end' => 1363,
+                'start' => 1362,
+                'end' => 1375,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1350,
-                  'end' => 1363,
+                  'start' => 1362,
+                  'end' => 1375,
                 ),
                 'value' => 'UnmappedInput',
-              ),
-            ),
-          ),
-          'directives' => 
-          array (
-          ),
-        ),
-      ),
-    ),
-    24 => 
-    array (
-      'kind' => 'InputObjectTypeDefinition',
-      'loc' => 
-      array (
-        'start' => 1368,
-        'end' => 1408,
-      ),
-      'name' => 
-      array (
-        'kind' => 'Name',
-        'loc' => 
-        array (
-          'start' => 1374,
-          'end' => 1392,
-        ),
-        'value' => 'AnotherMappedInput',
-      ),
-      'directives' => 
-      array (
-      ),
-      'fields' => 
-      array (
-        0 => 
-        array (
-          'kind' => 'InputValueDefinition',
-          'loc' => 
-          array (
-            'start' => 1399,
-            'end' => 1406,
-          ),
-          'name' => 
-          array (
-            'kind' => 'Name',
-            'loc' => 
-            array (
-              'start' => 1399,
-              'end' => 1401,
-            ),
-            'value' => 'id',
-          ),
-          'type' => 
-          array (
-            'kind' => 'NonNullType',
-            'loc' => 
-            array (
-              'start' => 1403,
-              'end' => 1406,
-            ),
-            'type' => 
-            array (
-              'kind' => 'NamedType',
-              'loc' => 
-              array (
-                'start' => 1403,
-                'end' => 1405,
-              ),
-              'name' => 
-              array (
-                'kind' => 'Name',
-                'loc' => 
-                array (
-                  'start' => 1403,
-                  'end' => 1405,
-                ),
-                'value' => 'ID',
               ),
             ),
           ),
@@ -2493,16 +2440,91 @@ return array (
       'kind' => 'InputObjectTypeDefinition',
       'loc' => 
       array (
-        'start' => 1410,
-        'end' => 1445,
+        'start' => 1380,
+        'end' => 1420,
       ),
       'name' => 
       array (
         'kind' => 'Name',
         'loc' => 
         array (
-          'start' => 1416,
-          'end' => 1429,
+          'start' => 1386,
+          'end' => 1404,
+        ),
+        'value' => 'AnotherMappedInput',
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'kind' => 'InputValueDefinition',
+          'loc' => 
+          array (
+            'start' => 1411,
+            'end' => 1418,
+          ),
+          'name' => 
+          array (
+            'kind' => 'Name',
+            'loc' => 
+            array (
+              'start' => 1411,
+              'end' => 1413,
+            ),
+            'value' => 'id',
+          ),
+          'type' => 
+          array (
+            'kind' => 'NonNullType',
+            'loc' => 
+            array (
+              'start' => 1415,
+              'end' => 1418,
+            ),
+            'type' => 
+            array (
+              'kind' => 'NamedType',
+              'loc' => 
+              array (
+                'start' => 1415,
+                'end' => 1417,
+              ),
+              'name' => 
+              array (
+                'kind' => 'Name',
+                'loc' => 
+                array (
+                  'start' => 1415,
+                  'end' => 1417,
+                ),
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    26 => 
+    array (
+      'kind' => 'InputObjectTypeDefinition',
+      'loc' => 
+      array (
+        'start' => 1422,
+        'end' => 1457,
+      ),
+      'name' => 
+      array (
+        'kind' => 'Name',
+        'loc' => 
+        array (
+          'start' => 1428,
+          'end' => 1441,
         ),
         'value' => 'UnmappedInput',
       ),
@@ -2516,16 +2538,16 @@ return array (
           'kind' => 'InputValueDefinition',
           'loc' => 
           array (
-            'start' => 1436,
-            'end' => 1443,
+            'start' => 1448,
+            'end' => 1455,
           ),
           'name' => 
           array (
             'kind' => 'Name',
             'loc' => 
             array (
-              'start' => 1436,
-              'end' => 1438,
+              'start' => 1448,
+              'end' => 1450,
             ),
             'value' => 'id',
           ),
@@ -2534,24 +2556,24 @@ return array (
             'kind' => 'NonNullType',
             'loc' => 
             array (
-              'start' => 1440,
-              'end' => 1443,
+              'start' => 1452,
+              'end' => 1455,
             ),
             'type' => 
             array (
               'kind' => 'NamedType',
               'loc' => 
               array (
-                'start' => 1440,
-                'end' => 1442,
+                'start' => 1452,
+                'end' => 1454,
               ),
               'name' => 
               array (
                 'kind' => 'Name',
                 'loc' => 
                 array (
-                  'start' => 1440,
-                  'end' => 1442,
+                  'start' => 1452,
+                  'end' => 1454,
                 ),
                 'value' => 'ID',
               ),

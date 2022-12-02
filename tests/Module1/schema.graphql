@@ -5,6 +5,7 @@ schema {
 
 scalar DateTime
 
+scalar JSON
 
 interface Node {
     id: ID!
