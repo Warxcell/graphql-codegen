@@ -1106,6 +1106,7 @@ EOT;
         $parseLiteral->setPublic();
         $parseLiteral->addParameter('valueNode')->setType(Node::class);
         $parseLiteral->addParameter('variables', null)->setType('?array');
+        $parseLiteral->addComment('@param array<string, mixed>|null $variables');
         $parseLiteral->addComment($throws);
 
         if ($this->typeDecorator) {
