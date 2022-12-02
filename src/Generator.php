@@ -67,6 +67,7 @@ use function in_array;
 use function is_dir;
 use function is_file;
 use function mkdir;
+use function preg_match;
 use function reset;
 use function sprintf;
 use function ucfirst;
@@ -554,10 +555,9 @@ final class Generator
                 foreach ($definitionNode->fields as $field) {
                     $parameter = $resolveMethod->addParameter($field->name->value);
 
-                    $types = $this->getPhpTypesFromGraphQLType($field->type);
+                    [$types, $generics] = $this->getTypesFromGraphQLType($field->type);
                     $types = $this->generateUnion($types);
-
-                    $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
+                    $genericsTypes = $this->generateUnion($generics);
 
                     $parameter->setType($types);
                     $resolveMethod->addComment(sprintf('@var %s %s', $genericsTypes, '$' . $field->name->value));
@@ -597,10 +597,10 @@ final class Generator
                     $construct = $inputObject->addMethod('__construct');
                 }
 
-                $types = $this->getPhpTypesFromGraphQLType($field->type);
+                [$types, $generics] = $this->getTypesFromGraphQLType($field->type);
                 $types = $this->generateUnion($types);
 
-                $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type));
+                $genericsTypes = $this->generateUnion($generics);
 
                 $method = $interface->addMethod(sprintf('get%s', ucfirst($field->name->value)));
                 $method->setPublic();
@@ -661,10 +661,10 @@ final class Generator
         $interface = new InterfaceType($interfaceName);
         if (count($definitionNode->fields) > 0) {
             foreach ($definitionNode->fields as $field) {
-                $types = $this->getPhpTypesFromGraphQLType($field->type, $module);
+                [$types, $generics] = $this->getTypesFromGraphQLType($field->type, $module);
                 $types[] = Promise::class;
 
-                $generics = $this->generateUnion($this->getGenericsTypes($field->type, $module));
+                $generics = $this->generateUnion($generics);
                 $interface->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
                     ->addComment(sprintf('@return %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])))
@@ -711,7 +711,7 @@ final class Generator
         // TODO maybe handle default value?
         // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
 
-        $types = $this->getPhpTypesFromGraphQLType($definitionNode->type, $module);
+        [$types, $generics] = $this->getTypesFromGraphQLType($definitionNode->type, $module);
         $types[] = Promise::class;
         $types = $this->generateUnion($types);
         $param = ($nullable ? $method->addPromotedParameter(
@@ -724,7 +724,7 @@ final class Generator
             ->setType($types);
         //            ->setNullable($nullable);
 
-        $generics = $this->generateUnion($this->getGenericsTypes($definitionNode->type, $module));
+        $generics = $this->generateUnion($generics);
         $param->addComment(sprintf('@var %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])));
 
         $class->addMethod(sprintf('get%s', ucfirst($definitionNode->name->value)))
@@ -779,13 +779,13 @@ final class Generator
                 $method->addParameter('args')->setType($this->getArgsType($definitionNode, $field, $module));
                 $method->addParameter('context')->setType($this->resolverParameterTypes->contextType);
                 $method->addParameter('info')->setType($this->resolverParameterTypes->info);
-                $types = $this->getPhpTypesFromGraphQLType($field->type, $module);
+                [$types, $genericsTypes] = $this->getTypesFromGraphQLType($field->type, $module);
                 if ($types[0] !== self::MIXED) {
                     $types[] = Promise::class;
                 }
                 $method->setReturnType($this->generateUnion($types));
 
-                $genericsTypes = $this->generateUnion($this->getGenericsTypes($field->type, $module));
+                $genericsTypes = $this->generateUnion($genericsTypes);
                 $promise = $this->wrapInPromise($genericsTypes);
                 $method->addComment(
                     sprintf(
@@ -829,28 +829,47 @@ final class Generator
     /**
      * @throws Exception
      */
-    private function getPhpTypesFromGraphQLType(
+    private function getIterableTypes(ListTypeNode $typeNode, Module|null $module): array
+    {
+        [, $generics] = $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode);
+
+        return [
+            ['iterable'],
+            [
+                sprintf(
+                    'list<%s>',
+                    $this->generateUnion($generics)
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getTypesFromGraphQLType(
         TypeNode $typeNode,
         ?Module $module = null,
         ?TypeNode $parentType = null
     ): array {
-        $types = match ($typeNode::class) {
-            ListTypeNode::class => ['iterable'],
-            NonNullTypeNode::class => $this->getPhpTypesFromGraphQLType($typeNode->type, $module, $typeNode),
-            NamedTypeNode::class => $this->getPhpTypesFromNamedNode($typeNode, $module),
+        [$types, $generics] = match ($typeNode::class) {
+            ListTypeNode::class => $this->getIterableTypes($typeNode, $module),
+            NonNullTypeNode::class => $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode),
+            NamedTypeNode::class => $this->extractPhpTypesAndGenerics($this->getTypesFromNamedNode($typeNode, $module)),
         };
 
         if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
             $types[] = 'null';
+            $generics[] = 'null';
         }
 
         foreach ($types as $type) {
             if ($type === self::MIXED) {
-                return [self::MIXED];
+                return [[self::MIXED], [self::MIXED]];
             }
         }
 
-        return array_unique($types);
+        return [array_unique($types), array_unique($generics)];
     }
 
     private function isNativeType(string $type): bool
@@ -878,26 +897,7 @@ final class Generator
         return $type;
     }
 
-    private function getGenericsTypes(TypeNode $typeNode, ?Module $module = null, ?TypeNode $parentType = null): array
-    {
-        $types = match ($typeNode::class) {
-            ListTypeNode::class => [
-                sprintf(
-                    'list<%s>',
-                    $this->generateUnion($this->getGenericsTypes($typeNode->type, $module, $typeNode))
-                ),
-            ],
-            NonNullTypeNode::class => $this->getGenericsTypes($typeNode->type, $module, $typeNode),
-            NamedTypeNode::class => $this->fixTypesForGenerics($this->getPhpTypesFromNamedNode($typeNode, $module))
-        };
-        if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
-            $types[] = 'null';
-        }
-
-        return array_unique($types);
-    }
-
-    private function getPhpTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
+    private function getTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
     {
         switch ($type->name->value) {
             case Type::ID:
@@ -911,9 +911,13 @@ final class Generator
                 return ['bool'];
             default:
                 if (!$module) {
-                    return $this->baseTypeMappingRegistry[$type->name->value] ?? throw new LogicException(
-                        sprintf('Global type %s not found', $type->name->value)
-                    );
+                    if (!$this->baseTypeMappingRegistry[$type->name->value]) {
+                        throw new LogicException(
+                            sprintf('Global type %s not found', $type->name->value)
+                        );
+                    }
+
+                    return $this->baseTypeMappingRegistry[$type->name->value];
                 }
 
                 foreach ($this->documents as $moduleInner => $document) {
@@ -934,6 +938,23 @@ final class Generator
             //                        sprintf('Type %s not found', $type->name->value)
             //                    );
         }
+    }
+
+    private function extractPhpTypesAndGenerics(array $types): array
+    {
+        $phpTypes = [];
+        $generics = [];
+        foreach ($types as $type) {
+            $matches = [];
+            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
+                $phpTypes[] = $matches['phpType'];
+            } else {
+                $phpTypes[] = $type;
+            }
+            $generics[] = $this->fixTypeForGenerics($type);
+        }
+
+        return [$phpTypes, $generics];
     }
 
     private function wrapInPromise(string $type): string
@@ -976,10 +997,11 @@ final class Generator
                 $method = $interface->addMethod(sprintf('get%s', ucfirst($argument->name->value)));
                 $method->setPublic();
 
-                $phpTypes = $this->generateUnion($this->getPhpTypesFromGraphQLType($argument->type));
-                $method->setReturnType($phpTypes);
+                [$phpTypes, $genericsTypes] = $this->getTypesFromGraphQLType($argument->type);
+                $phpTypes = $this->generateUnion($phpTypes);
+                $genericsTypes = $this->generateUnion($genericsTypes);
 
-                $genericsTypes = $this->generateUnion($this->getGenericsTypes($argument->type));
+                $method->setReturnType($phpTypes);
                 $method->addComment(sprintf('@return %s', $genericsTypes));
 
                 ###
@@ -1031,7 +1053,8 @@ final class Generator
         foreach ($definitionNode->types as $type) {
             $mapped += isset($this->moduleTypeMapping[$type->name->value]) ? 1 : 0;
 
-            $types = [...$types, ...$this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $type]), $module)];
+            [$newTypes] = $this->getTypesFromGraphQLType(new NonNullTypeNode(['type' => $type]), $module);
+            $types = [...$types, ...$newTypes];
 
             $returnTypes[] = $type->name->value;
 
@@ -1066,7 +1089,7 @@ final class Generator
             $generateBodyForType = function (NamedTypeNode $typeNode) use ($module): string {
                 $unionType = $typeNode->name->value;
 
-                $phpTypes = $this->getPhpTypesFromGraphQLType(new NonNullTypeNode(['type' => $typeNode]), $module);
+                [$phpTypes] = $this->getTypesFromGraphQLType(new NonNullTypeNode(['type' => $typeNode]), $module);
                 if (count($phpTypes) > 1) {
                     throw new LogicException('Cannot generate resolver for ' . $unionType);
                 }
@@ -1089,32 +1112,31 @@ EOT;
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function handleScalarType(
         Module $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
     ): void {
-        $mappedTypes = $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] ?? [self::MIXED];
-        $types = [];
-        $generics = [];
-        foreach ($mappedTypes as $type) {
-            $matches = [];
-            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
-                $types[] = $matches['phpType'];
-                $generics[] = $this->fixTypeForGenerics($type);
-            } else {
-                $generics[] = $this->fixTypeForGenerics($type);
-                $types[] = $type;
-            }
-        }
-        $unions = $this->generateUnion($types);
-        $generics = implode(' | ', $generics);
+        [$types, $generics] = $this->getTypesFromGraphQLType(
+            new NonNullTypeNode([
+                'type' => new NamedTypeNode([
+                    'name' => $definitionNode->name,
+                ]),
+            ]),
+            $module
+        );
+
+        $phpTypes = $this->generateUnion($types);
+        $generics = $this->generateUnion($generics);
         $interface = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($definitionNode));
         $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string', 'null']));
         $serialize->setPublic();
-        $serialize->addParameter('value')->setType($unions);
+        $serialize->addParameter('value')->setType($phpTypes);
         $serialize->addComment(sprintf('@param %s $value', $generics));
 
-        $parseValue = $interface->addMethod('parseValue')->setReturnType($unions);
+        $parseValue = $interface->addMethod('parseValue')->setReturnType($phpTypes);
         $parseValue->addComment(sprintf('@return %s', $generics));
 
         $throws = sprintf('@throws \%s', Exception::class);
@@ -1122,7 +1144,7 @@ EOT;
         $parseValue->addParameter('value')->setType('string');
         $parseValue->addComment($throws);
 
-        $parseLiteral = $interface->addMethod('parseLiteral')->setReturnType($unions);
+        $parseLiteral = $interface->addMethod('parseLiteral')->setReturnType($phpTypes);
         $parseLiteral->setPublic();
         $parseLiteral->addParameter('valueNode')->setType(Node::class);
         $parseLiteral->addParameter('variables', null)->setType('?array');
@@ -1223,17 +1245,17 @@ EOT;
 
                     foreach ($definition->interfaces as $definitionInterface) {
                         if ($definitionInterface->name->value === $definitionNode->name->value) {
+                            [$newTypes] = $this->getTypesFromGraphQLType(
+                                new NonNullTypeNode([
+                                    'type' => new NamedTypeNode([
+                                        'name' => $definition->name,
+                                    ]),
+                                ]),
+                                $module,
+                            );
                             $types = [
                                 ...$types,
-                                ...$this->getPhpTypesFromGraphQLType(
-                                    new NonNullTypeNode([
-                                        'type' => new NamedTypeNode([
-                                            'name' => $definition->name,
-                                        ]),
-                                    ]),
-                                    $module,
-
-                                ),
+                                ...$newTypes,
                             ];
                         }
                     }

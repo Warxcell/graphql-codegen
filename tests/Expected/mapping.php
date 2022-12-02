@@ -14,6 +14,7 @@ return array (
     'Mutation' => 
     array (
       'createUser' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MutationCreateUserArgs',
+      'testJson' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MutationTestJsonArgs',
     ),
     'CreateUserSuccess' => 
     array (

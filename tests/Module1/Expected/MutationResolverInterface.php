@@ -19,4 +19,14 @@ interface MutationResolverInterface
         mixed $context,
         \GraphQL\Type\Definition\ResolveInfo $info
     ): CreateUserSuccessInterface|CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise;
+
+    /**
+     * @return array<string, mixed>|null|\GraphQL\Executor\Promise\Promise
+     */
+    public function testJson(
+        mixed $parent,
+        MutationTestJsonArgsInterface $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info
+    ): array|null|\GraphQL\Executor\Promise\Promise;
 }

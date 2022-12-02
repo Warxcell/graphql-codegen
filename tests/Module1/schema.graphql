@@ -18,6 +18,7 @@ type Query {
 
 type Mutation {
     createUser(input: CreateUserInput!, int: Int, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): CreateUserResponse!
+    testJson: JSON
 }
 
 input CreateUserInput {
