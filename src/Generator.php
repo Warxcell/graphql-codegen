@@ -185,6 +185,7 @@ final class Generator
 
     /**
      * @throws SyntaxError
+     * @throws Exception
      */
     public function execute(): void
     {
@@ -564,9 +565,7 @@ final class Generator
                 }
             }
 
-            if ($this->typeDecorator) {
-                $this->typeDecorator->handleInputObjectResolverInterface($this->documents, $module, $definitionNode, $resolverInterface);
-            }
+            $this->typeDecorator?->handleInputObjectResolverInterface($this->documents, $module, $definitionNode, $resolverInterface);
             $this->typeRegistry->add($definitionNode, $resolverInterface, $module);
 
             return;
@@ -624,16 +623,16 @@ final class Generator
             }
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleInputObjectInterface($this->documents, $module, $definitionNode, $interface);
-            $this->typeDecorator->handleInputObject($this->documents, $module, $definitionNode, $inputObject);
-        }
-
+        $this->typeDecorator?->handleInputObjectInterface($this->documents, $module, $definitionNode, $interface);
+        $this->typeDecorator?->handleInputObject($this->documents, $module, $definitionNode, $inputObject);
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $inputObject->getName();
     }
 
+    /**
+     * @throws Exception
+     */
     private function handleObjectType(
         Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
@@ -672,10 +671,7 @@ final class Generator
             }
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleObjectInterface($this->documents, $module, $definitionNode, $interface);
-        }
-
+        $this->typeDecorator?->handleObjectInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
         $class = new ClassType($this->namingStrategy->nameForObject($definitionNode));
@@ -688,10 +684,7 @@ final class Generator
             }
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleObject($this->documents, $module, $definitionNode, $class);
-        }
-
+        $this->typeDecorator?->handleObject($this->documents, $module, $definitionNode, $class);
         $this->typeRegistry->add($definitionNode, $class, $module);
 
         $interface = $this->generateResolverInterfaceForObject($module, $definitionNode, [
@@ -700,6 +693,9 @@ final class Generator
         $this->generateResolverImplementation($module, $definitionNode, $interface);
     }
 
+    /**
+     * @throws Exception
+     */
     private function handleInputValue(
         Module $module,
         ClassType $class,
@@ -755,9 +751,7 @@ final class Generator
             }, $interface->getMethods())
         );
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleObjectResolverImplementation($this->documents, $module, $definitionNode, $class);
-        }
+        $this->typeDecorator?->handleObjectResolverImplementation($this->documents, $module, $definitionNode, $class);
 
         $this->typeRegistry->add($definitionNode, $class, $module);
     }
@@ -808,9 +802,7 @@ final class Generator
             }
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleObjectResolverInterface($this->documents, $module, $definitionNode, $interface);
-        }
+        $this->typeDecorator?->handleObjectResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
         return $interface;
@@ -877,15 +869,6 @@ final class Generator
         $pattern = sprintf('/^(%s).?/', implode('|', self::PHP_NATIVE_TYPES));
 
         return preg_match($pattern, $type) === 1;
-    }
-
-    /**
-     * @param array<string> $types
-     * @return array<string>
-     */
-    private function fixTypesForGenerics(array $types): array
-    {
-        return array_map([$this, 'fixTypeForGenerics'], $types);
     }
 
     private function fixTypeForGenerics(string $type): string
@@ -990,7 +973,7 @@ final class Generator
             foreach ($field->arguments as $argument) {
                 try {
                     $construct = $baseObjectFieldArgs->getMethod('__construct');
-                } catch (InvalidArgumentException $exception) {
+                } catch (InvalidArgumentException) {
                     $construct = $baseObjectFieldArgs->addMethod('__construct');
                 }
 
@@ -1021,11 +1004,8 @@ final class Generator
             }
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleObjectFieldArgsInterface($this->documents, $module, $objectType, $field, $interface);
-            $this->typeDecorator->handleObjectFieldArgs($this->documents, $module, $objectType, $field, $baseObjectFieldArgs);
-        }
-
+        $this->typeDecorator?->handleObjectFieldArgsInterface($this->documents, $module, $objectType, $field, $interface);
+        $this->typeDecorator?->handleObjectFieldArgs($this->documents, $module, $objectType, $field, $baseObjectFieldArgs);
         $this->typeRegistry->add($field, $interface, $module);
     }
 
@@ -1067,10 +1047,7 @@ final class Generator
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
         $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleUnionResolverInterface($this->documents, $module, $definitionNode, $interface);
-        }
-
+        $this->typeDecorator?->handleUnionResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
         if ($mapped === 0) {
@@ -1210,10 +1187,7 @@ EOT;
             $enum->addCase($value, $value);
         }
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleEnum($this->documents, $module, $definitionNode, $enum);
-        }
-
+        $this->typeDecorator?->handleEnum($this->documents, $module, $definitionNode, $enum);
         $this->typeRegistry->add($definitionNode, $enum, $module);
     }
 
@@ -1283,10 +1257,7 @@ EOT;
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
         $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleInterfaceResolverInterface($this->documents, $module, $definitionNode, $interface);
-        }
-
+        $this->typeDecorator?->handleInterfaceResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 }
