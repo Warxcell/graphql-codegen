@@ -13,15 +13,15 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
     public function __construct(
         /** @var \Arxy\GraphQLCodegen\Tests\Expected\CreateUserInput $input */
         private readonly CreateUserInput $input,
-        /** @var list<string> $nonNullArrayNonNullItem */
+        /** @var iterable<string> $nonNullArrayNonNullItem */
         private readonly iterable $nonNullArrayNonNullItem,
-        /** @var list<string> $nonNullArray */
+        /** @var iterable<string> $nonNullArray */
         private readonly iterable $nonNullArray,
         /** @var int|null $int */
         private readonly int|null $int = null,
-        /** @var list<string>|null $arrayNonNullItem */
+        /** @var iterable<string>|null $arrayNonNullItem */
         private readonly iterable|null $arrayNonNullItem = null,
-        /** @var list<string>|null $array */
+        /** @var iterable<string>|null $array */
         private readonly iterable|null $array = null,
     ) {
     }

@@ -21,22 +21,22 @@ interface MutationCreateUserArgsInterface
     public function getInt(): int|null;
 
     /**
-     * @return list<string>
+     * @return iterable<string>
      */
     public function getNonNullArrayNonNullItem(): iterable;
 
     /**
-     * @return list<string>
+     * @return iterable<string>
      */
     public function getNonNullArray(): iterable;
 
     /**
-     * @return list<string>|null
+     * @return iterable<string>|null
      */
     public function getArrayNonNullItem(): iterable|null;
 
     /**
-     * @return list<string>|null
+     * @return iterable<string>|null
      */
     public function getArray(): iterable|null;
 }
