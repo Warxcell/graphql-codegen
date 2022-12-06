@@ -1108,7 +1108,7 @@ EOT;
         $phpTypes = $this->generateUnion($types);
         $generics = $this->generateUnion($generics);
         $interface = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($definitionNode));
-        $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string', 'null']));
+        $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string']));
         $serialize->setPublic();
         $serialize->addParameter('value')->setType($phpTypes);
         $serialize->addComment(sprintf('@param %s $value', $generics));
