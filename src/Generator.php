@@ -1129,9 +1129,7 @@ EOT;
         $parseLiteral->addComment(sprintf('@return %s', $generics));
         $parseLiteral->addComment($throws);
 
-        if ($this->typeDecorator) {
-            $this->typeDecorator->handleScalarResolverInterface($this->documents, $module, $definitionNode, $interface);
-        }
+        $this->typeDecorator?->handleScalarResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 
