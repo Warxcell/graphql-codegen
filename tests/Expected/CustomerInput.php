@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Expected;
 
 final class CustomerInput implements \Arxy\GraphQLCodegen\Tests\Module2\Expected\CustomerInputInterface
 {
-    public function __construct(/** @var string name */
+    public function __construct(/** @var string */
     private readonly string $name) {
     }
 

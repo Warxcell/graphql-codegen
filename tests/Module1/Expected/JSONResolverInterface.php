@@ -13,7 +13,7 @@ interface JSONResolverInterface
     /**
      * @param array<string, mixed> $value
      */
-    public function serialize(array $value): string|null;
+    public function serialize(array $value): string;
 
     /**
      * @return array<string, mixed>

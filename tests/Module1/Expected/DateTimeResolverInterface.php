@@ -13,7 +13,7 @@ interface DateTimeResolverInterface
     /**
      * @param \DateTimeInterface $value
      */
-    public function serialize(\DateTimeInterface $value): string|null;
+    public function serialize(\DateTimeInterface $value): string;
 
     /**
      * @return \DateTimeInterface

@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Expected;
 
 final class UnmappedInput implements \Arxy\GraphQLCodegen\Tests\Module1\Expected\UnmappedInputInterface
 {
-    public function __construct(/** @var string id */
+    public function __construct(/** @var string */
     private readonly string $id) {
     }
 

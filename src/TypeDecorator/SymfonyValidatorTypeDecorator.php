@@ -19,59 +19,100 @@ use GraphQL\Language\AST\ObjectTypeDefinitionNode;
 use GraphQL\Language\AST\ObjectTypeExtensionNode;
 use LogicException;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\InterfaceType;
+use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PromotedParameter;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\IsFalse;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Valid;
-
 use function assert;
+use function in_array;
 use function is_array;
 use function is_subclass_of;
+use function preg_quote;
+use function preg_replace;
 use function sprintf;
+use function ucfirst;
 
 class SymfonyValidatorTypeDecorator extends AbstractTypeDecorator
 {
-    private function addConstraint(PromotedParameter $parameter, string $constraint, array $attributes = []): void
+    public function handleObjectFieldArgsInterface(array $documents, Module $module, ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode, FieldDefinitionNode $fieldNode, InterfaceType $classLike): void
     {
-        try {
-            $reflection = new ReflectionClass($constraint);
-
-            if (!is_subclass_of($constraint, Constraint::class, true)) {
-                throw new LogicException('Not extending ' . Constraint::class);
-            }
-
-            foreach ($attributes as $attribute => $value) {
-                try {
-                    $property = $reflection->getProperty($attribute);
-                } catch (ReflectionException $exception) {
-                    throw new LogicException(sprintf('Invalid option passed %s', $attribute), 0, $exception);
-                }
-            }
-        } catch (Exception $exception) {
-            throw new LogicException(sprintf('Constraint %s is not valid', $constraint), 0, $exception);
+        $validationMapping = $module->getValidationMapping()[$definitionNode->name->value][$fieldNode->name->value] ?? null;
+        if (!$validationMapping) {
+            return;
         }
-
-        $parameter->addAttribute($constraint, $attributes);
+        $this->handlePhpStanDocs($classLike, $validationMapping);
     }
 
-    private function addConstraints(ClassType $classType, array $validationMapping): void
+    private function handlePhpStanDocs(InterfaceType $classType, array $validationMapping): void
     {
         foreach ($validationMapping as $parameterName => $maybeParameterMapping) {
             if (is_array($maybeParameterMapping)) {
-                $parameter = $classType->getMethod('__construct')->getParameters()[$parameterName];
-                assert($parameter instanceof PromotedParameter);
+                $method = $classType->getMethod(sprintf('get%s', ucfirst($parameterName)));
+
                 foreach ($maybeParameterMapping as $maybeName => $maybeConstraint) {
                     if (is_array($maybeConstraint)) {
-                        $this->addConstraint($parameter, $maybeName, $maybeConstraint);
+                        $this->addPhpStanDocs($maybeName, $maybeConstraint, $method);
                     } else {
-                        $this->addConstraint($parameter, $maybeConstraint);
+                        $this->addPhpStanDocs($maybeConstraint, [], $method);
                     }
                 }
-            } else {
-                $classType->addAttribute($maybeParameterMapping);
             }
         }
+    }
+
+    private function addPhpStanDocs(string $constraint, array $attributes, PromotedParameter|Method $thing): void
+    {
+        $type = $thing instanceof PromotedParameter ? $thing->getType(true) : $thing->getReturnType(true);
+        if (in_array('int', $type->getTypes())) {
+            if ($constraint === Range::class) {
+                $min = $attributes['min'] ?? 'min';
+                $max = $attributes['max'] ?? 'max';
+
+                $thing->setComment(
+                    $this->replaceType('int', sprintf('int<%s, %s>', $min, $max), $thing->getComment())
+                );
+            }
+        } elseif (in_array('bool', $type->getTypes())) {
+            switch ($constraint) {
+                case IsTrue::class:
+                    $thing->setComment(
+                        $this->replaceType('bool', 'true', $thing->getComment())
+                    );
+                    break;
+                case IsFalse::class:
+                    $thing->setComment(
+                        $this->replaceType('bool', 'false', $thing->getComment())
+                    );
+            }
+        }
+    }
+
+    private function replaceType(string $type, string $replacement, string $comment): string
+    {
+        return preg_replace('/((?<!\$)' . preg_quote($type) . ')/', $replacement, $comment);
+    }
+
+    public function handleObjectFieldArgs(
+        array                                            $documents,
+        Module                                           $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        FieldDefinitionNode                              $fieldNode,
+        ClassType                                        $classLike
+    ): void
+    {
+        $this->addValidIfNeeded($documents, $fieldNode->arguments, $classLike);
+
+        $validationMapping = $module->getValidationMapping()[$definitionNode->name->value][$fieldNode->name->value] ?? null;
+        if (!$validationMapping) {
+            return;
+        }
+        $this->addConstraints($classLike, $validationMapping);
     }
 
     /**
@@ -79,10 +120,11 @@ class SymfonyValidatorTypeDecorator extends AbstractTypeDecorator
      * @var NodeList<InputValueDefinitionNode> $inputValueDefinitionNodes
      */
     private function addValidIfNeeded(
-        array $documents,
-        NodeList $inputValueDefinitionNodes,
+        array     $documents,
+        NodeList  $inputValueDefinitionNodes,
         ClassType $classType
-    ): void {
+    ): void
+    {
         if (!$classType->hasMethod('__construct')) {
             return;
         }
@@ -115,28 +157,66 @@ class SymfonyValidatorTypeDecorator extends AbstractTypeDecorator
         }
     }
 
-    public function handleObjectFieldArgs(
-        array $documents,
-        Module $module,
-        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        FieldDefinitionNode $fieldNode,
-        ClassType $classLike
-    ): void {
-        $this->addValidIfNeeded($documents, $fieldNode->arguments, $classLike);
+    private function addConstraints(ClassType $classType, array $validationMapping): void
+    {
+        foreach ($validationMapping as $parameterName => $maybeParameterMapping) {
+            if (is_array($maybeParameterMapping)) {
+                $parameter = $classType->getMethod('__construct')->getParameters()[$parameterName];
+                assert($parameter instanceof PromotedParameter);
+                foreach ($maybeParameterMapping as $maybeName => $maybeConstraint) {
+                    if (is_array($maybeConstraint)) {
+                        $this->addConstraint($parameter, $maybeName, $maybeConstraint);
+                    } else {
+                        $this->addConstraint($parameter, $maybeConstraint);
+                    }
+                }
+            } else {
+                $classType->addAttribute($maybeParameterMapping);
+            }
+        }
+    }
 
-        $validationMapping = $module->getValidationMapping()[$definitionNode->name->value][$fieldNode->name->value] ?? null;
+    private function addConstraint(PromotedParameter $parameter, string $constraint, array $attributes = []): void
+    {
+        try {
+            $reflection = new ReflectionClass($constraint);
+
+            if (!is_subclass_of($constraint, Constraint::class, true)) {
+                throw new LogicException('Not extending ' . Constraint::class);
+            }
+
+            foreach ($attributes as $attribute => $value) {
+                try {
+                    $property = $reflection->getProperty($attribute);
+                } catch (ReflectionException $exception) {
+                    throw new LogicException(sprintf('Invalid option passed %s', $attribute), 0, $exception);
+                }
+            }
+        } catch (Exception $exception) {
+            throw new LogicException(sprintf('Constraint %s is not valid', $constraint), 0, $exception);
+        }
+
+        $this->addPhpStanDocs($constraint, $attributes, $parameter);
+
+        $parameter->addAttribute($constraint, $attributes);
+    }
+
+    public function handleInputObjectInterface(array $documents, Module $module, InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode, InterfaceType $classLike): void
+    {
+        $validationMapping = $module->getValidationMapping()[$definitionNode->name->value] ?? null;
         if (!$validationMapping) {
             return;
         }
-        $this->addConstraints($classLike, $validationMapping);
+        $this->handlePhpStanDocs($classLike, $validationMapping);
     }
 
     public function handleInputObject(
-        array $documents,
-        Module $module,
+        array                                                      $documents,
+        Module                                                     $module,
         InputObjectTypeExtensionNode|InputObjectTypeDefinitionNode $definitionNode,
-        ClassType $classLike
-    ): void {
+        ClassType                                                  $classLike
+    ): void
+    {
         $this->addValidIfNeeded($documents, $definitionNode->fields, $classLike);
 
         $validationMapping = $module->getValidationMapping()[$definitionNode->name->value] ?? null;

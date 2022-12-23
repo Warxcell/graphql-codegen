@@ -11,7 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface AnotherMappedInputResolverInterface
 {
     /**
-     * @var string $id
+     * @var string
      */
     public function resolve(string $id): \Arxy\GraphQLCodegen\Tests\Module1\AnotherMappedInput;
 }

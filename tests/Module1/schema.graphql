@@ -17,12 +17,14 @@ type Query {
 }
 
 type Mutation {
-    createUser(input: CreateUserInput!, int: Int, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): CreateUserResponse!
+    createUser(input: CreateUserInput!, int: Int, bool: Boolean!, nonNullArrayNonNullItem: [ID!]!, nonNullArray: [ID]!, arrayNonNullItem: [ID!], array: [ID]): CreateUserResponse!
     testJson: JSON
 }
 
 input CreateUserInput {
     email: String!
+    int: Int!
+    bool: Boolean!
 }
 
 type CreateUserSuccess {

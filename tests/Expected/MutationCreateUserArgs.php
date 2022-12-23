@@ -12,13 +12,15 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
 {
     public function __construct(
         /** @var \Arxy\GraphQLCodegen\Tests\Expected\CreateUserInput $input */
-        private readonly CreateUserInput $input,
+        #[\Symfony\Component\Validator\Constraints\Valid] private readonly CreateUserInput $input,
+        /** @var true $bool */
+        #[\Symfony\Component\Validator\Constraints\IsTrue] private readonly bool $bool,
         /** @var iterable<string> $nonNullArrayNonNullItem */
         private readonly iterable $nonNullArrayNonNullItem,
         /** @var iterable<string> $nonNullArray */
         private readonly iterable $nonNullArray,
-        /** @var int|null $int */
-        private readonly int|null $int = null,
+        /** @var int<1, 600>|null $int */
+        #[\Symfony\Component\Validator\Constraints\Range(min: 1, max: 600)] private readonly int|null $int = null,
         /** @var iterable<string>|null $arrayNonNullItem */
         private readonly iterable|null $arrayNonNullItem = null,
         /** @var iterable<string>|null $array */
@@ -34,6 +36,11 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
     public function getInt(): int|null
     {
         return $this->int;
+    }
+
+    public function getBool(): bool
+    {
+        return $this->bool;
     }
 
     public function getNonNullArrayNonNullItem(): iterable

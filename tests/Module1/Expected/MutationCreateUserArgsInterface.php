@@ -16,9 +16,14 @@ interface MutationCreateUserArgsInterface
     public function getInput(): \Arxy\GraphQLCodegen\Tests\Expected\CreateUserInput;
 
     /**
-     * @return int|null
+     * @return int<1, 600>|null
      */
     public function getInt(): int|null;
+
+    /**
+     * @return true
+     */
+    public function getBool(): bool;
 
     /**
      * @return iterable<string>

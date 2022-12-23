@@ -53,7 +53,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ReflectionFunction;
 use ReflectionUnionType;
-
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -73,7 +72,6 @@ use function sprintf;
 use function ucfirst;
 use function unlink;
 use function var_export;
-
 use const PHP_EOL;
 
 final class Generator
@@ -130,13 +128,14 @@ final class Generator
      * @param list<Module> $modules
      */
     public function __construct(
-        private readonly BaseModule $baseModule,
-        array $modules,
-        private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(),
-        private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
+        private readonly BaseModule              $baseModule,
+        array                                    $modules,
+        private readonly ResolverParameterTypes  $resolverParameterTypes = new ResolverParameterTypes(),
+        private readonly NamingStrategy          $namingStrategy = new DefaultStrategy(),
         private readonly ?TypeDecoratorInterface $typeDecorator = null,
-        private readonly LoggerInterface $logger = new NullLogger()
-    ) {
+        private readonly LoggerInterface         $logger = new NullLogger()
+    )
+    {
         $this->typeRegistry = new TypeRegistry();
         foreach ($modules as $module) {
             if (isset($this->modules[$module->getName()])) {
@@ -152,35 +151,6 @@ final class Generator
         }
 
         $this->printer = new PsrPrinter();
-    }
-
-    private function isRootType(ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode): bool
-    {
-        return in_array($definitionNode->name->value, $this->rootTypes);
-    }
-
-    private function processDef(DocumentNode $node, callable $callback): void
-    {
-        $reflection = new ReflectionFunction($callback);
-        $params = $reflection->getParameters();
-
-        $param = $params[0];
-        $type = $param->getType();
-
-        $classes = [];
-        if ($type instanceof ReflectionUnionType) {
-            foreach ($type->getTypes() as $unionType) {
-                $classes[] = $unionType->getName();
-            }
-        } else {
-            $classes[] = $type->getName();
-        }
-
-        foreach ($node->definitions as $definition) {
-            if (in_array($definition::class, $classes)) {
-                $callback($definition);
-            }
-        }
     }
 
     /**
@@ -477,73 +447,268 @@ final class Generator
         );
     }
 
-    private function write(string $namespace, ClassLike $type, string $directory): void
+    private function processDef(DocumentNode $node, callable $callback): void
     {
-        $file = new PhpFile();
-        $file->setStrictTypes();
-        $file->addNamespace((new PhpNamespace($namespace))->add($type));
-        $file->addComment('Auto-Generated');
+        $reflection = new ReflectionFunction($callback);
+        $params = $reflection->getParameters();
 
-        $classes = $file->getClasses();
-        assert(count($classes) !== 0);
+        $param = $params[0];
+        $type = $param->getType();
 
-        $class = reset($classes)->getName();
+        $classes = [];
+        if ($type instanceof ReflectionUnionType) {
+            foreach ($type->getTypes() as $unionType) {
+                $classes[] = $unionType->getName();
+            }
+        } else {
+            $classes[] = $type->getName();
+        }
 
-        assert($class !== null);
-
-        $filename = sprintf('%s/%s.php', $directory, $class);
-        file_put_contents($filename, $this->printer->printFile($file));
-        $className = $type->getName();
-        assert($className !== null);
-        $this->logger->info(sprintf('Writing %s', $className));
-    }
-
-    private function getModuleByName(string $name): Module
-    {
-        return $this->modules[$name];
+        foreach ($node->definitions as $definition) {
+            if (in_array($definition::class, $classes)) {
+                $callback($definition);
+            }
+        }
     }
 
     /**
-     * @template T of DefinitionNode
-     * @param Closure(DefinitionNode): bool $predicate
-     * @return DefinitionNode
+     * @throws Exception
      */
-    private function findDefinitionBy(Closure $predicate): DefinitionNode
+    private function handleScalarType(
+        Module                                           $module,
+        ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
+    ): void
     {
-        foreach ($this->documents as $document) {
-            foreach ($document->definitions as $definition) {
-                if ($predicate($definition)) {
-                    return $definition;
-                }
-            }
-        }
-        throw new LogicException('Definition not found');
+        [$types, $generics] = $this->getTypesFromGraphQLType(
+            new NonNullTypeNode([
+                'type' => new NamedTypeNode([
+                    'name' => $definitionNode->name,
+                ]),
+            ]),
+            $module
+        );
+
+        $phpTypes = $this->generateUnion($types);
+        $generics = $this->generateUnion($generics);
+        $interface = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($definitionNode));
+        $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string']));
+        $serialize->setPublic();
+        $serialize->addParameter('value')->setType($phpTypes);
+        $serialize->addComment(sprintf('@param %s $value', $generics));
+
+        $parseValue = $interface->addMethod('parseValue')->setReturnType($phpTypes);
+        $parseValue->addComment(sprintf('@return %s', $generics));
+
+        $throws = sprintf('@throws \%s', Exception::class);
+        $parseValue->setPublic();
+        $parseValue->addParameter('value')->setType('string');
+        $parseValue->addComment($throws);
+
+        $parseLiteral = $interface->addMethod('parseLiteral')->setReturnType($phpTypes);
+        $parseLiteral->setPublic();
+        $parseLiteral->addParameter('valueNode')->setType(Node::class);
+        $parseLiteral->addParameter('variables', null)->setType('?array');
+        $parseLiteral->addComment('@param array<string, mixed>|null $variables');
+        $parseLiteral->addComment(sprintf('@return %s', $generics));
+        $parseLiteral->addComment($throws);
+
+        $this->typeDecorator?->handleScalarResolverInterface($this->documents, $module, $definitionNode, $interface);
+        $this->typeRegistry->add($definitionNode, $interface, $module);
     }
 
-    private function getBaseInputObjectType(
-        InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
-    ): ClassType {
-        $name = $definitionNode->name->value;
-        if (!isset($this->baseTypes['InputObject'][$name])) {
-            if (!$definitionNode instanceof InputObjectTypeDefinitionNode) {
-                $definitionNode = $this->findDefinitionBy(
-                    static fn (DefinitionNode $definitionNode
-                    ): bool => $definitionNode instanceof InputObjectTypeDefinitionNode && $definitionNode->name->value === $name
-                );
-            }
-            $inputObject = new ClassType($this->namingStrategy->nameForInputObject($definitionNode));
-            $inputObject->setFinal();
+    /**
+     * @throws Exception
+     */
+    private function getTypesFromGraphQLType(
+        TypeNode  $typeNode,
+        ?Module   $module = null,
+        ?TypeNode $parentType = null
+    ): array
+    {
+        [$types, $generics] = match ($typeNode::class) {
+            ListTypeNode::class => $this->getIterableTypes($typeNode, $module),
+            NonNullTypeNode::class => $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode),
+            NamedTypeNode::class => $this->extractPhpTypesAndGenerics($this->getTypesFromNamedNode($typeNode, $module)),
+        };
 
-            $this->baseTypes['InputObject'][$name] = $inputObject;
+        if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
+            $types[] = 'null';
+            $generics[] = 'null';
         }
 
-        return $this->baseTypes['InputObject'][$name];
+        foreach ($types as $type) {
+            if ($type === self::MIXED) {
+                return [[self::MIXED], [self::MIXED]];
+            }
+        }
+
+        return [array_unique($types), array_unique($generics)];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getIterableTypes(ListTypeNode $typeNode, Module|null $module): array
+    {
+        [, $generics] = $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode);
+
+        return [
+            ['iterable'],
+            [
+                sprintf(
+                    'iterable<%s>',
+                    $this->generateUnion($generics)
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function generateUnion(array $types): string
+    {
+        return implode('|', $types);
+    }
+
+    private function extractPhpTypesAndGenerics(array $types): array
+    {
+        $phpTypes = [];
+        $generics = [];
+        foreach ($types as $type) {
+            $matches = [];
+            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
+                $phpTypes[] = $matches['phpType'];
+            } else {
+                $phpTypes[] = $type;
+            }
+            $generics[] = $this->fixTypeForGenerics($type);
+        }
+
+        return [$phpTypes, $generics];
+    }
+
+    private function fixTypeForGenerics(string $type): string
+    {
+        if (!$this->isNativeType($type)) {
+            $type = '\\' . $type;
+        }
+
+        return $type;
+    }
+
+    private function isNativeType(string $type): bool
+    {
+        $pattern = sprintf('/^(%s).?/', implode('|', self::PHP_NATIVE_TYPES));
+
+        return preg_match($pattern, $type) === 1;
+    }
+
+    private function getTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
+    {
+        switch ($type->name->value) {
+            case Type::ID:
+            case Type::STRING:
+                return ['string'];
+            case Type::INT:
+                return ['int'];
+            case Type::FLOAT:
+                return ['float'];
+            case Type::BOOLEAN:
+                return ['bool'];
+            default:
+                if (!$module) {
+                    if (!$this->baseTypeMappingRegistry[$type->name->value]) {
+                        throw new LogicException(
+                            sprintf('Global type %s not found', $type->name->value)
+                        );
+                    }
+
+                    return $this->baseTypeMappingRegistry[$type->name->value];
+                }
+
+                foreach ($this->documents as $moduleInner => $document) {
+                    foreach ($document->definitions as $definition) {
+                        if ($definition instanceof TypeExtensionNode) {
+                            continue;
+                        }
+                        if (!isset($definition->name) || !$definition->name instanceof NameNode || $definition->name->value !== $type->name->value) {
+                            continue;
+                        }
+
+                        return $this->moduleTypeMappingRegistry[$moduleInner][$type->name->value];
+                    }
+                }
+
+                throw new LogicException(sprintf('Type %s not found', $type->name->value));
+            //                return $this->moduleTypeMappingRegistry[$module->getName()][$type->name->value] ?? throw new LogicException(
+            //                        sprintf('Type %s not found', $type->name->value)
+            //                    );
+        }
+    }
+
+    private function handleEnum(
+        Module                                       $module,
+        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
+    ): void
+    {
+        $cases = [];
+        foreach ($definitionNode->values as $value) {
+            $cases[] = $value->name->value;
+        }
+        foreach ($this->documents as $document) {
+            Visitor::visit($document, [
+                'enter' => [
+                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeExtensionNode $extension) use (&$cases, $definitionNode) {
+                        if ($extension->name->value !== $definitionNode->name->value) {
+                            return;
+                        }
+                        foreach ($extension->values as $value) {
+                            $cases[] = $value->name->value;
+                        }
+                    },
+                ],
+            ]);
+        }
+
+        $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
+        if (null !== $typeName) {
+            $interface = new InterfaceType($this->namingStrategy->nameForEnumResolver($definitionNode));
+            $resolve = $interface->addMethod('resolve');
+            $resolve->setStatic()
+                ->setPublic();
+
+            $resolve->addParameter('value')->setType('string');
+
+            $resolve->setReturnType($typeName);
+
+            $resolve->addComment(
+                sprintf('@param %s $value', implode(' | ', array_map(static fn(string $type): string => sprintf("'%s'", $type), $cases)))
+            );
+
+            if ($this->typeDecorator) {
+                $this->typeDecorator->handleEnumResolverInterface($this->documents, $module, $definitionNode, $interface);
+            }
+
+            $this->typeRegistry->add($definitionNode, $interface, $module);
+
+            return;
+        }
+
+        $enum = new EnumType($this->namingStrategy->nameForEnum($definitionNode));
+        foreach ($cases as $value) {
+            $enum->addCase($value, $value);
+        }
+
+        $this->typeDecorator?->handleEnum($this->documents, $module, $definitionNode, $enum);
+        $this->typeRegistry->add($definitionNode, $enum, $module);
     }
 
     private function handleInputObjectType(
-        Module $module,
+        Module                                                     $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $mappedType = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
 
         if ($mappedType) {
@@ -561,7 +726,7 @@ final class Generator
                     $genericsTypes = $this->generateUnion($generics);
 
                     $parameter->setType($types);
-                    $resolveMethod->addComment(sprintf('@var %s %s', $genericsTypes, '$' . $field->name->value));
+                    $resolveMethod->addComment(sprintf('@var %s', $genericsTypes));
                 }
             }
 
@@ -610,7 +775,7 @@ final class Generator
                     ->setPrivate()
                     ->setReadOnly()
                     ->setType($types)
-                    ->addComment(sprintf('@var %s %s', $genericsTypes, $field->name->value));
+                    ->addComment(sprintf('@var %s', $genericsTypes));
                 if (!$field->type instanceof NonNullTypeNode) {
                     $parameter->setDefaultValue(null);
                 }
@@ -630,13 +795,52 @@ final class Generator
         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $inputObject->getName();
     }
 
+    private function getBaseInputObjectType(
+        InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
+    ): ClassType
+    {
+        $name = $definitionNode->name->value;
+        if (!isset($this->baseTypes['InputObject'][$name])) {
+            if (!$definitionNode instanceof InputObjectTypeDefinitionNode) {
+                $definitionNode = $this->findDefinitionBy(
+                    static fn(DefinitionNode $definitionNode
+                    ): bool => $definitionNode instanceof InputObjectTypeDefinitionNode && $definitionNode->name->value === $name
+                );
+            }
+            $inputObject = new ClassType($this->namingStrategy->nameForInputObject($definitionNode));
+            $inputObject->setFinal();
+
+            $this->baseTypes['InputObject'][$name] = $inputObject;
+        }
+
+        return $this->baseTypes['InputObject'][$name];
+    }
+
+    /**
+     * @template T of DefinitionNode
+     * @param Closure(DefinitionNode): bool $predicate
+     * @return DefinitionNode
+     */
+    private function findDefinitionBy(Closure $predicate): DefinitionNode
+    {
+        foreach ($this->documents as $document) {
+            foreach ($document->definitions as $definition) {
+                if ($predicate($definition)) {
+                    return $definition;
+                }
+            }
+        }
+        throw new LogicException('Definition not found');
+    }
+
     /**
      * @throws Exception
      */
     private function handleObjectType(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $isRootType = $this->isRootType($definitionNode);
 
         if ($isRootType) {
@@ -693,74 +897,17 @@ final class Generator
         $this->generateResolverImplementation($module, $definitionNode, $interface);
     }
 
-    /**
-     * @throws Exception
-     */
-    private function handleInputValue(
-        Module $module,
-        ClassType $class,
-        Method $method,
-        InputValueDefinitionNode|FieldDefinitionNode $definitionNode
-    ): void {
-        $nullable = !$definitionNode->type instanceof NonNullTypeNode;
-
-        // TODO maybe handle default value?
-        // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
-
-        [$types, $generics] = $this->getTypesFromGraphQLType($definitionNode->type, $module);
-        $types[] = Promise::class;
-        $types = $this->generateUnion($types);
-        $param = ($nullable ? $method->addPromotedParameter(
-            $definitionNode->name->value,
-        ) : $method->addPromotedParameter(
-            $definitionNode->name->value
-        ))
-            ->setPrivate()
-            ->setReadOnly()
-            ->setType($types);
-        //            ->setNullable($nullable);
-
-        $generics = $this->generateUnion($generics);
-        $param->addComment(sprintf('@var %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])));
-
-        $class->addMethod(sprintf('get%s', ucfirst($definitionNode->name->value)))
-            ->setPublic()
-            ->setReturnType($types)
-            ->setBody(sprintf('return $this->%s;', $definitionNode->name->value));
-    }
-
-    private function generateResolverImplementation(
-        Module $module,
-        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        InterfaceType $interface
-    ): void {
-        $class = new ClassType($this->namingStrategy->nameForObjectResolverImplementation($definitionNode));
-        $class->setFinal();
-
-        $name = $interface->getName();
-        assert($name !== null);
-        $class->addImplement($module->getNamespace() . '\\' . $name);
-
-        $class->setMethods(
-            array_map(static function (Method $method) {
-                $implementation = clone($method);
-                $implementation->setAbstract(false);
-                $implementation->setBody(sprintf('return $parent->get%s();', ucfirst($method->getName())));
-
-                return $implementation;
-            }, $interface->getMethods())
-        );
-
-        $this->typeDecorator?->handleObjectResolverImplementation($this->documents, $module, $definitionNode, $class);
-
-        $this->typeRegistry->add($definitionNode, $class, $module);
+    private function isRootType(ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode): bool
+    {
+        return in_array($definitionNode->name->value, $this->rootTypes);
     }
 
     private function generateResolverInterfaceForObject(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        array $parentTypes
-    ): InterfaceType {
+        array                                            $parentTypes
+    ): InterfaceType
+    {
         $interface = new InterfaceType($this->namingStrategy->nameForObjectResolverInterface($definitionNode));
 
         foreach ($definitionNode->fields as $field) {
@@ -808,150 +955,12 @@ final class Generator
         return $interface;
     }
 
-    private function getArgsType(
-        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
-        FieldDefinitionNode $field,
-        ?Module $module = null
-    ): string {
-        $mapping = $module ? $this->argumentsMappingModule[$module->getName()] : $this->argumentsMapping;
-
-        return $mapping[$objectType->name->value][$field->name->value];
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getIterableTypes(ListTypeNode $typeNode, Module|null $module): array
-    {
-        [, $generics] = $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode);
-
-        return [
-            ['iterable'],
-            [
-                sprintf(
-                    'iterable<%s>',
-                    $this->generateUnion($generics)
-                ),
-            ],
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getTypesFromGraphQLType(
-        TypeNode $typeNode,
-        ?Module $module = null,
-        ?TypeNode $parentType = null
-    ): array {
-        [$types, $generics] = match ($typeNode::class) {
-            ListTypeNode::class => $this->getIterableTypes($typeNode, $module),
-            NonNullTypeNode::class => $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode),
-            NamedTypeNode::class => $this->extractPhpTypesAndGenerics($this->getTypesFromNamedNode($typeNode, $module)),
-        };
-
-        if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
-            $types[] = 'null';
-            $generics[] = 'null';
-        }
-
-        foreach ($types as $type) {
-            if ($type === self::MIXED) {
-                return [[self::MIXED], [self::MIXED]];
-            }
-        }
-
-        return [array_unique($types), array_unique($generics)];
-    }
-
-    private function isNativeType(string $type): bool
-    {
-        $pattern = sprintf('/^(%s).?/', implode('|', self::PHP_NATIVE_TYPES));
-
-        return preg_match($pattern, $type) === 1;
-    }
-
-    private function fixTypeForGenerics(string $type): string
-    {
-        if (!$this->isNativeType($type)) {
-            $type = '\\' . $type;
-        }
-
-        return $type;
-    }
-
-    private function getTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
-    {
-        switch ($type->name->value) {
-            case Type::ID:
-            case Type::STRING:
-                return ['string'];
-            case Type::INT:
-                return ['int'];
-            case Type::FLOAT:
-                return ['float'];
-            case Type::BOOLEAN:
-                return ['bool'];
-            default:
-                if (!$module) {
-                    if (!$this->baseTypeMappingRegistry[$type->name->value]) {
-                        throw new LogicException(
-                            sprintf('Global type %s not found', $type->name->value)
-                        );
-                    }
-
-                    return $this->baseTypeMappingRegistry[$type->name->value];
-                }
-
-                foreach ($this->documents as $moduleInner => $document) {
-                    foreach ($document->definitions as $definition) {
-                        if ($definition instanceof TypeExtensionNode) {
-                            continue;
-                        }
-                        if (!isset($definition->name) || !$definition->name instanceof NameNode || $definition->name->value !== $type->name->value) {
-                            continue;
-                        }
-
-                        return $this->moduleTypeMappingRegistry[$moduleInner][$type->name->value];
-                    }
-                }
-
-                throw new LogicException(sprintf('Type %s not found', $type->name->value));
-            //                return $this->moduleTypeMappingRegistry[$module->getName()][$type->name->value] ?? throw new LogicException(
-            //                        sprintf('Type %s not found', $type->name->value)
-            //                    );
-        }
-    }
-
-    private function extractPhpTypesAndGenerics(array $types): array
-    {
-        $phpTypes = [];
-        $generics = [];
-        foreach ($types as $type) {
-            $matches = [];
-            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
-                $phpTypes[] = $matches['phpType'];
-            } else {
-                $phpTypes[] = $type;
-            }
-            $generics[] = $this->fixTypeForGenerics($type);
-        }
-
-        return [$phpTypes, $generics];
-    }
-
-    private function wrapInPromise(string $type): string
-    {
-        return sprintf('\%s', Promise::class);
-        //https://github.com/webonyx/graphql-php/pull/1170
-        //return sprintf('\%s<%s>', Promise::class, $type);
-    }
-
     private function generateFieldArgsInterface(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
-        FieldDefinitionNode $field
-    ): void {
+        FieldDefinitionNode                              $field
+    ): void
+    {
         $key = $objectType->name->value . '_' . $field->name->value;
 
         if (!isset($this->baseTypes['ObjectFieldArgs'][$key])) {
@@ -992,7 +1001,7 @@ final class Generator
                     ->setPrivate()
                     ->setReadOnly()
                     ->setType($phpTypes)
-                    ->addComment(sprintf('@var %s $%s', $genericsTypes, $argument->name->value));
+                    ->addComment(sprintf('@var %s', $genericsTypes));
                 if (!$argument->type instanceof NonNullTypeNode) {
                     $parameter->setDefaultValue(null);
                 }
@@ -1009,18 +1018,94 @@ final class Generator
         $this->typeRegistry->add($field, $interface, $module);
     }
 
-    /**
-     * @param string[] $types
-     */
-    private function generateUnion(array $types): string
+    private function getArgsType(
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
+        FieldDefinitionNode                              $field,
+        ?Module                                          $module = null
+    ): string
     {
-        return implode('|', $types);
+        $mapping = $module ? $this->argumentsMappingModule[$module->getName()] : $this->argumentsMapping;
+
+        return $mapping[$objectType->name->value][$field->name->value];
+    }
+
+    private function wrapInPromise(string $type): string
+    {
+        return sprintf('\%s', Promise::class);
+        //https://github.com/webonyx/graphql-php/pull/1170
+        //return sprintf('\%s<%s>', Promise::class, $type);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function handleInputValue(
+        Module                                       $module,
+        ClassType                                    $class,
+        Method                                       $method,
+        InputValueDefinitionNode|FieldDefinitionNode $definitionNode
+    ): void
+    {
+        $nullable = !$definitionNode->type instanceof NonNullTypeNode;
+
+        // TODO maybe handle default value?
+        // $definitionNode instanceof InputValueDefinitionNode ? $definitionNode->defaultValue : null
+
+        [$types, $generics] = $this->getTypesFromGraphQLType($definitionNode->type, $module);
+        $types[] = Promise::class;
+        $types = $this->generateUnion($types);
+        $param = ($nullable ? $method->addPromotedParameter(
+            $definitionNode->name->value,
+        ) : $method->addPromotedParameter(
+            $definitionNode->name->value
+        ))
+            ->setPrivate()
+            ->setReadOnly()
+            ->setType($types);
+        //            ->setNullable($nullable);
+
+        $generics = $this->generateUnion($generics);
+        $param->addComment(sprintf('@var %s', $this->generateUnion([$generics, $this->wrapInPromise($generics)])));
+
+        $class->addMethod(sprintf('get%s', ucfirst($definitionNode->name->value)))
+            ->setPublic()
+            ->setReturnType($types)
+            ->setBody(sprintf('return $this->%s;', $definitionNode->name->value));
+    }
+
+    private function generateResolverImplementation(
+        Module                                           $module,
+        ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
+        InterfaceType                                    $interface
+    ): void
+    {
+        $class = new ClassType($this->namingStrategy->nameForObjectResolverImplementation($definitionNode));
+        $class->setFinal();
+
+        $name = $interface->getName();
+        assert($name !== null);
+        $class->addImplement($module->getNamespace() . '\\' . $name);
+
+        $class->setMethods(
+            array_map(static function (Method $method) {
+                $implementation = clone($method);
+                $implementation->setAbstract(false);
+                $implementation->setBody(sprintf('return $parent->get%s();', ucfirst($method->getName())));
+
+                return $implementation;
+            }, $interface->getMethods())
+        );
+
+        $this->typeDecorator?->handleObjectResolverImplementation($this->documents, $module, $definitionNode, $class);
+
+        $this->typeRegistry->add($definitionNode, $class, $module);
     }
 
     private function handleUnionType(
-        Module $module,
+        Module                                         $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $interface = new InterfaceType($this->namingStrategy->nameForUnionResolverInterface($definitionNode));
         $resolveType = $interface->addMethod('resolveType');
         $resolveType->setPublic();
@@ -1045,7 +1130,7 @@ final class Generator
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
-        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
+        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn(string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
         $this->typeDecorator?->handleUnionResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
@@ -1092,110 +1177,11 @@ EOT;
     /**
      * @throws Exception
      */
-    private function handleScalarType(
-        Module $module,
-        ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
-    ): void {
-        [$types, $generics] = $this->getTypesFromGraphQLType(
-            new NonNullTypeNode([
-                'type' => new NamedTypeNode([
-                    'name' => $definitionNode->name,
-                ]),
-            ]),
-            $module
-        );
-
-        $phpTypes = $this->generateUnion($types);
-        $generics = $this->generateUnion($generics);
-        $interface = new InterfaceType($this->namingStrategy->nameForScalarResolverInterface($definitionNode));
-        $serialize = $interface->addMethod('serialize')->setReturnType($this->generateUnion(['string']));
-        $serialize->setPublic();
-        $serialize->addParameter('value')->setType($phpTypes);
-        $serialize->addComment(sprintf('@param %s $value', $generics));
-
-        $parseValue = $interface->addMethod('parseValue')->setReturnType($phpTypes);
-        $parseValue->addComment(sprintf('@return %s', $generics));
-
-        $throws = sprintf('@throws \%s', Exception::class);
-        $parseValue->setPublic();
-        $parseValue->addParameter('value')->setType('string');
-        $parseValue->addComment($throws);
-
-        $parseLiteral = $interface->addMethod('parseLiteral')->setReturnType($phpTypes);
-        $parseLiteral->setPublic();
-        $parseLiteral->addParameter('valueNode')->setType(Node::class);
-        $parseLiteral->addParameter('variables', null)->setType('?array');
-        $parseLiteral->addComment('@param array<string, mixed>|null $variables');
-        $parseLiteral->addComment(sprintf('@return %s', $generics));
-        $parseLiteral->addComment($throws);
-
-        $this->typeDecorator?->handleScalarResolverInterface($this->documents, $module, $definitionNode, $interface);
-        $this->typeRegistry->add($definitionNode, $interface, $module);
-    }
-
-    private function handleEnum(
-        Module $module,
-        EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
-    ): void {
-        $cases = [];
-        foreach ($definitionNode->values as $value) {
-            $cases[] = $value->name->value;
-        }
-        foreach ($this->documents as $document) {
-            Visitor::visit($document, [
-                'enter' => [
-                    NodeKind::ENUM_TYPE_EXTENSION => function (EnumTypeExtensionNode $extension) use (&$cases, $definitionNode) {
-                        if ($extension->name->value !== $definitionNode->name->value) {
-                            return;
-                        }
-                        foreach ($extension->values as $value) {
-                            $cases[] = $value->name->value;
-                        }
-                    },
-                ],
-            ]);
-        }
-
-        $typeName = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
-        if (null !== $typeName) {
-            $interface = new InterfaceType($this->namingStrategy->nameForEnumResolver($definitionNode));
-            $resolve = $interface->addMethod('resolve');
-            $resolve->setStatic()
-                ->setPublic();
-
-            $resolve->addParameter('value')->setType('string');
-
-            $resolve->setReturnType($typeName);
-
-            $resolve->addComment(
-                sprintf('@param %s $value', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $cases)))
-            );
-
-            if ($this->typeDecorator) {
-                $this->typeDecorator->handleEnumResolverInterface($this->documents, $module, $definitionNode, $interface);
-            }
-
-            $this->typeRegistry->add($definitionNode, $interface, $module);
-
-            return;
-        }
-
-        $enum = new EnumType($this->namingStrategy->nameForEnum($definitionNode));
-        foreach ($cases as $value) {
-            $enum->addCase($value, $value);
-        }
-
-        $this->typeDecorator?->handleEnum($this->documents, $module, $definitionNode, $enum);
-        $this->typeRegistry->add($definitionNode, $enum, $module);
-    }
-
-    /**
-     * @throws Exception
-     */
     private function handleInterfaceType(
-        Module $module,
+        Module                                                 $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $interface = new InterfaceType(
             $this->namingStrategy->nameForInterfaceResolverInterface($definitionNode)
         );
@@ -1253,9 +1239,35 @@ EOT;
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
-        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn (string $type): string => sprintf("'%s'", $type), $returnTypes))));
+        $resolveType->addComment(sprintf('@return %s', implode(' | ', array_map(static fn(string $type): string => sprintf("'%s'", $type), $returnTypes))));
 
         $this->typeDecorator?->handleInterfaceResolverInterface($this->documents, $module, $definitionNode, $interface);
         $this->typeRegistry->add($definitionNode, $interface, $module);
+    }
+
+    private function getModuleByName(string $name): Module
+    {
+        return $this->modules[$name];
+    }
+
+    private function write(string $namespace, ClassLike $type, string $directory): void
+    {
+        $file = new PhpFile();
+        $file->setStrictTypes();
+        $file->addNamespace((new PhpNamespace($namespace))->add($type));
+        $file->addComment('Auto-Generated');
+
+        $classes = $file->getClasses();
+        assert(count($classes) !== 0);
+
+        $class = reset($classes)->getName();
+
+        assert($class !== null);
+
+        $filename = sprintf('%s/%s.php', $directory, $class);
+        file_put_contents($filename, $this->printer->printFile($file));
+        $className = $type->getName();
+        assert($className !== null);
+        $this->logger->info(sprintf('Writing %s', $className));
     }
 }

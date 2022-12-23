@@ -14,4 +14,14 @@ interface CreateUserInputInterface
      * @return string
      */
     public function getEmail(): string;
+
+    /**
+     * @return int<1, 600>
+     */
+    public function getInt(): int;
+
+    /**
+     * @return true
+     */
+    public function getBool(): bool;
 }
