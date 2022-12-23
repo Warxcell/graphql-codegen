@@ -10,7 +10,7 @@ namespace Arxy\GraphQLCodegen\Tests\Expected;
 
 final class QueryPingFromModule2Args implements \Arxy\GraphQLCodegen\Tests\Module2\Expected\QueryPingFromModule2ArgsInterface
 {
-    public function __construct(/** @var bool $da */
+    public function __construct(/** @var bool */
     private readonly bool $da) {
     }
 

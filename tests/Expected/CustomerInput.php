@@ -14,9 +14,6 @@ final class CustomerInput implements \Arxy\GraphQLCodegen\Tests\Module2\Expected
     private readonly string $name) {
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

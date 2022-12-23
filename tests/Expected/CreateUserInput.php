@@ -22,33 +22,21 @@ final class CreateUserInput implements \Arxy\GraphQLCodegen\Tests\Module1\Expect
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return int
-     */
     public function getInt(): int
     {
         return $this->int;
     }
 
-    /**
-     * @return bool
-     */
     public function getBool(): bool
     {
         return $this->bool;
     }
 
-    /**
-     * @return \Arxy\GraphQLCodegen\Tests\Expected\CustomerInput
-     */
     public function getCustomer(): CustomerInput
     {
         return $this->customer;

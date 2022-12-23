@@ -783,8 +783,8 @@ final class Generator
                 $inputObject->addMethod(sprintf('get%s', ucfirst($field->name->value)))
                     ->setPublic()
                     ->setReturnType($types)
-                    ->setBody(sprintf('return $this->%s;', $field->name->value))
-                    ->addComment(sprintf('@return %s', $genericsTypes));
+                    ->setBody(sprintf('return $this->%s;', $field->name->value));
+//                    ->addComment(sprintf('@return %s', $genericsTypes));
             }
         }
 

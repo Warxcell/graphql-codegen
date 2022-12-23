@@ -14,9 +14,6 @@ final class UnmappedInput implements \Arxy\GraphQLCodegen\Tests\Module1\Expected
     private readonly string $id) {
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
