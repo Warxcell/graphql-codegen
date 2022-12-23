@@ -11,10 +11,10 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface TestMappedInputResolverInterface
 {
     /**
-     * @var string
-     * @var bool
-     * @var \Arxy\GraphQLCodegen\Tests\Module1\AnotherMappedInput
-     * @var \Arxy\GraphQLCodegen\Tests\Expected\UnmappedInput
+     * @param string $string
+     * @param bool $boolean
+     * @param \Arxy\GraphQLCodegen\Tests\Module1\AnotherMappedInput $anotherMappedInput
+     * @param \Arxy\GraphQLCodegen\Tests\Expected\UnmappedInput $unmappedInput
      */
     public function resolve(
         string $string,

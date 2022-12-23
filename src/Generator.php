@@ -726,7 +726,7 @@ final class Generator
                     $genericsTypes = $this->generateUnion($generics);
 
                     $parameter->setType($types);
-                    $resolveMethod->addComment(sprintf('@var %s', $genericsTypes));
+                    $resolveMethod->addComment(sprintf('@param %s %s', $genericsTypes, '$' . $field->name->value));
                 }
             }
 
