@@ -77,7 +77,7 @@ use const PHP_EOL;
 final class Generator
 {
     public const MIXED = 'mixed';
-    public const PHP_NATIVE_TYPES = [
+    public const DO_NOT_SLASH_TYPES = [
         'string',
         'int',
         'float',
@@ -88,6 +88,7 @@ final class Generator
         'mixed',
         'object',
         'callable',
+        'numeric-string'
     ];
 
     /**
@@ -571,6 +572,14 @@ final class Generator
         return implode('|', $types);
     }
 
+    private function mapPhpstanTypeToPhpType(string $type): string
+    {
+        return match ($type) {
+            'numeric-string' => 'string',
+            default => $type
+        };
+    }
+
     private function extractPhpTypesAndGenerics(array $types): array
     {
         $phpTypes = [];
@@ -578,9 +587,9 @@ final class Generator
         foreach ($types as $type) {
             $matches = [];
             if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
-                $phpTypes[] = $matches['phpType'];
+                $phpTypes[] = $this->mapPhpstanTypeToPhpType($matches['phpType']);
             } else {
-                $phpTypes[] = $type;
+                $phpTypes[] = $this->mapPhpstanTypeToPhpType($type);
             }
             $generics[] = $this->fixTypeForGenerics($type);
         }
@@ -599,7 +608,7 @@ final class Generator
 
     private function isNativeType(string $type): bool
     {
-        $pattern = sprintf('/^(%s).?/', implode('|', self::PHP_NATIVE_TYPES));
+        $pattern = sprintf('/^(%s).?/', implode('|', self::DO_NOT_SLASH_TYPES));
 
         return preg_match($pattern, $type) === 1;
     }

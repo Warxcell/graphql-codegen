@@ -37,6 +37,7 @@ $modules = [
             'TestMappedInput' => MappedInput::class,
             'AnotherMappedInput' => AnotherMappedInput::class,
             'JSON' => 'array<string, mixed>',
+            'Decimal' => 'numeric-string'
         ],
         validationMapping: [
             'Mutation' => [
