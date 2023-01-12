@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
+use Symfony\Component\Validator\Constraint;
+
 final class Module
 {
     public function __construct(
@@ -15,6 +17,9 @@ final class Module
          * @var array<string, class-string|string>
          */
         private readonly array $typeMapping = [],
+        /**
+         * @var array<string, array<string, array<class-string<Constraint>, array<string, scalar>> | array<int, class-string<Constraint>>>>
+         */
         private readonly array $validationMapping = []
     ) {
     }
@@ -48,7 +53,7 @@ final class Module
     }
 
     /**
-     * @return array<string, class-string>
+     * @return array<string, array<string, array<class-string<Constraint>, array<string, scalar>> | array<int, class-string<Constraint>>>>
      */
     public function getValidationMapping(): array
     {

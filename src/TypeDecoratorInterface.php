@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen;
 
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Language\AST\EnumTypeExtensionNode;
 use GraphQL\Language\AST\FieldDefinitionNode;
@@ -23,6 +24,9 @@ use Nette\PhpGenerator\InterfaceType;
 
 interface TypeDecoratorInterface
 {
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObject(
         array $documents,
         Module $module,
@@ -30,6 +34,9 @@ interface TypeDecoratorInterface
         ClassType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObjectInterface(
         array $documents,
         Module $module,
@@ -37,6 +44,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObjectFieldArgs(
         array $documents,
         Module $module,
@@ -45,6 +55,9 @@ interface TypeDecoratorInterface
         ClassType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObjectFieldArgsInterface(
         array $documents,
         Module $module,
@@ -53,6 +66,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObjectResolverInterface(
         array $documents,
         Module $module,
@@ -60,6 +76,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleObjectResolverImplementation(
         array $documents,
         Module $module,
@@ -67,6 +86,9 @@ interface TypeDecoratorInterface
         ClassType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleInputObject(
         array $documents,
         Module $module,
@@ -74,6 +96,9 @@ interface TypeDecoratorInterface
         ClassType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleInputObjectInterface(
         array $documents,
         Module $module,
@@ -81,6 +106,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleInputObjectResolverInterface(
         array $documents,
         Module $module,
@@ -88,6 +116,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleEnum(
         array $documents,
         Module $module,
@@ -95,6 +126,9 @@ interface TypeDecoratorInterface
         EnumType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleScalarResolverInterface(
         array $documents,
         Module $module,
@@ -102,6 +136,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleInterfaceResolverInterface(
         array $documents,
         Module $module,
@@ -109,6 +146,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleUnionResolverInterface(
         array $documents,
         Module $module,
@@ -116,6 +156,9 @@ interface TypeDecoratorInterface
         InterfaceType $classLike
     ): void;
 
+    /**
+     * @param array<string, DocumentNode> $documents
+     */
     public function handleEnumResolverInterface(
         array $documents,
         Module $module,

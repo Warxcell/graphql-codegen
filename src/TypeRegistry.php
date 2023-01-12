@@ -10,10 +10,13 @@ use Nette\PhpGenerator\ClassLike;
 final class TypeRegistry
 {
     /**
-     * @var array<string, array<string, ClassLike>>
+     * @var array<string, array<int, ClassLike>>
      */
     private array $generatedClasses = [];
 
+    /**
+     * @return array<string, array<int, ClassLike>>
+     */
     public function all(): array
     {
         return $this->generatedClasses;
