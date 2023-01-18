@@ -1218,8 +1218,8 @@ final class Generator
                 $phpType = $phpTypes[0];
 
                 return <<<EOT
-if (\$value instanceof \\${phpType}) {
-    return '${unionType}';
+if (\$value instanceof \\{$phpType}) {
+    return '{$unionType}';
 }
 EOT;
             };
