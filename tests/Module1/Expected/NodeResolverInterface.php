@@ -16,6 +16,6 @@ interface NodeResolverInterface
     public function resolveType(
         UserInterface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string;
 }

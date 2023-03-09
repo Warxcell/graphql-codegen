@@ -15,15 +15,15 @@ final class MutationCreateUserArgs implements \Arxy\GraphQLCodegen\Tests\Module1
         #[\Symfony\Component\Validator\Constraints\Valid] private readonly CreateUserInput $input,
         /** @var true */
         #[\Symfony\Component\Validator\Constraints\IsTrue] private readonly bool $bool,
-        /** @var iterable<string> */
+        /** @var iterable<int, string> */
         private readonly iterable $nonNullArrayNonNullItem,
-        /** @var iterable<string> */
+        /** @var iterable<int, string> */
         private readonly iterable $nonNullArray,
         /** @var int<1, 600>|null */
         #[\Symfony\Component\Validator\Constraints\Range(min: 1, max: 600)] private readonly int|null $int = null,
-        /** @var iterable<string>|null */
+        /** @var iterable<int, string>|null */
         private readonly iterable|null $arrayNonNullItem = null,
-        /** @var iterable<string>|null */
+        /** @var iterable<int, string>|null */
         private readonly iterable|null $array = null,
     ) {
     }

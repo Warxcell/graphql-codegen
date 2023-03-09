@@ -17,6 +17,6 @@ interface CreateUserSuccessResolverInterface
         CreateUserSuccessInterface $parent,
         CreateUserSuccessFieldFromModule2ArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|null|\GraphQL\Executor\Promise\Promise;
 }

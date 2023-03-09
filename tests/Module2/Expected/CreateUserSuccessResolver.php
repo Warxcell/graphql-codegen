@@ -17,7 +17,7 @@ final class CreateUserSuccessResolver implements CreateUserSuccessResolverInterf
         CreateUserSuccessInterface $parent,
         CreateUserSuccessFieldFromModule2ArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|null|\GraphQL\Executor\Promise\Promise {
         return $parent->getFieldFromModule2();
     }

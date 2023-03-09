@@ -13,7 +13,7 @@ final class WidgetResolver implements WidgetResolverInterface
     public function resolveType(
         Widget1Interface|Widget2Interface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string {
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\Widget1Interface) {
             return 'Widget1';

@@ -17,7 +17,7 @@ final class Widget2Resolver implements Widget2ResolverInterface
         Widget2Interface $parent,
         Widget2NameArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise {
         return $parent->getName();
     }

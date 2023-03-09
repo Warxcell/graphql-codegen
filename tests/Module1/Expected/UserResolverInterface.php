@@ -17,7 +17,7 @@ interface UserResolverInterface
         UserInterface $parent,
         UserIdArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
@@ -27,6 +27,6 @@ interface UserResolverInterface
         UserInterface $parent,
         UserUsernameArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

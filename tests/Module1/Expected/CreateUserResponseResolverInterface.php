@@ -16,6 +16,6 @@ interface CreateUserResponseResolverInterface
     public function resolveType(
         CreateUserSuccessInterface|CreateUserFailureInterface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string;
 }

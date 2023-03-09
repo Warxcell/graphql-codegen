@@ -17,7 +17,7 @@ final class TestSuccessResponseResolver implements TestSuccessResponseResolverIn
         TestSuccessResponseInterface $parent,
         TestSuccessResponseBoolArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): bool|\GraphQL\Executor\Promise\Promise {
         return $parent->getBool();
     }

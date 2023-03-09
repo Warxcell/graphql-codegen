@@ -13,7 +13,7 @@ final class TestResponseResolver implements TestResponseResolverInterface
     public function resolveType(
         TestSuccessResponseInterface|TestFailureResponseInterface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string {
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\TestSuccessResponseInterface) {
             return 'TestSuccessResponse';

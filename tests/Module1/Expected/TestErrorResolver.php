@@ -13,7 +13,7 @@ final class TestErrorResolver implements TestErrorResolverInterface
     public function resolveType(
         \Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string {
         return 'TestError1';
     }

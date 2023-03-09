@@ -17,6 +17,6 @@ interface QueryResolverInterface
         mixed $parent,
         QueryPingFromModule2ArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): PingResponseSuccessInterface|PingResponseFailureInterface|\GraphQL\Executor\Promise\Promise;
 }

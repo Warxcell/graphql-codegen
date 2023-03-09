@@ -16,6 +16,6 @@ interface WidgetResolverInterface
     public function resolveType(
         Widget1Interface|Widget2Interface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string;
 }

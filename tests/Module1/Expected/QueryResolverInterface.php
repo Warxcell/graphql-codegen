@@ -17,7 +17,7 @@ interface QueryResolverInterface
         mixed $parent,
         QueryPingArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
@@ -27,6 +27,6 @@ interface QueryResolverInterface
         mixed $parent,
         QueryTestSameTypeArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): \DateTimeInterface|\GraphQL\Executor\Promise\Promise;
 }

@@ -17,7 +17,7 @@ final class UserResolver implements UserResolverInterface
         UserInterface $parent,
         UserIdArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise {
         return $parent->getId();
     }
@@ -29,7 +29,7 @@ final class UserResolver implements UserResolverInterface
         UserInterface $parent,
         UserUsernameArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise {
         return $parent->getUsername();
     }

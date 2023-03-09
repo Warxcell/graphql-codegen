@@ -16,6 +16,6 @@ interface TestResponseResolverInterface
     public function resolveType(
         TestSuccessResponseInterface|TestFailureResponseInterface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string;
 }

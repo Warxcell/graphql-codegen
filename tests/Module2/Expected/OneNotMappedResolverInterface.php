@@ -17,6 +17,6 @@ interface OneNotMappedResolverInterface
         OneNotMappedInterface $parent,
         OneNotMappedIdArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

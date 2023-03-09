@@ -17,7 +17,7 @@ final class CreateUserFailureResolver implements CreateUserFailureResolverInterf
         CreateUserFailureInterface $parent,
         CreateUserFailureErrorArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise {
         return $parent->getError();
     }

@@ -580,7 +580,7 @@ final class Generator
             ['iterable'],
             [
                 sprintf(
-                    'iterable<%s>',
+                    'iterable<int, %s>',
                     $this->generateUnion($generics)
                 ),
             ],

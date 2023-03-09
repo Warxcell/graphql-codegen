@@ -17,6 +17,6 @@ interface TestSameType2ResolverInterface
         \DateTimeInterface $parent,
         TestSameType2MessageArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

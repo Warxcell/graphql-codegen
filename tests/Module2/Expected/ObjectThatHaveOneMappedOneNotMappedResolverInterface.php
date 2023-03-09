@@ -17,6 +17,6 @@ interface ObjectThatHaveOneMappedOneNotMappedResolverInterface
         ObjectThatHaveOneMappedOneNotMappedInterface $parent,
         ObjectThatHaveOneMappedOneNotMappedItemArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): \stdClass|OneNotMappedInterface|\GraphQL\Executor\Promise\Promise;
 }

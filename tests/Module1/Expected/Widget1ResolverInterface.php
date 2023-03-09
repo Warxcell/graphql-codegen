@@ -17,6 +17,6 @@ interface Widget1ResolverInterface
         Widget1Interface $parent,
         Widget1NameArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

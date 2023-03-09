@@ -17,6 +17,6 @@ interface OneMappedResolverInterface
         \stdClass $parent,
         OneMappedIdArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

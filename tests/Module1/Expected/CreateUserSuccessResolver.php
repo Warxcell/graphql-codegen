@@ -17,7 +17,7 @@ final class CreateUserSuccessResolver implements CreateUserSuccessResolverInterf
         CreateUserSuccessInterface $parent,
         CreateUserSuccessUserArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): UserInterface|\GraphQL\Executor\Promise\Promise {
         return $parent->getUser();
     }

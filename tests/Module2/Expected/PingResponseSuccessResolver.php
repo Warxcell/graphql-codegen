@@ -17,7 +17,7 @@ final class PingResponseSuccessResolver implements PingResponseSuccessResolverIn
         PingResponseSuccessInterface $parent,
         PingResponseSuccessSuccessArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): bool|\GraphQL\Executor\Promise\Promise {
         return $parent->getSuccess();
     }

@@ -20,6 +20,6 @@ interface TestMappedInputResolverInterface
         string $string,
         bool $boolean,
         \Arxy\GraphQLCodegen\Tests\Module1\AnotherMappedInput $anotherMappedInput,
-        \Arxy\GraphQLCodegen\Tests\Expected\UnmappedInput $unmappedInput
+        \Arxy\GraphQLCodegen\Tests\Expected\UnmappedInput $unmappedInput,
     ): \Arxy\GraphQLCodegen\Tests\Module1\MappedInput;
 }

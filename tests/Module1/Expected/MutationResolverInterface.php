@@ -17,7 +17,7 @@ interface MutationResolverInterface
         mixed $parent,
         MutationCreateUserArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): CreateUserSuccessInterface|CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise;
 
     /**
@@ -27,6 +27,6 @@ interface MutationResolverInterface
         mixed $parent,
         MutationTestJsonArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): array|null|\GraphQL\Executor\Promise\Promise;
 }

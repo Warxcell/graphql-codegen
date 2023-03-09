@@ -13,7 +13,7 @@ final class CreateUserResponseResolver implements CreateUserResponseResolverInte
     public function resolveType(
         CreateUserSuccessInterface|CreateUserFailureInterface $value,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string {
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface) {
             return 'CreateUserSuccess';

@@ -17,6 +17,6 @@ interface TestSuccessResponseResolverInterface
         TestSuccessResponseInterface $parent,
         TestSuccessResponseBoolArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): bool|\GraphQL\Executor\Promise\Promise;
 }

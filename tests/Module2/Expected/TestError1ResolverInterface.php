@@ -17,6 +17,6 @@ interface TestError1ResolverInterface
         TestError1Interface $parent,
         TestError1MessageArgsInterface $args,
         mixed $context,
-        \GraphQL\Type\Definition\ResolveInfo $info
+        \GraphQL\Type\Definition\ResolveInfo $info,
     ): string|\GraphQL\Executor\Promise\Promise;
 }

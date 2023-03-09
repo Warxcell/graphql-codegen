@@ -26,22 +26,22 @@ interface MutationCreateUserArgsInterface
     public function getBool(): bool;
 
     /**
-     * @return iterable<string>
+     * @return iterable<int, string>
      */
     public function getNonNullArrayNonNullItem(): iterable;
 
     /**
-     * @return iterable<string>
+     * @return iterable<int, string>
      */
     public function getNonNullArray(): iterable;
 
     /**
-     * @return iterable<string>|null
+     * @return iterable<int, string>|null
      */
     public function getArrayNonNullItem(): iterable|null;
 
     /**
-     * @return iterable<string>|null
+     * @return iterable<int, string>|null
      */
     public function getArray(): iterable|null;
 }
