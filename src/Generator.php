@@ -118,7 +118,7 @@ final class Generator
     private readonly Printer $printer;
 
     /**
-     * @var array<string, ClassType>
+     * @var array<string, ClassType[]>
      */
     private array $baseTypes = [];
 
@@ -270,9 +270,7 @@ final class Generator
                             );
                         }
                     },
-                    NodeKind::SCALAR_TYPE_EXTENSION => function (ScalarTypeDefinitionNode $definitionNode) use (
-                        $module
-                    ) {
+                    NodeKind::SCALAR_TYPE_EXTENSION => function (ScalarTypeDefinitionNode $definitionNode) {
                         throw new LogicException('Not supported');
                     },
                     NodeKind::ENUM_TYPE_DEFINITION => function (EnumTypeDefinitionNode $definitionNode) use (
@@ -346,7 +344,7 @@ final class Generator
             );
             $this->processDef(
                 $document,
-                function (ScalarTypeExtensionNode $definitionNode) use ($module) {
+                function (ScalarTypeExtensionNode $definitionNode) {
                     throw new LogicException('Not supported');
                 }
             );
@@ -390,7 +388,7 @@ final class Generator
             );
             $this->processDef(
                 $document,
-                function (UnionTypeExtensionNode $definitionNode) use ($module) {
+                function (UnionTypeExtensionNode $definitionNode) {
                     throw new LogicException('Not supported');
                 }
             );
@@ -571,6 +569,7 @@ final class Generator
 
     /**
      * @throws Exception
+     * @return array{0: list<string>, 1: list<string>}
      */
     private function getIterableTypes(ListTypeNode $typeNode, Module|null $module): array
     {
@@ -595,6 +594,10 @@ final class Generator
         return implode('|', $types);
     }
 
+    /**
+     * @param list<string> $types
+     * @return array{0: list<string>, 1: list<string>}
+     */
     private function extractPhpTypesAndGenerics(array $types): array
     {
         $phpTypes = [];
@@ -636,6 +639,9 @@ final class Generator
         return preg_match($pattern, $type) === 1;
     }
 
+    /**
+     * @return string[]
+     */
     private function getTypesFromNamedNode(NamedTypeNode $type, ?Module $module = null): array
     {
         switch ($type->name->value) {
@@ -951,6 +957,10 @@ final class Generator
         return in_array($definitionNode->name->value, $this->rootTypes);
     }
 
+    /**
+     * @param string[] $parentTypes
+     * @throws Exception
+     */
     private function generateResolverInterfaceForObject(
         Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
