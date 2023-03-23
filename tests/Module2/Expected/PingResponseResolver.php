@@ -18,8 +18,6 @@ final class PingResponseResolver implements PingResponseResolverInterface
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseSuccessInterface) {
             return 'PingResponseSuccess';
         }
-        if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseFailureInterface) {
-            return 'PingResponseFailure';
-        }
+        return 'PingResponseFailure';
     }
 }

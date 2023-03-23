@@ -18,8 +18,6 @@ final class WidgetResolver implements WidgetResolverInterface
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\Widget1Interface) {
             return 'Widget1';
         }
-        if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\Widget2Interface) {
-            return 'Widget2';
-        }
+        return 'Widget2';
     }
 }

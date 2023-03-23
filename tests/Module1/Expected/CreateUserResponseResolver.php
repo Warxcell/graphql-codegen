@@ -18,8 +18,6 @@ final class CreateUserResponseResolver implements CreateUserResponseResolverInte
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface) {
             return 'CreateUserSuccess';
         }
-        if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserFailureInterface) {
-            return 'CreateUserFailure';
-        }
+        return 'CreateUserFailure';
     }
 }

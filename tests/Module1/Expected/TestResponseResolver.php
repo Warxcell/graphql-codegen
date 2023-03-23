@@ -18,8 +18,6 @@ final class TestResponseResolver implements TestResponseResolverInterface
         if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\TestSuccessResponseInterface) {
             return 'TestSuccessResponse';
         }
-        if ($value instanceof \Arxy\GraphQLCodegen\Tests\Module1\Expected\TestFailureResponseInterface) {
-            return 'TestFailureResponse';
-        }
+        return 'TestFailureResponse';
     }
 }
