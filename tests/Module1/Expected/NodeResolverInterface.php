@@ -8,10 +8,13 @@ declare(strict_types=1);
 
 namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 
+/**
+ * @phpstan-type Node 'User'
+ */
 interface NodeResolverInterface
 {
     /**
-     * @return 'User'
+     * @return Node
      */
     public function resolveType(
         UserInterface $value,

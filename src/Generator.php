@@ -164,7 +164,7 @@ final class Generator
         foreach ($this->modules as $module) {
             $schema = file_get_contents($module->getSchema());
             if ($schema === false) {
-                throw new RuntimeException('Could not read schema '.$module->getSchema());
+                throw new RuntimeException('Could not read schema ' . $module->getSchema());
             }
             $document = Parser::parse($schema);
             $this->documents[$module->getName()] = $document;
@@ -192,10 +192,10 @@ final class Generator
                         $className = $this->namingStrategy->nameForObjectInterface($definitionNode);
 
                         $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
-                            $this->baseModule->getNamespace().'\\'.$className,
+                            $this->baseModule->getNamespace() . '\\' . $className,
                         ];
                         $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace().'\\'.$className];
+                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::OBJECT_TYPE_EXTENSION => function (ObjectTypeExtensionNode $definitionNode) use (
                         $module,
@@ -207,7 +207,7 @@ final class Generator
                         }
                         $className = $this->namingStrategy->nameForObjectInterface($definitionNode);
                         $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace().'\\'.$className];
+                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::FIELD_DEFINITION => function (FieldDefinitionNode $definitionNode) use (
                         $module,
@@ -220,12 +220,12 @@ final class Generator
                             $currentNode,
                             $definitionNode
                         );
-                        $name = $module->getNamespace().'\\'.$interfaceName;
+                        $name = $module->getNamespace() . '\\' . $interfaceName;
                         $this->argumentsMappingModule[$module->getName(
                         )][$currentNode->name->value][$definitionNode->name->value] = $name;
 
                         $className = $this->baseModule->getNamespace(
-                            ).'\\'.$this->namingStrategy->nameForObjectFieldArgumentsObject(
+                            ) . '\\' . $this->namingStrategy->nameForObjectFieldArgumentsObject(
                                 $currentNode,
                                 $definitionNode
                             );
@@ -244,11 +244,11 @@ final class Generator
                         } else {
                             $className = $this->namingStrategy->nameForInputObject($definitionNode);
                             $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
-                                $this->baseModule->getNamespace().'\\'.$className,
+                                $this->baseModule->getNamespace() . '\\' . $className,
                             ];
 
                             $this->moduleTypeMappingRegistry[$module->getName(
-                            )][$definitionNode->name->value] = [$module->getNamespace().'\\'.$className];
+                            )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                         }
                     },
                     NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
@@ -257,7 +257,7 @@ final class Generator
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
                         $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace().'\\'.$className];
+                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::SCALAR_TYPE_DEFINITION => function (ScalarTypeDefinitionNode $definitionNode) use (
                         $module
@@ -281,7 +281,7 @@ final class Generator
 
                             return;
                         }
-                        $name = $module->getNamespace().'\\'.$this->namingStrategy->nameForEnum($definitionNode);
+                        $name = $module->getNamespace() . '\\' . $this->namingStrategy->nameForEnum($definitionNode);
                         $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$name];
                         $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$name];
 
@@ -405,12 +405,12 @@ final class Generator
             if (!is_dir($directory)) {
                 $result = mkdir($directory);
                 if (false === $result) {
-                    throw new RuntimeException('Could not create directoy '.$directory);
+                    throw new RuntimeException('Could not create directoy ' . $directory);
                 }
             } else {
                 $files = glob(sprintf('%s/*', $directory));
                 if (false === $files) {
-                    throw new RuntimeException('Could not traverse '.$directory);
+                    throw new RuntimeException('Could not traverse ' . $directory);
                 }
                 foreach ($files as $file) {
                     if (is_file($file)) {
@@ -461,12 +461,12 @@ final class Generator
         }
 
         file_put_contents(
-            $this->baseModule->getDirectory().'/mapping.php',
-            "<?php\n\ndeclare(strict_types=1);\n\nreturn ".var_export([
+            $this->baseModule->getDirectory() . '/mapping.php',
+            "<?php\n\ndeclare(strict_types=1);\n\nreturn " . var_export([
                 'argumentsMapping' => $this->argumentsMapping,
                 'inputObjectsMapping' => $this->inputObjectsMapping,
                 'enumsMapping' => $this->enumsMapping,
-            ], true).";\n"
+            ], true) . ";\n"
         );
     }
 
@@ -626,7 +626,7 @@ final class Generator
     private function fixTypeForGenerics(string $type): string
     {
         if (!$this->isNativeType($type)) {
-            $type = '\\'.$type;
+            $type = '\\' . $type;
         }
 
         return $type;
@@ -775,7 +775,7 @@ final class Generator
                     $genericsTypes = $this->generateUnion($generics);
 
                     $parameter->setType($types);
-                    $resolveMethod->addComment(sprintf('@param %s %s', $genericsTypes, '$'.$field->name->value));
+                    $resolveMethod->addComment(sprintf('@param %s %s', $genericsTypes, '$' . $field->name->value));
                 }
             }
 
@@ -798,14 +798,14 @@ final class Generator
                 foreach ($document->definitions as $definition) {
                     if ($definition instanceof InputObjectTypeDefinitionNode && $definition->name->value === $definitionNode->name->value) {
                         $originInterfaceName = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
-                        $originInterface = $this->modules[$moduleName]->getNamespace().'\\'.$originInterfaceName;
+                        $originInterface = $this->modules[$moduleName]->getNamespace() . '\\' . $originInterfaceName;
 
                         $interface->addExtend($originInterface);
                     }
                 }
             }
         }
-        $inputObject->addImplement($module->getNamespace().'\\'.$interface->getName());
+        $inputObject->addImplement($module->getNamespace() . '\\' . $interface->getName());
 
         if (count($definitionNode->fields) > 0) {
             foreach ($definitionNode->fields as $field) {
@@ -847,7 +847,7 @@ final class Generator
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
         $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace(
-            ).'\\'.$inputObject->getName();
+            ) . '\\' . $inputObject->getName();
     }
 
     private function getBaseInputObjectType(
@@ -935,7 +935,7 @@ final class Generator
 
         $class = new ClassType($this->namingStrategy->nameForObject($definitionNode));
         $class->setFinal();
-        $class->addImplement($module->getNamespace().'\\'.$interface->getName());
+        $class->addImplement($module->getNamespace() . '\\' . $interface->getName());
         if (count($definitionNode->fields) > 0) {
             $method = $class->addMethod('__construct');
             foreach ($definitionNode->fields as $field) {
@@ -947,7 +947,7 @@ final class Generator
         $this->typeRegistry->add($definitionNode, $class, $module);
 
         $interface = $this->generateResolverInterfaceForObject($module, $definitionNode, [
-            $module->getNamespace().'\\'.$interfaceName,
+            $module->getNamespace() . '\\' . $interfaceName,
         ]);
         $this->generateResolverImplementation($module, $definitionNode, $interface);
     }
@@ -1018,7 +1018,7 @@ final class Generator
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
         FieldDefinitionNode $field
     ): void {
-        $key = $objectType->name->value.'_'.$field->name->value;
+        $key = $objectType->name->value . '_' . $field->name->value;
 
         if (!isset($this->baseTypes['ObjectFieldArgs'][$key])) {
             $baseObjectFieldArgs = new ClassType(
@@ -1033,7 +1033,7 @@ final class Generator
 
         $className = $this->namingStrategy->nameForObjectFieldArgumentsObjectInterface($objectType, $field);
         $interface = new InterfaceType($className);
-        $baseObjectFieldArgs->addImplement($module->getNamespace().'\\'.$className);
+        $baseObjectFieldArgs->addImplement($module->getNamespace() . '\\' . $className);
 
         if (count($field->arguments) > 0) {
             foreach ($field->arguments as $argument) {
@@ -1150,7 +1150,7 @@ final class Generator
 
         $name = $interface->getName();
         assert($name !== null);
-        $class->addImplement($module->getNamespace().'\\'.$name);
+        $class->addImplement($module->getNamespace() . '\\' . $name);
 
         $class->setMethods(
             array_map(static function (Method $method) {
@@ -1207,7 +1207,7 @@ final class Generator
 
         if ($mapped === 0) {
             $resolver = new ClassType($this->namingStrategy->nameForUnionResolver($definitionNode));
-            $resolver->addImplement($module->getNamespace().'\\'.$interface->getName());
+            $resolver->addImplement($module->getNamespace() . '\\' . $interface->getName());
             $resolver->setFinal();
             $resolveType = $resolver
                 ->addMethod('resolveType')
@@ -1223,7 +1223,7 @@ final class Generator
 
                 [$phpTypes] = $this->getTypesFromGraphQLType(new NonNullTypeNode(['type' => $typeNode]), $module);
                 if (count($phpTypes) > 1) {
-                    throw new LogicException('Cannot generate resolver for '.$unionType);
+                    throw new LogicException('Cannot generate resolver for ' . $unionType);
                 }
                 $phpType = $phpTypes[0];
 
@@ -1314,10 +1314,17 @@ EOT;
         $resolveType->addParameter('value')->setType($this->generateUnion($types));
         $resolveType->addParameter('context')->setType($this->resolverParameterTypes->contextType);
         $resolveType->addParameter('info')->setType($this->resolverParameterTypes->info);
+        $interface->addComment(
+            sprintf(
+                '@phpstan-type %s %s',
+                $definitionNode->name->value,
+                implode(' | ', array_map(static fn(string $type): string => sprintf("'%s'", $type), $returnTypes))
+            )
+        );
         $resolveType->addComment(
             sprintf(
                 '@return %s',
-                implode(' | ', array_map(static fn(string $type): string => sprintf("'%s'", $type), $returnTypes))
+                $definitionNode->name->value
             )
         );
 
