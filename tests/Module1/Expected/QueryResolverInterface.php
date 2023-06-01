@@ -11,6 +11,46 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface QueryResolverInterface
 {
     /**
+     * @return iterable<int, string|null>|null|\GraphQL\Executor\Promise\Promise
+     */
+    public function nullableArrayWithNullableItems(
+        mixed $parent,
+        QueryNullableArrayWithNullableItemsArgsInterface $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info,
+    ): iterable|null|\GraphQL\Executor\Promise\Promise;
+
+    /**
+     * @return iterable<int, string>|null|\GraphQL\Executor\Promise\Promise
+     */
+    public function nullableArrayWithNonNullableItems(
+        mixed $parent,
+        QueryNullableArrayWithNonNullableItemsArgsInterface $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info,
+    ): iterable|null|\GraphQL\Executor\Promise\Promise;
+
+    /**
+     * @return iterable<int, string>|\GraphQL\Executor\Promise\Promise
+     */
+    public function nonNullableArrayWithNonNullableItems(
+        mixed $parent,
+        QueryNonNullableArrayWithNonNullableItemsArgsInterface $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info,
+    ): iterable|\GraphQL\Executor\Promise\Promise;
+
+    /**
+     * @return iterable<int, string|null>|\GraphQL\Executor\Promise\Promise
+     */
+    public function nonNullableArrayWithNullableItems(
+        mixed $parent,
+        QueryNonNullableArrayWithNullableItemsArgsInterface $args,
+        mixed $context,
+        \GraphQL\Type\Definition\ResolveInfo $info,
+    ): iterable|\GraphQL\Executor\Promise\Promise;
+
+    /**
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function ping(

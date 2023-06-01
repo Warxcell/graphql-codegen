@@ -31,7 +31,7 @@ interface MutationCreateUserArgsInterface
     public function getNonNullArrayNonNullItem(): iterable;
 
     /**
-     * @return iterable<int, string>
+     * @return iterable<int, string|null>
      */
     public function getNonNullArray(): iterable;
 
@@ -41,7 +41,7 @@ interface MutationCreateUserArgsInterface
     public function getArrayNonNullItem(): iterable|null;
 
     /**
-     * @return iterable<int, string>|null
+     * @return iterable<int, string|null>|null
      */
     public function getArray(): iterable|null;
 }

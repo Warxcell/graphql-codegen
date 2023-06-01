@@ -7,6 +7,10 @@ return array (
   array (
     'Query' => 
     array (
+      'nullableArrayWithNullableItems' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryNullableArrayWithNullableItemsArgs',
+      'nullableArrayWithNonNullableItems' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryNullableArrayWithNonNullableItemsArgs',
+      'nonNullableArrayWithNonNullableItems' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryNonNullableArrayWithNonNullableItemsArgs',
+      'nonNullableArrayWithNullableItems' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryNonNullableArrayWithNullableItemsArgs',
       'ping' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryPingArgs',
       'testSameType' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryTestSameTypeArgs',
       'pingFromModule2' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\QueryPingFromModule2Args',

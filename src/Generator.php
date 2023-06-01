@@ -553,9 +553,8 @@ final class Generator
             NamedTypeNode::class => $this->extractPhpTypesAndGenerics($this->getTypesFromNamedNode($typeNode, $module)),
         };
 
-        if (!$parentType && !$typeNode instanceof NonNullTypeNode) {
-            $types[] = 'null';
-            $generics[] = 'null';
+        if (!$typeNode instanceof NonNullTypeNode && !$parentType instanceof NonNullTypeNode) {
+            $types[] = $generics[] = 'null';
         }
 
         foreach ($types as $type) {

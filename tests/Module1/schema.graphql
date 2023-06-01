@@ -14,6 +14,10 @@ interface Node {
 }
 
 type Query {
+    nullableArrayWithNullableItems: [String]
+    nullableArrayWithNonNullableItems: [String!]
+    nonNullableArrayWithNonNullableItems: [String!]!
+    nonNullableArrayWithNullableItems: [String]!
     ping(da: Boolean!): String!
     testSameType: TestSameType!
 }
