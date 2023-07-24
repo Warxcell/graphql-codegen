@@ -775,6 +775,10 @@ final class Generator
 
                     $parameter->setType($types);
                     $resolveMethod->addComment(sprintf('@param %s %s', $genericsTypes, '$' . $field->name->value));
+
+                    if (!$field->type instanceof NonNullTypeNode) {
+                        $parameter->setDefaultValue(null);
+                    }
                 }
             }
 

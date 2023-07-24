@@ -103,6 +103,7 @@ input TestMappedInput {
     boolean: Boolean!
     anotherMappedInput: AnotherMappedInput!
     unmappedInput: UnmappedInput!
+    optional: String
 }
 
 input AnotherMappedInput {
