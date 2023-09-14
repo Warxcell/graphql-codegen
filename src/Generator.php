@@ -960,11 +960,11 @@ final class Generator
      * @throws Exception
      */
     private function generateResolverInterfaceForObject(
-        Module                                           $module,
+        Module $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        array                                            $parentTypes
-    ): InterfaceType
-    {
+        array $parentTypes
+    ): InterfaceType {
+        $parentTypes = $this->extractPhpTypesAndGenerics($parentTypes);
         $interface = new InterfaceType($this->namingStrategy->nameForObjectResolverInterface($definitionNode));
 
         foreach ($definitionNode->fields as $field) {
@@ -973,7 +973,7 @@ final class Generator
 
                 $method = $interface->addMethod($field->name->value);
                 $method->setPublic();
-                $method->addParameter('parent')->setType($this->generateUnion($parentTypes));
+                $method->addParameter('parent')->setType($this->generateUnion($parentTypes[0]));
                 $method->addParameter('args')->setType($this->getArgsType($definitionNode, $field, $module));
                 $method->addParameter('context')->setType($this->resolverParameterTypes->contextType);
                 $method->addParameter('info')->setType($this->resolverParameterTypes->info);
@@ -985,6 +985,7 @@ final class Generator
 
                 $genericsTypes = $this->generateUnion($genericsTypes);
                 $promise = $this->wrapInPromise($genericsTypes);
+                $method->addComment(sprintf('@param %s $parent', $this->generateUnion($parentTypes[1])));
                 $method->addComment(
                     sprintf(
                         '@return %s',
