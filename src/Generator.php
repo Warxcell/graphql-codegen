@@ -54,7 +54,6 @@ use Psr\Log\NullLogger;
 use ReflectionFunction;
 use ReflectionUnionType;
 use RuntimeException;
-
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -74,7 +73,6 @@ use function sprintf;
 use function ucfirst;
 use function unlink;
 use function var_export;
-
 use const PHP_EOL;
 
 final class Generator
@@ -131,13 +129,14 @@ final class Generator
      * @param list<Module> $modules
      */
     public function __construct(
-        private readonly BaseModule $baseModule,
-        array $modules,
-        private readonly ResolverParameterTypes $resolverParameterTypes = new ResolverParameterTypes(),
-        private readonly NamingStrategy $namingStrategy = new DefaultStrategy(),
+        private readonly BaseModule              $baseModule,
+        array                                    $modules,
+        private readonly ResolverParameterTypes  $resolverParameterTypes = new ResolverParameterTypes(),
+        private readonly NamingStrategy          $namingStrategy = new DefaultStrategy(),
         private readonly ?TypeDecoratorInterface $typeDecorator = null,
-        private readonly LoggerInterface $logger = new NullLogger()
-    ) {
+        private readonly LoggerInterface         $logger = new NullLogger()
+    )
+    {
         $this->typeRegistry = new TypeRegistry();
         foreach ($modules as $module) {
             if (isset($this->modules[$module->getName()])) {
@@ -194,8 +193,7 @@ final class Generator
                         $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
                             $this->baseModule->getNamespace() . '\\' . $className,
                         ];
-                        $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
+                        $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::OBJECT_TYPE_EXTENSION => function (ObjectTypeExtensionNode $definitionNode) use (
                         $module,
@@ -206,8 +204,7 @@ final class Generator
                             return;
                         }
                         $className = $this->namingStrategy->nameForObjectInterface($definitionNode);
-                        $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
+                        $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::FIELD_DEFINITION => function (FieldDefinitionNode $definitionNode) use (
                         $module,
@@ -221,11 +218,9 @@ final class Generator
                             $definitionNode
                         );
                         $name = $module->getNamespace() . '\\' . $interfaceName;
-                        $this->argumentsMappingModule[$module->getName(
-                        )][$currentNode->name->value][$definitionNode->name->value] = $name;
+                        $this->argumentsMappingModule[$module->getName()][$currentNode->name->value][$definitionNode->name->value] = $name;
 
-                        $className = $this->baseModule->getNamespace(
-                            ) . '\\' . $this->namingStrategy->nameForObjectFieldArgumentsObject(
+                        $className = $this->baseModule->getNamespace() . '\\' . $this->namingStrategy->nameForObjectFieldArgumentsObject(
                                 $currentNode,
                                 $definitionNode
                             );
@@ -239,25 +234,21 @@ final class Generator
                         if ($mapped) {
                             $this->baseTypeMappingRegistry[$definitionNode->name->value] = [$mapped];
 
-                            $this->moduleTypeMappingRegistry[$module->getName(
-                            )][$definitionNode->name->value] = [$mapped];
+                            $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$mapped];
                         } else {
                             $className = $this->namingStrategy->nameForInputObject($definitionNode);
                             $this->baseTypeMappingRegistry[$definitionNode->name->value] = [
                                 $this->baseModule->getNamespace() . '\\' . $className,
                             ];
 
-                            $this->moduleTypeMappingRegistry[$module->getName(
-                            )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
+                            $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                         }
                     },
-                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use
-                    (
+                    NodeKind::INPUT_OBJECT_TYPE_EXTENSION => function (InputObjectTypeExtensionNode $definitionNode) use (
                         $module
                     ) {
                         $className = $this->namingStrategy->nameForInputObjectInterface($definitionNode);
-                        $this->moduleTypeMappingRegistry[$module->getName(
-                        )][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
+                        $this->moduleTypeMappingRegistry[$module->getName()][$definitionNode->name->value] = [$module->getNamespace() . '\\' . $className];
                     },
                     NodeKind::SCALAR_TYPE_DEFINITION => function (ScalarTypeDefinitionNode $definitionNode) use (
                         $module
@@ -312,8 +303,7 @@ final class Generator
                                     continue;
                                 }
                                 $this->moduleTypeMappingRegistry[$module->getName()][$union->name->value] = [
-                                    ...($this->moduleTypeMappingRegistry[$module->getName(
-                                    )][$union->name->value] ?? []),
+                                    ...($this->moduleTypeMappingRegistry[$module->getName()][$union->name->value] ?? []),
                                     ...($this->moduleTypeMappingRegistry[$moduleInner][$type->name->value] ?? []),
                                 ];
                             }
@@ -498,9 +488,10 @@ final class Generator
      * @throws Exception
      */
     private function handleScalarType(
-        Module $module,
+        Module                                           $module,
         ScalarTypeDefinitionNode|ScalarTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         [$types, $generics] = $this->getTypesFromGraphQLType(
             new NonNullTypeNode([
                 'type' => new NamedTypeNode([
@@ -543,10 +534,11 @@ final class Generator
      * @throws Exception
      */
     private function getTypesFromGraphQLType(
-        TypeNode $typeNode,
-        ?Module $module = null,
+        TypeNode  $typeNode,
+        ?Module   $module = null,
         ?TypeNode $parentType = null
-    ): array {
+    ): array
+    {
         [$types, $generics] = match ($typeNode::class) {
             ListTypeNode::class => $this->getIterableTypes($typeNode, $module),
             NonNullTypeNode::class => $this->getTypesFromGraphQLType($typeNode->type, $module, $typeNode),
@@ -685,9 +677,10 @@ final class Generator
     }
 
     private function handleEnum(
-        Module $module,
+        Module                                       $module,
         EnumTypeDefinitionNode|EnumTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $cases = [];
         foreach ($definitionNode->values as $value) {
             $cases[] = $value->name->value;
@@ -752,9 +745,10 @@ final class Generator
     }
 
     private function handleInputObjectType(
-        Module $module,
+        Module                                                     $module,
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $mappedType = $module->getTypeMapping()[$definitionNode->name->value] ?? null;
 
         if ($mappedType) {
@@ -849,13 +843,13 @@ final class Generator
         $this->typeDecorator?->handleInputObject($this->documents, $module, $definitionNode, $inputObject);
         $this->typeRegistry->add($definitionNode, $interface, $module);
 
-        $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace(
-            ) . '\\' . $inputObject->getName();
+        $this->inputObjectsMapping[$definitionNode->name->value] = $this->baseModule->getNamespace() . '\\' . $inputObject->getName();
     }
 
     private function getBaseInputObjectType(
         InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode $definitionNode
-    ): ClassType {
+    ): ClassType
+    {
         $name = $definitionNode->name->value;
         if (!isset($this->baseTypes['InputObject'][$name])) {
             if (!$definitionNode instanceof InputObjectTypeDefinitionNode) {
@@ -894,9 +888,10 @@ final class Generator
      * @throws Exception
      */
     private function handleObjectType(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $isRootType = $this->isRootType($definitionNode);
 
         if ($isRootType) {
@@ -965,10 +960,11 @@ final class Generator
      * @throws Exception
      */
     private function generateResolverInterfaceForObject(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        array $parentTypes
-    ): InterfaceType {
+        array                                            $parentTypes
+    ): InterfaceType
+    {
         $interface = new InterfaceType($this->namingStrategy->nameForObjectResolverInterface($definitionNode));
 
         foreach ($definitionNode->fields as $field) {
@@ -1017,10 +1013,11 @@ final class Generator
     }
 
     private function generateFieldArgsInterface(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
-        FieldDefinitionNode $field
-    ): void {
+        FieldDefinitionNode                              $field
+    ): void
+    {
         $key = $objectType->name->value . '_' . $field->name->value;
 
         if (!isset($this->baseTypes['ObjectFieldArgs'][$key])) {
@@ -1092,9 +1089,10 @@ final class Generator
 
     private function getArgsType(
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $objectType,
-        FieldDefinitionNode $field,
-        ?Module $module = null
-    ): string {
+        FieldDefinitionNode                              $field,
+        ?Module                                          $module = null
+    ): string
+    {
         $mapping = $module ? $this->argumentsMappingModule[$module->getName()] : $this->argumentsMapping;
 
         return $mapping[$objectType->name->value][$field->name->value];
@@ -1111,11 +1109,12 @@ final class Generator
      * @throws Exception
      */
     private function handleInputValue(
-        Module $module,
-        ClassType $class,
-        Method $method,
+        Module                                       $module,
+        ClassType                                    $class,
+        Method                                       $method,
         InputValueDefinitionNode|FieldDefinitionNode $definitionNode
-    ): void {
+    ): void
+    {
         $nullable = !$definitionNode->type instanceof NonNullTypeNode;
 
         // TODO maybe handle default value?
@@ -1144,10 +1143,11 @@ final class Generator
     }
 
     private function generateResolverImplementation(
-        Module $module,
+        Module                                           $module,
         ObjectTypeDefinitionNode|ObjectTypeExtensionNode $definitionNode,
-        InterfaceType $interface
-    ): void {
+        InterfaceType                                    $interface
+    ): void
+    {
         $class = new ClassType($this->namingStrategy->nameForObjectResolverImplementation($definitionNode));
         $class->setFinal();
 
@@ -1171,9 +1171,10 @@ final class Generator
     }
 
     private function handleUnionType(
-        Module $module,
+        Module                                         $module,
         UnionTypeDefinitionNode|UnionTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $interface = new InterfaceType($this->namingStrategy->nameForUnionResolverInterface($definitionNode));
         $resolveType = $interface->addMethod('resolveType');
         $resolveType->setPublic();
@@ -1257,9 +1258,10 @@ EOT;
      * @throws Exception
      */
     private function handleInterfaceType(
-        Module $module,
+        Module                                                 $module,
         InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode $definitionNode
-    ): void {
+    ): void
+    {
         $interface = new InterfaceType(
             $this->namingStrategy->nameForInterfaceResolverInterface($definitionNode)
         );
@@ -1298,6 +1300,8 @@ EOT;
                 }
             }
         }
+
+        $types = array_unique($types);
 
         $returnTypes = [];
         foreach ($this->documents as $document) {

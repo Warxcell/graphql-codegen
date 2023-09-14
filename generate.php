@@ -37,7 +37,9 @@ $modules = [
             'TestMappedInput' => MappedInput::class,
             'AnotherMappedInput' => AnotherMappedInput::class,
             'JSON' => 'array<string, mixed>',
-            'Decimal' => 'numeric-string'
+            'Decimal' => 'numeric-string',
+            'MultipleTypesMappedToSameInnerType1' => stdClass::class,
+            'MultipleTypesMappedToSameInnerType2' => stdClass::class,
         ],
         validationMapping: [
             'Mutation' => [

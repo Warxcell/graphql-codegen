@@ -6,7 +6,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 1759,
+    'end' => 2030,
   ),
   'kind' => 'Document',
   'definitions' => 
@@ -3078,6 +3078,287 @@ return array (
                 array (
                   'start' => 1753,
                   'end' => 1755,
+                ),
+                'kind' => 'Name',
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    28 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 1761,
+        'end' => 1821,
+      ),
+      'kind' => 'InterfaceTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 1771,
+          'end' => 1805,
+        ),
+        'kind' => 'Name',
+        'value' => 'MultipleTypesMappedToSameInnerType',
+      ),
+      'directives' => 
+      array (
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 1812,
+            'end' => 1819,
+          ),
+          'kind' => 'FieldDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1812,
+              'end' => 1814,
+            ),
+            'kind' => 'Name',
+            'value' => 'id',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1816,
+              'end' => 1819,
+            ),
+            'kind' => 'NonNullType',
+            'type' => 
+            array (
+              'loc' => 
+              array (
+                'start' => 1816,
+                'end' => 1818,
+              ),
+              'kind' => 'NamedType',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 1816,
+                  'end' => 1818,
+                ),
+                'kind' => 'Name',
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    29 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 1823,
+        'end' => 1925,
+      ),
+      'kind' => 'ObjectTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 1828,
+          'end' => 1863,
+        ),
+        'kind' => 'Name',
+        'value' => 'MultipleTypesMappedToSameInnerType1',
+      ),
+      'interfaces' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 1875,
+            'end' => 1909,
+          ),
+          'kind' => 'NamedType',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1875,
+              'end' => 1909,
+            ),
+            'kind' => 'Name',
+            'value' => 'MultipleTypesMappedToSameInnerType',
+          ),
+        ),
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 1916,
+            'end' => 1923,
+          ),
+          'kind' => 'FieldDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1916,
+              'end' => 1918,
+            ),
+            'kind' => 'Name',
+            'value' => 'id',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1920,
+              'end' => 1923,
+            ),
+            'kind' => 'NonNullType',
+            'type' => 
+            array (
+              'loc' => 
+              array (
+                'start' => 1920,
+                'end' => 1922,
+              ),
+              'kind' => 'NamedType',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 1920,
+                  'end' => 1922,
+                ),
+                'kind' => 'Name',
+                'value' => 'ID',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    30 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 1927,
+        'end' => 2029,
+      ),
+      'kind' => 'ObjectTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 1932,
+          'end' => 1967,
+        ),
+        'kind' => 'Name',
+        'value' => 'MultipleTypesMappedToSameInnerType2',
+      ),
+      'interfaces' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 1979,
+            'end' => 2013,
+          ),
+          'kind' => 'NamedType',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 1979,
+              'end' => 2013,
+            ),
+            'kind' => 'Name',
+            'value' => 'MultipleTypesMappedToSameInnerType',
+          ),
+        ),
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 2020,
+            'end' => 2027,
+          ),
+          'kind' => 'FieldDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2020,
+              'end' => 2022,
+            ),
+            'kind' => 'Name',
+            'value' => 'id',
+          ),
+          'arguments' => 
+          array (
+          ),
+          'type' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2024,
+              'end' => 2027,
+            ),
+            'kind' => 'NonNullType',
+            'type' => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2024,
+                'end' => 2026,
+              ),
+              'kind' => 'NamedType',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2024,
+                  'end' => 2026,
                 ),
                 'kind' => 'Name',
                 'value' => 'ID',

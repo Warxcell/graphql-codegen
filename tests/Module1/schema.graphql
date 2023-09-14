@@ -113,3 +113,16 @@ input AnotherMappedInput {
 input UnmappedInput {
     id: ID!
 }
+
+
+interface MultipleTypesMappedToSameInnerType {
+    id: ID!
+}
+
+type MultipleTypesMappedToSameInnerType1 implements MultipleTypesMappedToSameInnerType {
+    id: ID!
+}
+
+type MultipleTypesMappedToSameInnerType2 implements MultipleTypesMappedToSameInnerType {
+    id: ID!
+}

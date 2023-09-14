@@ -63,6 +63,14 @@ return array (
     array (
       'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\OneMappedIdArgs',
     ),
+    'MultipleTypesMappedToSameInnerType1' => 
+    array (
+      'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MultipleTypesMappedToSameInnerType1IdArgs',
+    ),
+    'MultipleTypesMappedToSameInnerType2' => 
+    array (
+      'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MultipleTypesMappedToSameInnerType2IdArgs',
+    ),
     'PingResponseSuccess' => 
     array (
       'success' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\PingResponseSuccessSuccessArgs',
