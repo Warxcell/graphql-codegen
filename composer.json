@@ -4,7 +4,7 @@
     "license": "proprietary",
     "require": {
         "php": ">=8.1",
-        "webonyx/graphql-php": "dev-master",
+        "webonyx/graphql-php": "^15.7",
         "nette/php-generator": "^4.0",
         "psr/log": "^1.0 | ^2.0 | ^3.0"
     },
