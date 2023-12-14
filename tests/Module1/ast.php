@@ -6,7 +6,7 @@ return array (
   'loc' => 
   array (
     'start' => 0,
-    'end' => 2030,
+    'end' => 2343,
   ),
   'kind' => 'Document',
   'definitions' => 
@@ -3367,6 +3367,480 @@ return array (
           ),
           'directives' => 
           array (
+          ),
+        ),
+      ),
+    ),
+    31 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 2031,
+        'end' => 2117,
+      ),
+      'kind' => 'InputObjectTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 2037,
+          'end' => 2056,
+        ),
+        'kind' => 'Name',
+        'value' => 'TestDeprecatedInput',
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 2063,
+            'end' => 2115,
+          ),
+          'kind' => 'InputValueDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2063,
+              'end' => 2078,
+            ),
+            'kind' => 'Name',
+            'value' => 'deprecatedField',
+          ),
+          'type' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2080,
+              'end' => 2087,
+            ),
+            'kind' => 'NonNullType',
+            'type' => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2080,
+                'end' => 2086,
+              ),
+              'kind' => 'NamedType',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2080,
+                  'end' => 2086,
+                ),
+                'kind' => 'Name',
+                'value' => 'String',
+              ),
+            ),
+          ),
+          'directives' => 
+          array (
+            0 => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2088,
+                'end' => 2115,
+              ),
+              'kind' => 'Directive',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2089,
+                  'end' => 2099,
+                ),
+                'kind' => 'Name',
+                'value' => 'deprecated',
+              ),
+              'arguments' => 
+              array (
+                0 => 
+                array (
+                  'loc' => 
+                  array (
+                    'start' => 2100,
+                    'end' => 2114,
+                  ),
+                  'kind' => 'Argument',
+                  'value' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2108,
+                      'end' => 2114,
+                    ),
+                    'kind' => 'StringValue',
+                    'value' => 'test',
+                    'block' => false,
+                  ),
+                  'name' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2100,
+                      'end' => 2106,
+                    ),
+                    'kind' => 'Name',
+                    'value' => 'reason',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    32 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 2119,
+        'end' => 2208,
+      ),
+      'kind' => 'EnumTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 2124,
+          'end' => 2142,
+        ),
+        'kind' => 'Name',
+        'value' => 'TestDeprecatedEnum',
+      ),
+      'directives' => 
+      array (
+      ),
+      'values' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 2149,
+            'end' => 2187,
+          ),
+          'kind' => 'EnumValueDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2149,
+              'end' => 2159,
+            ),
+            'kind' => 'Name',
+            'value' => 'DEPRECATED',
+          ),
+          'directives' => 
+          array (
+            0 => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2160,
+                'end' => 2187,
+              ),
+              'kind' => 'Directive',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2161,
+                  'end' => 2171,
+                ),
+                'kind' => 'Name',
+                'value' => 'deprecated',
+              ),
+              'arguments' => 
+              array (
+                0 => 
+                array (
+                  'loc' => 
+                  array (
+                    'start' => 2172,
+                    'end' => 2186,
+                  ),
+                  'kind' => 'Argument',
+                  'value' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2180,
+                      'end' => 2186,
+                    ),
+                    'kind' => 'StringValue',
+                    'value' => 'test',
+                    'block' => false,
+                  ),
+                  'name' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2172,
+                      'end' => 2178,
+                    ),
+                    'kind' => 'Name',
+                    'value' => 'reason',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        1 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 2192,
+            'end' => 2206,
+          ),
+          'kind' => 'EnumValueDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2192,
+              'end' => 2206,
+            ),
+            'kind' => 'Name',
+            'value' => 'NON_DEPRECATED',
+          ),
+          'directives' => 
+          array (
+          ),
+        ),
+      ),
+    ),
+    33 => 
+    array (
+      'loc' => 
+      array (
+        'start' => 2210,
+        'end' => 2342,
+      ),
+      'kind' => 'ObjectTypeDefinition',
+      'name' => 
+      array (
+        'loc' => 
+        array (
+          'start' => 2215,
+          'end' => 2234,
+        ),
+        'kind' => 'Name',
+        'value' => 'TestDeprecatedField',
+      ),
+      'interfaces' => 
+      array (
+      ),
+      'directives' => 
+      array (
+      ),
+      'fields' => 
+      array (
+        0 => 
+        array (
+          'loc' => 
+          array (
+            'start' => 2241,
+            'end' => 2340,
+          ),
+          'kind' => 'FieldDefinition',
+          'name' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2241,
+              'end' => 2260,
+            ),
+            'kind' => 'Name',
+            'value' => 'testDeprecatedField',
+          ),
+          'arguments' => 
+          array (
+            0 => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2261,
+                'end' => 2302,
+              ),
+              'kind' => 'InputValueDefinition',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2261,
+                  'end' => 2265,
+                ),
+                'kind' => 'Name',
+                'value' => 'test',
+              ),
+              'type' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2267,
+                  'end' => 2274,
+                ),
+                'kind' => 'NonNullType',
+                'type' => 
+                array (
+                  'loc' => 
+                  array (
+                    'start' => 2267,
+                    'end' => 2273,
+                  ),
+                  'kind' => 'NamedType',
+                  'name' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2267,
+                      'end' => 2273,
+                    ),
+                    'kind' => 'Name',
+                    'value' => 'String',
+                  ),
+                ),
+              ),
+              'directives' => 
+              array (
+                0 => 
+                array (
+                  'loc' => 
+                  array (
+                    'start' => 2275,
+                    'end' => 2302,
+                  ),
+                  'kind' => 'Directive',
+                  'name' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2276,
+                      'end' => 2286,
+                    ),
+                    'kind' => 'Name',
+                    'value' => 'deprecated',
+                  ),
+                  'arguments' => 
+                  array (
+                    0 => 
+                    array (
+                      'loc' => 
+                      array (
+                        'start' => 2287,
+                        'end' => 2301,
+                      ),
+                      'kind' => 'Argument',
+                      'value' => 
+                      array (
+                        'loc' => 
+                        array (
+                          'start' => 2295,
+                          'end' => 2301,
+                        ),
+                        'kind' => 'StringValue',
+                        'value' => 'test',
+                        'block' => false,
+                      ),
+                      'name' => 
+                      array (
+                        'loc' => 
+                        array (
+                          'start' => 2287,
+                          'end' => 2293,
+                        ),
+                        'kind' => 'Name',
+                        'value' => 'reason',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          'type' => 
+          array (
+            'loc' => 
+            array (
+              'start' => 2305,
+              'end' => 2312,
+            ),
+            'kind' => 'NamedType',
+            'name' => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2305,
+                'end' => 2312,
+              ),
+              'kind' => 'Name',
+              'value' => 'Boolean',
+            ),
+          ),
+          'directives' => 
+          array (
+            0 => 
+            array (
+              'loc' => 
+              array (
+                'start' => 2313,
+                'end' => 2340,
+              ),
+              'kind' => 'Directive',
+              'name' => 
+              array (
+                'loc' => 
+                array (
+                  'start' => 2314,
+                  'end' => 2324,
+                ),
+                'kind' => 'Name',
+                'value' => 'deprecated',
+              ),
+              'arguments' => 
+              array (
+                0 => 
+                array (
+                  'loc' => 
+                  array (
+                    'start' => 2325,
+                    'end' => 2339,
+                  ),
+                  'kind' => 'Argument',
+                  'value' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2333,
+                      'end' => 2339,
+                    ),
+                    'kind' => 'StringValue',
+                    'value' => 'test',
+                    'block' => false,
+                  ),
+                  'name' => 
+                  array (
+                    'loc' => 
+                    array (
+                      'start' => 2325,
+                      'end' => 2331,
+                    ),
+                    'kind' => 'Name',
+                    'value' => 'reason',
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

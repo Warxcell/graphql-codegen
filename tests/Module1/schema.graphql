@@ -126,3 +126,16 @@ type MultipleTypesMappedToSameInnerType1 implements MultipleTypesMappedToSameInn
 type MultipleTypesMappedToSameInnerType2 implements MultipleTypesMappedToSameInnerType {
     id: ID!
 }
+
+input TestDeprecatedInput {
+    deprecatedField: String! @deprecated(reason: "test")
+}
+
+enum TestDeprecatedEnum {
+    DEPRECATED @deprecated(reason: "test")
+    NON_DEPRECATED
+}
+
+type TestDeprecatedField {
+    testDeprecatedField(test: String! @deprecated(reason: "test")): Boolean @deprecated(reason: "test")
+}

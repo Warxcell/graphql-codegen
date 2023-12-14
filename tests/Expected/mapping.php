@@ -71,6 +71,10 @@ return array (
     array (
       'id' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\MultipleTypesMappedToSameInnerType2IdArgs',
     ),
+    'TestDeprecatedField' => 
+    array (
+      'testDeprecatedField' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestDeprecatedFieldTestDeprecatedFieldArgs',
+    ),
     'PingResponseSuccess' => 
     array (
       'success' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\PingResponseSuccessSuccessArgs',
@@ -96,11 +100,13 @@ return array (
   array (
     'CreateUserInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CreateUserInput',
     'UnmappedInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\UnmappedInput',
+    'TestDeprecatedInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\TestDeprecatedInput',
     'CustomerInput' => 'Arxy\\GraphQLCodegen\\Tests\\Expected\\CustomerInput',
   ),
   'enumsMapping' => 
   array (
     'Enum1' => 'Arxy\\GraphQLCodegen\\Tests\\Module1\\Expected\\Enum1',
     'MappedEnum' => 'Arxy\\GraphQLCodegen\\Tests\\Module1\\MappedEnum',
+    'TestDeprecatedEnum' => 'Arxy\\GraphQLCodegen\\Tests\\Module1\\Expected\\TestDeprecatedEnum',
   ),
 );
