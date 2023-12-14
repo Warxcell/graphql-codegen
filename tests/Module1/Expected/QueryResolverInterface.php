@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface QueryResolverInterface
 {
     /**
+     * @param mixed $parent
      * @return iterable<int, string|null>|null|\GraphQL\Executor\Promise\Promise
      */
     public function nullableArrayWithNullableItems(
@@ -21,6 +22,7 @@ interface QueryResolverInterface
     ): iterable|null|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return iterable<int, string>|null|\GraphQL\Executor\Promise\Promise
      */
     public function nullableArrayWithNonNullableItems(
@@ -31,6 +33,7 @@ interface QueryResolverInterface
     ): iterable|null|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return iterable<int, string>|\GraphQL\Executor\Promise\Promise
      */
     public function nonNullableArrayWithNonNullableItems(
@@ -41,6 +44,7 @@ interface QueryResolverInterface
     ): iterable|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return iterable<int, string|null>|\GraphQL\Executor\Promise\Promise
      */
     public function nonNullableArrayWithNullableItems(
@@ -51,6 +55,7 @@ interface QueryResolverInterface
     ): iterable|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function ping(
@@ -61,6 +66,7 @@ interface QueryResolverInterface
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return \DateTimeInterface|\GraphQL\Executor\Promise\Promise
      */
     public function testSameType(

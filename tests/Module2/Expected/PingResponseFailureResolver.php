@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 final class PingResponseFailureResolver implements PingResponseFailureResolverInterface
 {
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseFailureInterface $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function message(

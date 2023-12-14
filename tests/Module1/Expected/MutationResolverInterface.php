@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface MutationResolverInterface
 {
     /**
+     * @param mixed $parent
      * @return \Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserSuccessInterface|\Arxy\GraphQLCodegen\Tests\Module1\Expected\CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise
      */
     public function createUser(
@@ -21,6 +22,7 @@ interface MutationResolverInterface
     ): CreateUserSuccessInterface|CreateUserFailureInterface|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param mixed $parent
      * @return array<string, mixed>|null|\GraphQL\Executor\Promise\Promise
      */
     public function testJson(

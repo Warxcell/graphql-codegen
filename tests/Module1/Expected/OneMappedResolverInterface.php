@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface OneMappedResolverInterface
 {
     /**
+     * @param \stdClass $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function id(

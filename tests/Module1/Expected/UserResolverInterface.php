@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface UserResolverInterface
 {
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module1\Expected\UserInterface $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function id(
@@ -21,6 +22,7 @@ interface UserResolverInterface
     ): string|\GraphQL\Executor\Promise\Promise;
 
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module1\Expected\UserInterface $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function username(

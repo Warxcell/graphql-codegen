@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface PingResponseSuccessResolverInterface
 {
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module2\Expected\PingResponseSuccessInterface $parent
      * @return bool|\GraphQL\Executor\Promise\Promise
      */
     public function success(

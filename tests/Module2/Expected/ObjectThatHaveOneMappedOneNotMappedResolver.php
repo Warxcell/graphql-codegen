@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 final class ObjectThatHaveOneMappedOneNotMappedResolver implements ObjectThatHaveOneMappedOneNotMappedResolverInterface
 {
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module2\Expected\ObjectThatHaveOneMappedOneNotMappedInterface $parent
      * @return \stdClass|\Arxy\GraphQLCodegen\Tests\Module2\Expected\OneNotMappedInterface|\GraphQL\Executor\Promise\Promise
      */
     public function item(

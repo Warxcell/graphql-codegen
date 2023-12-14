@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module2\Expected;
 interface TestError1ResolverInterface
 {
     /**
+     * @param \Arxy\GraphQLCodegen\Tests\Module2\Expected\TestError1Interface $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function message(

@@ -11,6 +11,7 @@ namespace Arxy\GraphQLCodegen\Tests\Module1\Expected;
 interface TestSameType1ResolverInterface
 {
     /**
+     * @param \DateTimeInterface $parent
      * @return string|\GraphQL\Executor\Promise\Promise
      */
     public function message(
