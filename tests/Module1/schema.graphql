@@ -6,6 +6,7 @@ schema {
 scalar DateTime
 
 scalar JSON
+scalar JSONSpecific
 
 scalar Decimal
 

@@ -37,6 +37,7 @@ $modules = [
             'TestMappedInput' => MappedInput::class,
             'AnotherMappedInput' => AnotherMappedInput::class,
             'JSON' => 'array<string, mixed>',
+            'JSONSpecific' => 'array{key1: string, key2: int}',
             'Decimal' => 'numeric-string',
             'MultipleTypesMappedToSameInnerType1' => stdClass::class,
             'MultipleTypesMappedToSameInnerType2' => stdClass::class,

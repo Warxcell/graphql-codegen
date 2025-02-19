@@ -604,7 +604,7 @@ final class Generator
         $generics = [];
         foreach ($types as $type) {
             $matches = [];
-            if (preg_match('/(?<phpType>\w+)<.+>/', $type, $matches)) {
+            if (preg_match('/(?<phpType>\w+)(<.+>|{.+})/', $type, $matches)) {
                 $phpTypes[] = $this->mapPhpstanTypeToPhpType($matches['phpType']);
             } else {
                 $phpTypes[] = $this->mapPhpstanTypeToPhpType($type);
