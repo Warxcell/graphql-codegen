@@ -19,7 +19,7 @@ interface JSONSpecificResolverInterface
      * @return array{key1: string, key2: int}
      * @throws \Exception
      */
-    public function parseValue(string|int|float|bool|null $value): array;
+    public function parseValue(string|int|float|bool $value): array;
 
     /**
      * @param array<string, mixed>|null $variables

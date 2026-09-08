@@ -19,7 +19,7 @@ interface DateTimeResolverInterface
      * @return \DateTimeInterface
      * @throws \Exception
      */
-    public function parseValue(string|int|float|bool|null $value): \DateTimeInterface;
+    public function parseValue(string|int|float|bool $value): \DateTimeInterface;
 
     /**
      * @param array<string, mixed>|null $variables

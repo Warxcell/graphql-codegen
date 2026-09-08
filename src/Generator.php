@@ -525,7 +525,7 @@ final class Generator
 
         $throws = sprintf('@throws \%s', Exception::class);
         $parseValue->setPublic();
-        $parseValue->addParameter('value')->setType('string|int|float|bool|null');
+        $parseValue->addParameter('value')->setType('string|int|float|bool');
         $parseValue->addComment($throws);
 
         $parseLiteral = $interface->addMethod('parseLiteral')->setReturnType($phpTypes);

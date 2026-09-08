@@ -19,7 +19,7 @@ interface DecimalResolverInterface
      * @return numeric-string
      * @throws \Exception
      */
-    public function parseValue(string|int|float|bool|null $value): string;
+    public function parseValue(string|int|float|bool $value): string;
 
     /**
      * @param array<string, mixed>|null $variables
